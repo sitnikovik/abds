@@ -1,0 +1,18 @@
+version: '3.7'
+services:
+  ch1:
+    image: clickhouse/clickhouse-server:25.8
+    container_name: ch1
+    ports:
+      - "8123:8123" # Веб-интерфейс
+      - "9000:9000"
+    volumes:
+      - ./ch1_volume:/var/lib/ch1
+    environment:
+      - CLICKHOUSE_USER=default
+      - CLICKHOUSE_PASSWORD=
+      - CLICKHOUSE_DEFAULT_ACCESS_MANAGEMENT=1
+
+volumes:
+  ch1_volume:
+    driver: local

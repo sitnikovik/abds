@@ -1,0 +1,9 @@
+# Editor/IDE
+.idea/
+.vscode/
+.obsidian/
+
+__*.*
+
+# Other files
+.DS_Store

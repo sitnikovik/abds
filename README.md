@@ -1,2 +1,7 @@
 # abds
-Tasks and practice for the course “Architecture of Big Data Processing Applications”
+
+Воркшопы и практические материалы для курса "Архитектура систем обработки больших данных".
+
+## Воркшопы
+
+- [Знакомство c ClickHouse](/workshops/02-clickhouse-intro/)

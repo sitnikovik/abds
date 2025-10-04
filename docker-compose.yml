@@ -7,12 +7,15 @@ services:
       - "8123:8123" # Веб-интерфейс
       - "9000:9000"
     volumes:
-      - ./ch1_volume:/var/lib/ch1
+      - ./ch1_volume:/var/lib/clickhouse
     environment:
       - CLICKHOUSE_USER=default
       - CLICKHOUSE_PASSWORD=
       - CLICKHOUSE_DEFAULT_ACCESS_MANAGEMENT=1
-
+      - CLICKHOUSE_CONFIG_max_memory_usage=30000000000
+      - CLICKHOUSE_CONFIG_max_partitions_per_insert_block=100
+      - CLICKHOUSE_CONFIG_max_concurrent_queries=20
+      - CLICKHOUSE_CONFIG_max_threads=4
 volumes:
   ch1_volume:
     driver: local

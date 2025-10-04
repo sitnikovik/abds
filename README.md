@@ -5,3 +5,4 @@
 ## Воркшопы
 
 - [Знакомство c ClickHouse](/workshops/02-clickhouse-intro/)
+- [SCD - медленно изменяющиеся измерения](/workshops/03-scd/)

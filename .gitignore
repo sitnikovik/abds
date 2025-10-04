@@ -3,7 +3,9 @@
 .vscode/
 .obsidian/
 
+# Project files
 __*.*
+*volume/
 
 # Other files
 .DS_Store

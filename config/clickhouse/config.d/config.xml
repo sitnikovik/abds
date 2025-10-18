@@ -1,18 +1,19 @@
 <clickhouse>
-  <remote_servers>
-    <my_cluster>
-      <shard>
-        <replica>
-          <host>ch1</host>
-          <port>9000</port>
-        </replica>
-      </shard>
-      <shard>
-        <replica>
-          <host>ch2</host>
-          <port>9001</port>
-        </replica>
-      </shard>
-    </my_cluster>
-  </remote_servers>
+    <listen_host>0.0.0.0</listen_host>
+    <remote_servers>
+        <my_cluster>
+        <shard>
+            <replica>
+            <host>ch1</host>
+            <port>9000</port>
+            </replica>
+        </shard>
+        <shard>
+            <replica>
+            <host>ch2</host>
+            <port>9000</port>
+            </replica>
+        </shard>
+        </my_cluster>
+    </remote_servers>
 </clickhouse>

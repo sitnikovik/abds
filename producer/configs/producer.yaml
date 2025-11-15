@@ -1,0 +1,12 @@
+kafka:
+  producer:
+    brokers:
+      - name: "kafka"
+        port: 9092
+        topics:
+          - name: "gauges"
+    connection:
+      timeout: 10
+    retry:
+      max: 5
+    ack: -1

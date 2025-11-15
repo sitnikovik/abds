@@ -8,6 +8,7 @@ x-environment: &environment
   CLICKHOUSE_CONFIG_max_concurrent_queries: 20
   CLICKHOUSE_CONFIG_max_threads: 4
   CLICKHOUSE_REPLICATION: "1"
+
 services:
   ch1:
     image: clickhouse/clickhouse-server:25.8
@@ -20,6 +21,7 @@ services:
       - ./config/clickhouse/config.d:/etc/clickhouse-server/config.d:ro
     environment:
       <<: *environment
+
   ch2:
     image: clickhouse/clickhouse-server:25.8
     container_name: ch2
@@ -31,8 +33,68 @@ services:
       - ./config/clickhouse/config.d:/etc/clickhouse-server/config.d:ro
     environment:
       <<: *environment
+
+  kafka:
+    image: confluentinc/cp-kafka:7.6.1 
+    container_name: kafka               
+    ports:
+      - "9092:9092"  # Публичный порт для клиентов
+      - "9093:9093"  # Порт для управления кластером
+    environment:
+      # Уникальный ID ноды в кластере (в KRaft это обязательно)
+      KAFKA_NODE_ID: 1
+      # Роли: брокер (обработка сообщений) + контроллер (управление метаданными)
+      KAFKA_PROCESS_ROLES: broker,controller
+      # Слушатели: клиенты на 9092, контроллер на 9093
+      KAFKA_LISTENERS: PLAINTEXT://:9092,CONTROLLER://:9093
+      # Адрес для клиентов (внутри docker-сети)
+      KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://kafka:9092
+      # Имя слушателя для controller protocol
+      KAFKA_CONTROLLER_LISTENER_NAMES: CONTROLLER
+      # Протоколы безопасности (здесь без шифрования)
+      KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: CONTROLLER:PLAINTEXT,PLAINTEXT:PLAINTEXT
+      # Список голосующих контроллеров (для консенсуса в KRaft)
+      KAFKA_CONTROLLER_QUORUM_VOTERS: 1@kafka:9093
+      # Фактор репликации для внутреннего топика офсетов (1 = без репликации)
+      KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
+      # Минимальное количество синхронных реплик для транзакций
+      KAFKA_TRANSACTION_STATE_LOG_MIN_ISR: 1
+      # Задержка перебалансировки consumer-групп (0 = без задержки)
+      KAFKA_GROUP_INITIAL_REBALANCE_DELAY_MS: 0
+      # Автосоздание топиков при первом обращении            
+      KAFKA_AUTO_CREATE_TOPICS_ENABLE: "true"
+      # Количество партиций по умолчанию для новых топиков
+      KAFKA_NUM_PARTITIONS: 3
+      # Уникальный ID кластера (требуется для KRaft, рандомный)
+      CLUSTER_ID: "4L6g3nShT-eMCtK--X86sw"
+    volumes:
+      - kafka_volume:/var/lib/kafka
+
+  # Веб-интерфейс для управления Kafka (топики, сообщения, consumer-группы)
+  kafka-ui:
+    image: provectuslabs/kafka-ui:latest
+    container_name: kafka-ui
+    depends_on:
+      - kafka
+    ports:
+      - "8080:8080"
+    environment:
+      KAFKA_CLUSTERS_0_NAME: local
+      # Сервер Kafka, к которому подключается UI
+      KAFKA_CLUSTERS_0_BOOTSTRAPSERVERS: kafka:9092
+
+  # Продюсер счётчиков показаний электричества в виде сообщений в Kafka (для воркшопа)
+  producer:
+    build: ./producer
+    container_name: producer
+    depends_on:
+      - kafka
+    restart: unless-stopped
+
 volumes:
   ch1_volume:
     driver: local
   ch2_volume:
+    driver: local
+  kafka_volume:
     driver: local

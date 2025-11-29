@@ -28,6 +28,16 @@ func (bb Brokers) Strings() []string {
 	return ss
 }
 
+// FirstTopic возвращает первый топик из списка брокеров.
+func (bb Brokers) FirstTopic() (t topic.Topic) {
+	for _, b := range bb {
+		for _, t := range b.Topics {
+			return t
+		}
+	}
+	return
+}
+
 // String возвращает строковое представление брокера.
 func (b Broker) String() string {
 	return fmt.Sprintf("%s:%d", b.Name, b.Port)

@@ -1,13 +1,11 @@
-package send
+package listen
 
 import (
 	"context"
-	"fmt"
-	"log"
+	"time"
 
 	"abds-producer/internal/domain/energosbyt/gauge"
 	"abds-producer/internal/infra/client/kafka/message"
-	gaugeMapped "abds-producer/internal/infra/mapper/kafka/gauge"
 )
 
 // producer реализует продюсера сообщений.
@@ -19,12 +17,13 @@ type producer interface {
 	) error
 }
 
-// gaugeRepo реализует репозиторий счетчиков.
-type gaugeRepo interface {
+// gaugeListener реализует сервис для работы с счетчиками электроэнергии.
+type gaugeListener interface {
 	// ListenFor слушает новые счетчики и отправляет их в канал.
 	ListenFor(
 		ctx context.Context,
 		max int,
+		interval time.Duration,
 	) (<-chan gauge.Gauge, error)
 }
 
@@ -32,8 +31,8 @@ type gaugeRepo interface {
 type UseCase struct {
 	// prod - продюсер сообщений.
 	prod producer
-	// gauges - репозиторий счетчиков.
-	gauges gaugeRepo
+	// gauges - сервис счетчиков.
+	gauges gaugeListener
 	// topic - топик для отправки сообщений.
 	topic string
 }
@@ -45,7 +44,7 @@ type UseCase struct {
 // gauges - репозиторий счетчиков.
 func NewUseCase(
 	prod producer,
-	gauges gaugeRepo,
+	gauges gaugeListener,
 	topic string,
 ) *UseCase {
 	return &UseCase{
@@ -53,29 +52,4 @@ func NewUseCase(
 		gauges: gauges,
 		topic:  topic,
 	}
-}
-
-// Listen слушает новые счетчики и отправляет их показания.
-//
-// max - буфер для хранения счетчиков.
-func (u *UseCase) Listen(
-	ctx context.Context,
-	max int,
-) error {
-	gg, err := u.gauges.ListenFor(ctx, max)
-	if err != nil {
-		return fmt.Errorf("failed to get gauges: %w", err)
-	}
-	for g := range gg {
-		err = u.prod.SendMessage(
-			ctx,
-			gaugeMapped.ToMessage(u.topic, g),
-		)
-		if err != nil {
-			log.Printf("failed to send message for gauge '%d': %v", g.ID, err)
-		} else {
-			log.Printf("sent gauge '%d': T1=%d, T2=%d", g.ID, g.T1, g.T2)
-		}
-	}
-	return nil
 }

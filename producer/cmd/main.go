@@ -3,10 +3,13 @@ package main
 import (
 	"context"
 	"log"
+	"time"
 
-	gauges "abds-producer/internal/app/usecase/enegrosbyt/gauge/listen"
+	enegrosbyt "abds-producer/internal/app/service/energosbyt"
+	gaugesListener "abds-producer/internal/app/usecase/enegrosbyt/gauge/listen"
 	"abds-producer/internal/infra/client/kafka/producer/sync"
 	"abds-producer/internal/infra/config"
+	"abds-producer/internal/infra/repo/energosbyt/flat"
 	"abds-producer/internal/infra/repo/energosbyt/gauge"
 )
 
@@ -18,13 +21,16 @@ func main() {
 	}
 	ctx := context.Background()
 	bufsize := 10
-	err = gauges.
+	err = gaugesListener.
 		NewUseCase(
 			sync.NewProducer(cfg.Kafka.Producer),
-			gauge.NewRepo(),
-			cfg.Kafka.Producer.Brokers[0].Topics[0].Name, // Пока берем первый топик из конфига.
+			enegrosbyt.NewService(
+				gauge.NewRepo(),
+				flat.NewRepo(f.flatsCSV),
+			),
+			cfg.Kafka.Producer.Brokers.FirstTopic().Name, // Пока берем первый топик из конфига.
 		).
-		Listen(ctx, bufsize)
+		Listen(ctx, bufsize, 3*time.Second)
 	if err != nil {
 		log.Fatalf("failed to send gauges: %v", err)
 	}

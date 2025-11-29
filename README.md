@@ -8,3 +8,4 @@
 - [SCD - медленно изменяющиеся измерения](/workshops/03-scd/)
 - [Шардирование в ClickHouse](/workshops/04/)
 - [ClickHouse + Kafka](/workshops/05/01)
+- [Витрины данных: ClickHouse + Superset](/workshops/06/)

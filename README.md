@@ -9,3 +9,11 @@
 - [Шардирование в ClickHouse](/workshops/04/)
 - [ClickHouse + Kafka](/workshops/05/01)
 - [Витрины данных: ClickHouse + Superset](/workshops/06/)
+
+## Курсовые работы
+
+- [Введение](/termpapers/)
+- Темы
+  - [Антифрод в банковских транзакциях](termpapers/antifraud/)
+  - [Clickstream-аналитика](termpapers/clickstream/)
+  - [Система сбора логов](termpapers/logging/)

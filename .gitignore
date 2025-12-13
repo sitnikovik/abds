@@ -4,8 +4,20 @@
 .obsidian/
 
 # Project files
-__*.*
 *volume/
+bin/
+airflow/logs/
+.venv/
+venv/
+.env
+airflow/.env
+airflow/data/
+
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
 
 # Other files
 .DS_Store

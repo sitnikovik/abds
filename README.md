@@ -9,6 +9,7 @@
 - [Шардирование в ClickHouse](/workshops/04/)
 - [ClickHouse + Kafka](/workshops/05/01)
 - [Витрины данных: ClickHouse + Superset](/workshops/06/)
+- [Оркестрация c Apache Airflow](/workshops/07/)
 
 ## Курсовые работы
 

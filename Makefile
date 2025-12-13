@@ -1,13 +1,13 @@
 .DEFAULT_GOAL = run
 
 .PHONY: run
-run:
+run: .cfg
 	@echo "🐳 🔕 Запускаю проект в фоновом режиме..."
 	docker-compose up -d --build
 	@echo "✅ Всё ОК"
 
 .PHONY: rund
-rund:
+rund: .cfg
 	@echo "🐳 📣 Запускаю проект..."
 	docker-compose up --build
 
@@ -18,6 +18,14 @@ stop:
 	docker-compose down
 	@echo "✅ Всё ОК"
 
+.PHONY: venv
+venv:
+	@echo "🐍 Создаю виртуальное окружение Python и устанавливаю зависимости..."
+	python3 -m venv .venv && \
+	source .venv/bin/activate && \
+	pip install --upgrade pip && \
+	pip install -r requirements.txt --upgrade
+	
 .PHONY: .energosbyt
 energosbyt: .schema .loadcsv .run-gauge-producer
 	@echo "✅ Проект 'energosbyt' готов к работе!"
@@ -58,3 +66,8 @@ energosbyt: .schema .loadcsv .run-gauge-producer
 .schema:
 	@echo "🐳 Создаю новую БД 'energosbyt' ClickHouse..."
 	docker exec -i ch1 clickhouse-client --multiquery < workshops/06/schema.energosbyt.sql
+
+.PHONY: .cfg
+.cfg:
+	@echo "⚙️  Создаю файл конфигурации .env для Airflow..."
+	cp airflow/.env.example airflow/.env

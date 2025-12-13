@@ -9,6 +9,11 @@ x-environment: &environment
   CLICKHOUSE_CONFIG_max_threads: 4
   CLICKHOUSE_REPLICATION: "1"
 
+x-airflow-common: &airflow-common
+  AIRFLOW__CORE__EXECUTOR: LocalExecutor
+  AIRFLOW__CORE__DAGS_ARE_PAUSED_AT_CREATION: 'true'
+  AIRFLOW__CORE__LOAD_EXAMPLES: 'false'
+
 services:
   ch1:
     image: clickhouse/clickhouse-server:25.8
@@ -103,6 +108,110 @@ services:
       - superset_volume:/app/superset_home
     restart: unless-stopped
 
+  airflow-init:
+    image: apache/airflow:2.8.1-python3.11
+    container_name: airflow-init
+    networks:
+      - default
+    env_file:
+      - ./airflow/.env
+    environment:
+      <<: *airflow-common
+      _AIRFLOW_DB_MIGRATE: 'true'
+      _AIRFLOW_WWW_USER_CREATE: 'true'
+      _AIRFLOW_WWW_USER_USERNAME: admin
+      _AIRFLOW_WWW_USER_PASSWORD: admin
+    volumes:
+      - ./airflow/dags:/opt/airflow/dags
+      - airflow_logs_volume:/opt/airflow/logs
+      - ./airflow/plugins:/opt/airflow/plugins
+      - ./airflow/data:/opt/airflow/data
+      - ./airflow/config:/opt/airflow/config
+      - ./airflow/sql:/opt/airflow/sql
+      - ./airflow/setup.sh:/opt/airflow/setup.sh
+    entrypoint: /bin/bash
+    command:
+      - /opt/airflow/setup.sh
+    depends_on:
+      airflow-postgres:
+        condition: service_healthy
+
+  airflow-webserver:
+    image: apache/airflow:2.8.1-python3.11
+    container_name: airflow-webserver
+    restart: unless-stopped
+    networks:
+      - default
+    depends_on:
+      airflow-postgres:
+        condition: service_healthy
+    env_file:
+      - ./airflow/.env
+    environment:
+      <<: *airflow-common
+    volumes:
+      - ./airflow/dags:/opt/airflow/dags
+      - airflow_logs_volume:/opt/airflow/logs
+      - ./airflow/plugins:/opt/airflow/plugins
+      - ./airflow/data:/opt/airflow/data
+      - ./airflow/sql:/opt/airflow/sql
+    ports:
+      - "8081:8081"
+    command:
+      - bash
+      - -c
+      - |
+        pip install clickhouse-connect requests
+        airflow webserver
+    healthcheck:
+      test: ["CMD", "curl", "--fail", "http://localhost:8081/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 5
+
+  airflow-scheduler:
+    image: apache/airflow:2.8.1-python3.11
+    container_name: airflow-scheduler
+    restart: unless-stopped
+    networks:
+      - default
+    depends_on:
+      airflow-postgres:
+        condition: service_healthy
+    env_file:
+      - ./airflow/.env
+    environment:
+      <<: *airflow-common
+    volumes:
+      - ./airflow/dags:/opt/airflow/dags
+      - ./airflow/plugins:/opt/airflow/plugins
+      - ./airflow/data:/opt/airflow/data
+      - ./airflow/sql:/opt/airflow/sql
+    command:
+      - bash
+      - -c
+      - |
+        pip install clickhouse-connect requests
+        airflow scheduler
+
+  airflow-postgres:
+    image: postgres:15
+    container_name: airflow-postgres
+    networks:
+      - default
+    environment:
+      POSTGRES_USER: airflow
+      POSTGRES_PASSWORD: airflow
+      POSTGRES_DB: airflow
+    volumes:
+      - postgres_volume:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD", "pg_isready", "-U", "airflow"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 10s
+
 volumes:
   ch1_volume:
     driver: local
@@ -111,4 +220,10 @@ volumes:
   kafka_volume:
     driver: local
   superset_volume:
+    driver: local
+  postgres_volume:
+    driver: local
+  airflow_logs_volume:
+    driver: local
+  airflow_dags_pycache_volume:
     driver: local

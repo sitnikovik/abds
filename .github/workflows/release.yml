@@ -1,0 +1,68 @@
+name: Release
+
+on:
+  workflow_dispatch:
+    inputs:
+      version:
+        description: 'Version to release (e.g., 1.0.0)'
+        required: true
+        type: string
+  pull_request:
+    types:
+      - closed
+
+jobs:
+  release:
+    if: >-
+      github.event_name == 'workflow_dispatch' ||
+      (
+        github.event_name == 'pull_request' &&
+        github.event.pull_request.merged == true &&
+        contains(github.event.pull_request.title, 'release: v')
+      )
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Make scripts executable
+        run: chmod +x .github/scripts/release/*.sh
+
+      - name: Resolve release version
+        id: version
+        shell: bash
+        run: |
+          if [ "${{ github.event_name }}" = "workflow_dispatch" ]; then
+            VERSION="${{ inputs.version }}"
+          else
+            TITLE="${{ github.event.pull_request.title }}"
+
+            if [[ "$TITLE" =~ release:[[:space:]]v([0-9]+\.[0-9]+\.[0-9]+) ]]; then
+              VERSION="${BASH_REMATCH[1]}"
+            else
+              echo "❌ Pull request title must contain release: vX.Y.Z"
+              exit 1
+            fi
+          fi
+
+          echo "version=$VERSION" >> "$GITHUB_OUTPUT"
+          echo "✅ Release version resolved: $VERSION"
+
+      - name: Validate version format
+        run: .github/scripts/release/validate_version.sh "${{ steps.version.outputs.version }}"
+
+      - name: Check if tag exists
+        run: .github/scripts/release/check_tag_exists.sh "${{ steps.version.outputs.version }}"
+
+      - name: Extract changelog for version
+        run: .github/scripts/release/extract_changelog.sh "${{ steps.version.outputs.version }}" /tmp/release_notes.md
+
+      - name: Create git tag
+        run: .github/scripts/release/create_tag.sh "${{ steps.version.outputs.version }}"
+
+      - name: Create GitHub Release
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: .github/scripts/release/create_release.sh "${{ steps.version.outputs.version }}" /tmp/release_notes.md

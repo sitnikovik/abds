@@ -3,8 +3,14 @@
 .vscode/
 .obsidian/
 
+# Agents
+.opencode/
+.claude/
+.codex/
+
 # Project files
 *volume/
+volume/
 bin/
 airflow/logs/
 .venv/
@@ -12,6 +18,11 @@ venv/
 .env
 airflow/.env
 airflow/data/
+*local*
+tmp/
+
+# Datasets
+*.dataset.*
 
 # Python
 __pycache__/

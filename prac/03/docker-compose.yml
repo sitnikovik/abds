@@ -1,0 +1,21 @@
+version: '3.7'
+x-environment: &environment
+  CLICKHOUSE_USER: default
+  CLICKHOUSE_PASSWORD: ""
+  CLICKHOUSE_DEFAULT_ACCESS_MANAGEMENT: 1
+
+services:
+  energosbyt_ch1:
+    image: clickhouse/clickhouse-server:26.7
+    container_name: energosbyt_ch1
+    ports:
+      - "8123:8123" # Веб-интерфейс
+      - "9000:9000"
+    volumes:
+      - ./volume/energosbyt_ch1:/var/lib/clickhouse
+    environment:
+      <<: *environment
+
+volumes:
+  energosbyt_ch1:
+    driver: local

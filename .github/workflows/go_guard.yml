@@ -1,0 +1,26 @@
+name: Go Guard
+
+on:
+  workflow_call:
+    outputs:
+      go_mod_exists:
+        description: Whether go.mod exists in repository root
+        value: ${{ jobs.guard.outputs.go_mod_exists }}
+
+jobs:
+  guard:
+    runs-on: ubuntu-latest
+    outputs:
+      go_mod_exists: ${{ steps.gomod.outputs.exists }}
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+      - name: Check go.mod
+        id: gomod
+        run: |
+          if [ -f go.mod ]; then
+            echo "exists=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "::warning::go.mod not found. Go-specific jobs will be skipped."
+            echo "exists=false" >> "$GITHUB_OUTPUT"
+          fi

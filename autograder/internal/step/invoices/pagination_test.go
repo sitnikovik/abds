@@ -6,11 +6,10 @@ import (
 	"net/http"
 	"testing"
 
-	"github.com/stretchr/testify/assert"
-
 	"github.com/sitnikovik/buggles/expect"
 	checkerr "github.com/sitnikovik/buggles/expect/errors"
 	"github.com/sitnikovik/buggles/expect/strings"
+	"github.com/stretchr/testify/assert"
 
 	"github.com/sitnikovik/abds/autograder/internal/step"
 	"github.com/sitnikovik/abds/autograder/internal/step/fixture"
@@ -25,26 +24,30 @@ func TestPagination_Run(t *testing.T) {
 
 	t.Run("passes when the pages differ", func(t *testing.T) {
 		t.Parallel()
-		cli := fakehttp.NewSequence(
-			fakehttp.NewResponse(
-				fakehttp.WithStatus(http.StatusOK),
-				fakehttp.WithBody(`{"invoices":[{"created_at":"2026-10-27 10:00:00"}],"count":2}`),
-			),
-			fakehttp.NewResponse(
-				fakehttp.WithStatus(http.StatusOK),
-				fakehttp.WithBody(`{"invoices":[{"created_at":"2026-10-27 10:00:00"}],"count":2}`),
-			),
-			fakehttp.NewResponse(
-				fakehttp.WithStatus(http.StatusOK),
-				fakehttp.WithBody(`{"invoices":[{"created_at":"2026-09-27 10:00:00"}],"count":2}`),
-			),
-		)
 		vars := step.NewVariables()
 		vars.Set(fixture.RealtyID, "1")
-		err := invoices.NewPagination(cli, "http://localhost:8080").Run(
-			context.Background(),
-			vars,
-		)
+		err := invoices.
+			NewPagination(
+				fakehttp.NewSequence(
+					fakehttp.NewResponse(
+						fakehttp.WithStatus(http.StatusOK),
+						fakehttp.WithBody(`{"invoices":[{"created_at":"2026-10-27 10:00:00"}],"count":2}`),
+					),
+					fakehttp.NewResponse(
+						fakehttp.WithStatus(http.StatusOK),
+						fakehttp.WithBody(`{"invoices":[{"created_at":"2026-10-27 10:00:00"}],"count":2}`),
+					),
+					fakehttp.NewResponse(
+						fakehttp.WithStatus(http.StatusOK),
+						fakehttp.WithBody(`{"invoices":[{"created_at":"2026-09-27 10:00:00"}],"count":2}`),
+					),
+				),
+				"http://localhost:8080",
+			).
+			Run(
+				context.Background(),
+				vars,
+			)
 		assert.NoError(t, checkerr.NoError(err))
 	})
 
@@ -66,10 +69,11 @@ func TestPagination_Run(t *testing.T) {
 		)
 		vars := step.NewVariables()
 		vars.Set(fixture.RealtyID, "1")
-		err := invoices.NewPagination(cli, "http://localhost:8080").Run(
-			context.Background(),
-			vars,
-		)
+		err := invoices.NewPagination(cli, "http://localhost:8080").
+			Run(
+				context.Background(),
+				vars,
+			)
 		assert.NoError(t, checkerr.Contains(err, "offset must move"))
 	})
 
@@ -91,10 +95,11 @@ func TestPagination_Run(t *testing.T) {
 		)
 		vars := step.NewVariables()
 		vars.Set(fixture.RealtyID, "1")
-		err := invoices.NewPagination(cli, "http://localhost:8080").Run(
-			context.Background(),
-			vars,
-		)
+		err := invoices.NewPagination(cli, "http://localhost:8080").
+			Run(
+				context.Background(),
+				vars,
+			)
 		assert.NoError(t, checkerr.Contains(err, "second page"))
 	})
 
@@ -111,10 +116,11 @@ func TestPagination_Run(t *testing.T) {
 		)
 		vars := step.NewVariables()
 		vars.Set(fixture.RealtyID, "1")
-		err := invoices.NewPagination(cli, "http://localhost:8080").Run(
-			context.Background(),
-			vars,
-		)
+		err := invoices.NewPagination(cli, "http://localhost:8080").
+			Run(
+				context.Background(),
+				vars,
+			)
 		assert.NoError(t, checkerr.Contains(err, "default page"))
 	})
 
@@ -127,10 +133,11 @@ func TestPagination_Run(t *testing.T) {
 		)
 		vars := step.NewVariables()
 		vars.Set(fixture.RealtyID, "1")
-		err := invoices.NewPagination(cli, "http://localhost:8080").Run(
-			context.Background(),
-			vars,
-		)
+		err := invoices.NewPagination(cli, "http://localhost:8080").
+			Run(
+				context.Background(),
+				vars,
+			)
 		assert.NoError(t, checkerr.Contains(err, "unexpected response"))
 	})
 
@@ -143,10 +150,11 @@ func TestPagination_Run(t *testing.T) {
 		)
 		vars := step.NewVariables()
 		vars.Set(fixture.RealtyID, "1")
-		err := invoices.NewPagination(cli, "http://localhost:8080").Run(
-			context.Background(),
-			vars,
-		)
+		err := invoices.NewPagination(cli, "http://localhost:8080").
+			Run(
+				context.Background(),
+				vars,
+			)
 		assert.NoError(t, checkerr.Contains(err, "connection refused"))
 	})
 
@@ -159,10 +167,11 @@ func TestPagination_Run(t *testing.T) {
 				nil,
 			),
 			"http://localhost:8080",
-		).Run(
-			context.Background(),
-			step.NewVariables(),
-		)
+		).
+			Run(
+				context.Background(),
+				step.NewVariables(),
+			)
 		assert.NoError(t, checkerr.Contains(err, fixture.RealtyID))
 	})
 

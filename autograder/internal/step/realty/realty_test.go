@@ -39,10 +39,11 @@ func TestGet_Run(t *testing.T) {
 				nil,
 			),
 			baseURL,
-		).Run(
-			context.Background(),
-			VarsWithRealty(),
-		)
+		).
+			Run(
+				context.Background(),
+				VarsWithRealty(),
+			)
 		assert.NoError(t, checkerr.NoError(err))
 	})
 
@@ -55,10 +56,11 @@ func TestGet_Run(t *testing.T) {
 				nil,
 			),
 			baseURL,
-		).Run(
-			context.Background(),
-			VarsWithRealty(),
-		)
+		).
+			Run(
+				context.Background(),
+				VarsWithRealty(),
+			)
 		assert.NoError(t, checkerr.NoError(err))
 	})
 
@@ -71,10 +73,11 @@ func TestGet_Run(t *testing.T) {
 				nil,
 			),
 			baseURL,
-		).Run(
-			context.Background(),
-			VarsWithRealty(),
-		)
+		).
+			Run(
+				context.Background(),
+				VarsWithRealty(),
+			)
 		assert.NoError(t, checkerr.Contains(err, "field type"))
 	})
 
@@ -87,10 +90,11 @@ func TestGet_Run(t *testing.T) {
 				nil,
 			),
 			baseURL,
-		).Run(
-			context.Background(),
-			VarsWithRealty(),
-		)
+		).
+			Run(
+				context.Background(),
+				VarsWithRealty(),
+			)
 		assert.NoError(t, checkerr.Contains(err, "field square"))
 	})
 
@@ -103,10 +107,11 @@ func TestGet_Run(t *testing.T) {
 				nil,
 			),
 			baseURL,
-		).Run(
-			context.Background(),
-			VarsWithRealty(),
-		)
+		).
+			Run(
+				context.Background(),
+				VarsWithRealty(),
+			)
 		assert.NoError(t, checkerr.Contains(err, "field id"))
 	})
 
@@ -119,10 +124,11 @@ func TestGet_Run(t *testing.T) {
 				nil,
 			),
 			baseURL,
-		).Run(
-			context.Background(),
-			VarsWithRealty(),
-		)
+		).
+			Run(
+				context.Background(),
+				VarsWithRealty(),
+			)
 		assert.NoError(t, checkerr.Contains(err, "unexpected response"))
 	})
 
@@ -135,10 +141,11 @@ func TestGet_Run(t *testing.T) {
 				nil,
 			),
 			baseURL,
-		).Run(
-			context.Background(),
-			VarsWithRealty(),
-		)
+		).
+			Run(
+				context.Background(),
+				VarsWithRealty(),
+			)
 		assert.NoError(t, checkerr.Contains(err, "decode body"))
 	})
 
@@ -151,10 +158,11 @@ func TestGet_Run(t *testing.T) {
 				errors.New("connection refused"),
 			),
 			baseURL,
-		).Run(
-			context.Background(),
-			VarsWithRealty(),
-		)
+		).
+			Run(
+				context.Background(),
+				VarsWithRealty(),
+			)
 		assert.NoError(t, checkerr.Contains(err, "connection refused"))
 	})
 
@@ -167,10 +175,11 @@ func TestGet_Run(t *testing.T) {
 				nil,
 			),
 			baseURL,
-		).Run(
-			context.Background(),
-			step.NewVariables(),
-		)
+		).
+			Run(
+				context.Background(),
+				step.NewVariables(),
+			)
 		assert.NoError(t, checkerr.Contains(err, fixture.RealtyID))
 	})
 
@@ -206,10 +215,11 @@ func TestNotFound_Run(t *testing.T) {
 				nil,
 			),
 			baseURL,
-		).Run(
-			context.Background(),
-			step.NewVariables(),
-		)
+		).
+			Run(
+				context.Background(),
+				step.NewVariables(),
+			)
 		assert.NoError(t, checkerr.NoError(err))
 	})
 
@@ -222,10 +232,11 @@ func TestNotFound_Run(t *testing.T) {
 				nil,
 			),
 			baseURL,
-		).Run(
-			context.Background(),
-			step.NewVariables(),
-		)
+		).
+			Run(
+				context.Background(),
+				step.NewVariables(),
+			)
 		assert.NoError(t, checkerr.Contains(err, "status code must be 404"))
 	})
 
@@ -238,10 +249,11 @@ func TestNotFound_Run(t *testing.T) {
 				nil,
 			),
 			baseURL,
-		).Run(
-			context.Background(),
-			step.NewVariables(),
-		)
+		).
+			Run(
+				context.Background(),
+				step.NewVariables(),
+			)
 		assert.NoError(t, checkerr.Contains(err, "field message"))
 	})
 
@@ -254,10 +266,11 @@ func TestNotFound_Run(t *testing.T) {
 				nil,
 			),
 			baseURL,
-		).Run(
-			context.Background(),
-			step.NewVariables(),
-		)
+		).
+			Run(
+				context.Background(),
+				step.NewVariables(),
+			)
 		assert.NoError(t, checkerr.Contains(err, "unexpected response"))
 	})
 
@@ -270,10 +283,11 @@ func TestNotFound_Run(t *testing.T) {
 				errors.New("connection refused"),
 			),
 			baseURL,
-		).Run(
-			context.Background(),
-			step.NewVariables(),
-		)
+		).
+			Run(
+				context.Background(),
+				step.NewVariables(),
+			)
 		assert.NoError(t, checkerr.Contains(err, "connection refused"))
 	})
 

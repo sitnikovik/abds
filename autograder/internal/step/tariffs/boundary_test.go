@@ -60,10 +60,11 @@ func TestBoundary_Run(t *testing.T) {
 			"energosbyt",
 			cli,
 			"http://localhost:8080",
-		).Run(
-			context.Background(),
-			VarsWithTariff(),
-		)
+		).
+			Run(
+				context.Background(),
+				VarsWithTariff(),
+			)
 		assert.NoError(t, checkerr.NoError(err))
 	})
 
@@ -84,10 +85,11 @@ func TestBoundary_Run(t *testing.T) {
 			"energosbyt",
 			cli,
 			"http://localhost:8080",
-		).Run(
-			context.Background(),
-			VarsWithTariff(),
-		)
+		).
+			Run(
+				context.Background(),
+				VarsWithTariff(),
+			)
 		assert.NoError(t, checkerr.Contains(err, "version must change"))
 	})
 
@@ -110,10 +112,11 @@ func TestBoundary_Run(t *testing.T) {
 			"energosbyt",
 			cli,
 			"http://localhost:8080",
-		).Run(
-			context.Background(),
-			VarsWithTariff(),
-		)
+		).
+			Run(
+				context.Background(),
+				VarsWithTariff(),
+			)
 		assert.NoError(t, checkerr.Contains(err, "day before the boundary"))
 	})
 
@@ -131,10 +134,11 @@ func TestBoundary_Run(t *testing.T) {
 				nil,
 			),
 			"http://localhost:8080",
-		).Run(
-			context.Background(),
-			VarsWithTariff(),
-		)
+		).
+			Run(
+				context.Background(),
+				VarsWithTariff(),
+			)
 		assert.NoError(t, checkerr.Contains(err, "two versions"))
 	})
 
@@ -152,10 +156,11 @@ func TestBoundary_Run(t *testing.T) {
 				nil,
 			),
 			"http://localhost:8080",
-		).Run(
-			context.Background(),
-			VarsWithTariff(),
-		)
+		).
+			Run(
+				context.Background(),
+				VarsWithTariff(),
+			)
 		assert.NoError(t, checkerr.Contains(err, "parse valid_from"))
 	})
 
@@ -172,10 +177,11 @@ func TestBoundary_Run(t *testing.T) {
 			"energosbyt",
 			cli,
 			"http://localhost:8080",
-		).Run(
-			context.Background(),
-			VarsWithTariff(),
-		)
+		).
+			Run(
+				context.Background(),
+				VarsWithTariff(),
+			)
 		assert.NoError(t, checkerr.Contains(err, "unexpected response"))
 	})
 
@@ -191,10 +197,11 @@ func TestBoundary_Run(t *testing.T) {
 			"energosbyt",
 			cli,
 			"http://localhost:8080",
-		).Run(
-			context.Background(),
-			VarsWithTariff(),
-		)
+		).
+			Run(
+				context.Background(),
+				VarsWithTariff(),
+			)
 		assert.NoError(t, checkerr.Contains(err, "connection refused"))
 	})
 
@@ -209,10 +216,11 @@ func TestBoundary_Run(t *testing.T) {
 				nil,
 			),
 			"http://localhost:8080",
-		).Run(
-			context.Background(),
-			step.NewVariables(),
-		)
+		).
+			Run(
+				context.Background(),
+				step.NewVariables(),
+			)
 		assert.NoError(t, checkerr.Contains(err, fixture.TariffID))
 	})
 

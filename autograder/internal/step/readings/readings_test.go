@@ -42,10 +42,11 @@ func TestPost_Run(t *testing.T) {
 				nil,
 			),
 			baseURL,
-		).Run(
-			context.Background(),
-			VarsWithAll(),
-		)
+		).
+			Run(
+				context.Background(),
+				VarsWithAll(),
+			)
 		assert.NoError(t, checkerr.NoError(err))
 	})
 
@@ -58,10 +59,11 @@ func TestPost_Run(t *testing.T) {
 				nil,
 			),
 			baseURL,
-		).Run(
-			context.Background(),
-			VarsWithAll(),
-		)
+		).
+			Run(
+				context.Background(),
+				VarsWithAll(),
+			)
 		assert.NoError(t, checkerr.Contains(err, "status code must be 201"))
 	})
 
@@ -74,10 +76,11 @@ func TestPost_Run(t *testing.T) {
 				nil,
 			),
 			baseURL,
-		).Run(
-			context.Background(),
-			VarsWithAll(),
-		)
+		).
+			Run(
+				context.Background(),
+				VarsWithAll(),
+			)
 		assert.NoError(t, checkerr.Contains(err, "body must be empty"))
 	})
 
@@ -90,10 +93,11 @@ func TestPost_Run(t *testing.T) {
 				errors.New("connection refused"),
 			),
 			baseURL,
-		).Run(
-			context.Background(),
-			VarsWithAll(),
-		)
+		).
+			Run(
+				context.Background(),
+				VarsWithAll(),
+			)
 		assert.NoError(t, checkerr.Contains(err, "connection refused"))
 	})
 
@@ -106,10 +110,11 @@ func TestPost_Run(t *testing.T) {
 				nil,
 			),
 			baseURL,
-		).Run(
-			context.Background(),
-			step.NewVariables(),
-		)
+		).
+			Run(
+				context.Background(),
+				step.NewVariables(),
+			)
 		assert.NoError(t, checkerr.Contains(err, fixture.RealtyID))
 	})
 
@@ -124,10 +129,11 @@ func TestPost_Run(t *testing.T) {
 				nil,
 			),
 			baseURL,
-		).Run(
-			context.Background(),
-			vars,
-		)
+		).
+			Run(
+				context.Background(),
+				vars,
+			)
 		assert.NoError(t, checkerr.Contains(err, fixture.UserID))
 	})
 
@@ -163,10 +169,11 @@ func TestList_Run(t *testing.T) {
 				nil,
 			),
 			baseURL,
-		).Run(
-			context.Background(),
-			VarsWithAll(),
-		)
+		).
+			Run(
+				context.Background(),
+				VarsWithAll(),
+			)
 		assert.NoError(t, checkerr.NoError(err))
 	})
 
@@ -179,10 +186,11 @@ func TestList_Run(t *testing.T) {
 				nil,
 			),
 			baseURL,
-		).Run(
-			context.Background(),
-			VarsWithAll(),
-		)
+		).
+			Run(
+				context.Background(),
+				VarsWithAll(),
+			)
 		assert.NoError(t, checkerr.Contains(err, "count must match"))
 	})
 
@@ -195,10 +203,11 @@ func TestList_Run(t *testing.T) {
 				nil,
 			),
 			baseURL,
-		).Run(
-			context.Background(),
-			VarsWithAll(),
-		)
+		).
+			Run(
+				context.Background(),
+				VarsWithAll(),
+			)
 		assert.NoError(t, checkerr.Contains(err, "October 2026"))
 	})
 
@@ -211,10 +220,11 @@ func TestList_Run(t *testing.T) {
 				nil,
 			),
 			baseURL,
-		).Run(
-			context.Background(),
-			VarsWithAll(),
-		)
+		).
+			Run(
+				context.Background(),
+				VarsWithAll(),
+			)
 		assert.NoError(t, checkerr.Contains(err, "unexpected response"))
 	})
 
@@ -227,10 +237,11 @@ func TestList_Run(t *testing.T) {
 				nil,
 			),
 			baseURL,
-		).Run(
-			context.Background(),
-			VarsWithAll(),
-		)
+		).
+			Run(
+				context.Background(),
+				VarsWithAll(),
+			)
 		assert.NoError(t, checkerr.Contains(err, "decode body"))
 	})
 
@@ -243,10 +254,11 @@ func TestList_Run(t *testing.T) {
 				errors.New("connection refused"),
 			),
 			baseURL,
-		).Run(
-			context.Background(),
-			VarsWithAll(),
-		)
+		).
+			Run(
+				context.Background(),
+				VarsWithAll(),
+			)
 		assert.NoError(t, checkerr.Contains(err, "connection refused"))
 	})
 
@@ -259,10 +271,11 @@ func TestList_Run(t *testing.T) {
 				nil,
 			),
 			baseURL,
-		).Run(
-			context.Background(),
-			step.NewVariables(),
-		)
+		).
+			Run(
+				context.Background(),
+				step.NewVariables(),
+			)
 		assert.NoError(t, checkerr.Contains(err, fixture.RealtyID))
 	})
 
@@ -298,10 +311,11 @@ func TestBadRequest_Run(t *testing.T) {
 				nil,
 			),
 			baseURL,
-		).Run(
-			context.Background(),
-			VarsWithAll(),
-		)
+		).
+			Run(
+				context.Background(),
+				VarsWithAll(),
+			)
 		assert.NoError(t, checkerr.NoError(err))
 	})
 
@@ -314,10 +328,11 @@ func TestBadRequest_Run(t *testing.T) {
 				nil,
 			),
 			baseURL,
-		).Run(
-			context.Background(),
-			VarsWithAll(),
-		)
+		).
+			Run(
+				context.Background(),
+				VarsWithAll(),
+			)
 		assert.NoError(t, checkerr.Contains(err, "status code must be 400"))
 	})
 
@@ -330,10 +345,11 @@ func TestBadRequest_Run(t *testing.T) {
 				nil,
 			),
 			baseURL,
-		).Run(
-			context.Background(),
-			VarsWithAll(),
-		)
+		).
+			Run(
+				context.Background(),
+				VarsWithAll(),
+			)
 		assert.NoError(t, checkerr.Contains(err, "field message"))
 	})
 
@@ -346,10 +362,11 @@ func TestBadRequest_Run(t *testing.T) {
 				nil,
 			),
 			baseURL,
-		).Run(
-			context.Background(),
-			VarsWithAll(),
-		)
+		).
+			Run(
+				context.Background(),
+				VarsWithAll(),
+			)
 		assert.NoError(t, checkerr.Contains(err, "unexpected response"))
 	})
 
@@ -362,10 +379,11 @@ func TestBadRequest_Run(t *testing.T) {
 				errors.New("connection refused"),
 			),
 			baseURL,
-		).Run(
-			context.Background(),
-			VarsWithAll(),
-		)
+		).
+			Run(
+				context.Background(),
+				VarsWithAll(),
+			)
 		assert.NoError(t, checkerr.Contains(err, "connection refused"))
 	})
 
@@ -378,10 +396,11 @@ func TestBadRequest_Run(t *testing.T) {
 				nil,
 			),
 			baseURL,
-		).Run(
-			context.Background(),
-			step.NewVariables(),
-		)
+		).
+			Run(
+				context.Background(),
+				step.NewVariables(),
+			)
 		assert.NoError(t, checkerr.Contains(err, fixture.RealtyID))
 	})
 

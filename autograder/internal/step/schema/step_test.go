@@ -28,10 +28,11 @@ func TestStep_Run(t *testing.T) {
 				fakeclickhouse.WithStrings("system.columns", fixtureschema.Columns()),
 			),
 			"energosbyt",
-		).Run(
-			context.Background(),
-			step.NewVariables(),
-		)
+		).
+			Run(
+				context.Background(),
+				step.NewVariables(),
+			)
 		assert.NoError(
 			t,
 			checkerr.NoError(err),
@@ -47,10 +48,11 @@ func TestStep_Run(t *testing.T) {
 				fakeclickhouse.WithStrings("system.columns", fixtureschema.Columns()),
 			),
 			"energosbyt",
-		).Run(
-			context.Background(),
-			step.NewVariables(),
-		)
+		).
+			Run(
+				context.Background(),
+				step.NewVariables(),
+			)
 		assert.NoError(
 			t,
 			checkerr.Contains(err, "table dim_realty engine"),
@@ -66,10 +68,11 @@ func TestStep_Run(t *testing.T) {
 				fakeclickhouse.WithStrings("system.columns", rows),
 			),
 			"energosbyt",
-		).Run(
-			context.Background(),
-			step.NewVariables(),
-		)
+		).
+			Run(
+				context.Background(),
+				step.NewVariables(),
+			)
 		assert.NoError(
 			t,
 			checkerr.Contains(err, "column dim_realty.id type"),
@@ -83,10 +86,11 @@ func TestStep_Run(t *testing.T) {
 				fakeclickhouse.WithError(errors.New("connection refused")),
 			),
 			"energosbyt",
-		).Run(
-			context.Background(),
-			step.NewVariables(),
-		)
+		).
+			Run(
+				context.Background(),
+				step.NewVariables(),
+			)
 		assert.NoError(
 			t,
 			expect.All(
@@ -103,10 +107,11 @@ func TestStep_Run(t *testing.T) {
 				fakeclickhouse.WithStrings("system.tables", fixtureschema.Engines()),
 			),
 			"energosbyt",
-		).Run(
-			context.Background(),
-			step.NewVariables(),
-		)
+		).
+			Run(
+				context.Background(),
+				step.NewVariables(),
+			)
 		assert.NoError(
 			t,
 			checkerr.Contains(err, "read columns"),

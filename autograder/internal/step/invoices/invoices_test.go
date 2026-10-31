@@ -39,10 +39,11 @@ func TestList_Run(t *testing.T) {
 				nil,
 			),
 			baseURL,
-		).Run(
-			context.Background(),
-			VarsWithRealty(),
-		)
+		).
+			Run(
+				context.Background(),
+				VarsWithRealty(),
+			)
 		assert.NoError(t, checkerr.NoError(err))
 	})
 
@@ -56,10 +57,11 @@ func TestList_Run(t *testing.T) {
 				nil,
 			),
 			baseURL,
-		).Run(
-			context.Background(),
-			VarsWithRealty(),
-		)
+		).
+			Run(
+				context.Background(),
+				VarsWithRealty(),
+			)
 		assert.NoError(t, checkerr.Contains(err, "page must not exceed the limit"))
 	})
 
@@ -72,10 +74,11 @@ func TestList_Run(t *testing.T) {
 				nil,
 			),
 			baseURL,
-		).Run(
-			context.Background(),
-			VarsWithRealty(),
-		)
+		).
+			Run(
+				context.Background(),
+				VarsWithRealty(),
+			)
 		assert.NoError(t, checkerr.Contains(err, "object must have invoices"))
 	})
 
@@ -88,10 +91,11 @@ func TestList_Run(t *testing.T) {
 				nil,
 			),
 			baseURL,
-		).Run(
-			context.Background(),
-			VarsWithRealty(),
-		)
+		).
+			Run(
+				context.Background(),
+				VarsWithRealty(),
+			)
 		assert.NoError(t, checkerr.Contains(err, "unexpected response"))
 	})
 
@@ -104,10 +108,11 @@ func TestList_Run(t *testing.T) {
 				nil,
 			),
 			baseURL,
-		).Run(
-			context.Background(),
-			VarsWithRealty(),
-		)
+		).
+			Run(
+				context.Background(),
+				VarsWithRealty(),
+			)
 		assert.NoError(t, checkerr.Contains(err, "decode body"))
 	})
 
@@ -120,10 +125,11 @@ func TestList_Run(t *testing.T) {
 				errors.New("connection refused"),
 			),
 			baseURL,
-		).Run(
-			context.Background(),
-			VarsWithRealty(),
-		)
+		).
+			Run(
+				context.Background(),
+				VarsWithRealty(),
+			)
 		assert.NoError(t, checkerr.Contains(err, "connection refused"))
 	})
 
@@ -136,10 +142,11 @@ func TestList_Run(t *testing.T) {
 				nil,
 			),
 			baseURL,
-		).Run(
-			context.Background(),
-			step.NewVariables(),
-		)
+		).
+			Run(
+				context.Background(),
+				step.NewVariables(),
+			)
 		assert.NoError(t, checkerr.Contains(err, fixture.RealtyID))
 	})
 

@@ -36,10 +36,11 @@ func TestStep_Run(t *testing.T) {
 			step.NewDesc("users get not found", "Checks 404."),
 			endpoint.WithPath("/users/%s", "user_id"),
 			endpoint.WithStatus(http.StatusNotFound),
-		).Run(
-			context.Background(),
-			vars,
-		)
+		).
+			Run(
+				context.Background(),
+				vars,
+			)
 		assert.NoError(t, checkerr.NoError(err))
 	})
 
@@ -54,10 +55,11 @@ func TestStep_Run(t *testing.T) {
 			baseURL,
 			step.NewDesc("case", ""),
 			endpoint.WithStatus(http.StatusBadRequest),
-		).Run(
-			context.Background(),
-			step.NewVariables(),
-		)
+		).
+			Run(
+				context.Background(),
+				step.NewVariables(),
+			)
 		assert.NoError(t, checkerr.Contains(err, "status code must be 400"))
 	})
 
@@ -72,10 +74,11 @@ func TestStep_Run(t *testing.T) {
 			baseURL,
 			step.NewDesc("case", ""),
 			endpoint.WithStatus(http.StatusBadRequest),
-		).Run(
-			context.Background(),
-			step.NewVariables(),
-		)
+		).
+			Run(
+				context.Background(),
+				step.NewVariables(),
+			)
 		assert.NoError(t, checkerr.Contains(err, "field message"))
 	})
 
@@ -90,10 +93,11 @@ func TestStep_Run(t *testing.T) {
 			baseURL,
 			step.NewDesc("case", ""),
 			endpoint.WithStatus(http.StatusBadRequest),
-		).Run(
-			context.Background(),
-			step.NewVariables(),
-		)
+		).
+			Run(
+				context.Background(),
+				step.NewVariables(),
+			)
 		assert.NoError(t, checkerr.Contains(err, "unexpected response"))
 	})
 
@@ -107,10 +111,11 @@ func TestStep_Run(t *testing.T) {
 			),
 			baseURL,
 			step.NewDesc("case", ""),
-		).Run(
-			context.Background(),
-			step.NewVariables(),
-		)
+		).
+			Run(
+				context.Background(),
+				step.NewVariables(),
+			)
 		assert.NoError(t, checkerr.Contains(err, "connection refused"))
 	})
 
@@ -125,10 +130,11 @@ func TestStep_Run(t *testing.T) {
 			baseURL,
 			step.NewDesc("case", ""),
 			endpoint.WithPath("/realty/%s", "realty_id"),
-		).Run(
-			context.Background(),
-			step.NewVariables(),
-		)
+		).
+			Run(
+				context.Background(),
+				step.NewVariables(),
+			)
 		assert.NoError(t, checkerr.Contains(err, "realty_id"))
 	})
 
@@ -142,10 +148,11 @@ func TestStep_Run(t *testing.T) {
 			),
 			"://bad",
 			step.NewDesc("case", ""),
-		).Run(
-			context.Background(),
-			step.NewVariables(),
-		)
+		).
+			Run(
+				context.Background(),
+				step.NewVariables(),
+			)
 		assert.NoError(t, checkerr.Contains(err, "build request"))
 	})
 
@@ -182,10 +189,11 @@ func TestStep_Run(t *testing.T) {
 			endpoint.WithMethod(http.MethodPost),
 			endpoint.WithBody(map[string]int{"gauge_id": 0}),
 			endpoint.WithStatus(http.StatusBadRequest),
-		).Run(
-			context.Background(),
-			step.NewVariables(),
-		)
+		).
+			Run(
+				context.Background(),
+				step.NewVariables(),
+			)
 		assert.NoError(t, checkerr.NoError(err))
 	})
 }

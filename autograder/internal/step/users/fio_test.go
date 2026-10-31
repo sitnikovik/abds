@@ -44,10 +44,11 @@ func TestFio_Run(t *testing.T) {
 			"energosbyt",
 			cli,
 			"http://localhost:8080",
-		).Run(
-			context.Background(),
-			VarsWithUser(),
-		)
+		).
+			Run(
+				context.Background(),
+				VarsWithUser(),
+			)
 		assert.NoError(t, checkerr.NoError(err))
 	})
 
@@ -65,10 +66,11 @@ func TestFio_Run(t *testing.T) {
 			"energosbyt",
 			cli,
 			"http://localhost:8080",
-		).Run(
-			context.Background(),
-			VarsWithUser(),
-		)
+		).
+			Run(
+				context.Background(),
+				VarsWithUser(),
+			)
 		assert.NoError(t, checkerr.Contains(err, "field fio"))
 	})
 
@@ -86,10 +88,11 @@ func TestFio_Run(t *testing.T) {
 			"energosbyt",
 			cli,
 			"http://localhost:8080",
-		).Run(
-			context.Background(),
-			VarsWithUser(),
-		)
+		).
+			Run(
+				context.Background(),
+				VarsWithUser(),
+			)
 		assert.NoError(t, checkerr.Contains(err, "previous name must not be stored"))
 	})
 
@@ -106,10 +109,11 @@ func TestFio_Run(t *testing.T) {
 				nil,
 			),
 			"http://localhost:8080",
-		).Run(
-			context.Background(),
-			VarsWithUser(),
-		)
+		).
+			Run(
+				context.Background(),
+				VarsWithUser(),
+			)
 		assert.NoError(t, checkerr.Contains(err, "owner must be stored"))
 	})
 
@@ -125,10 +129,11 @@ func TestFio_Run(t *testing.T) {
 			"energosbyt",
 			cli,
 			"http://localhost:8080",
-		).Run(
-			context.Background(),
-			VarsWithUser(),
-		)
+		).
+			Run(
+				context.Background(),
+				VarsWithUser(),
+			)
 		assert.NoError(t, checkerr.Contains(err, "status code must be 204"))
 	})
 
@@ -144,10 +149,11 @@ func TestFio_Run(t *testing.T) {
 			"energosbyt",
 			cli,
 			"http://localhost:8080",
-		).Run(
-			context.Background(),
-			VarsWithUser(),
-		)
+		).
+			Run(
+				context.Background(),
+				VarsWithUser(),
+			)
 		assert.NoError(t, checkerr.Contains(err, "connection refused"))
 	})
 
@@ -162,10 +168,11 @@ func TestFio_Run(t *testing.T) {
 				nil,
 			),
 			"http://localhost:8080",
-		).Run(
-			context.Background(),
-			step.NewVariables(),
-		)
+		).
+			Run(
+				context.Background(),
+				step.NewVariables(),
+			)
 		assert.NoError(t, checkerr.Contains(err, fixture.UserID))
 	})
 

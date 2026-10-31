@@ -30,10 +30,11 @@ func TestCorrection_Run(t *testing.T) {
 				nil,
 			),
 			baseURL,
-		).Run(
-			context.Background(),
-			VarsWithAll(),
-		)
+		).
+			Run(
+				context.Background(),
+				VarsWithAll(),
+			)
 		assert.NoError(t, checkerr.NoError(err))
 	})
 
@@ -46,10 +47,11 @@ func TestCorrection_Run(t *testing.T) {
 				nil,
 			),
 			baseURL,
-		).Run(
-			context.Background(),
-			VarsWithAll(),
-		)
+		).
+			Run(
+				context.Background(),
+				VarsWithAll(),
+			)
 		assert.NoError(t, checkerr.Contains(err, "one actual reading"))
 	})
 
@@ -62,10 +64,11 @@ func TestCorrection_Run(t *testing.T) {
 				nil,
 			),
 			baseURL,
-		).Run(
-			context.Background(),
-			VarsWithAll(),
-		)
+		).
+			Run(
+				context.Background(),
+				VarsWithAll(),
+			)
 		assert.NoError(t, checkerr.Contains(err, "field day_kw"))
 	})
 
@@ -78,10 +81,11 @@ func TestCorrection_Run(t *testing.T) {
 				nil,
 			),
 			baseURL,
-		).Run(
-			context.Background(),
-			VarsWithAll(),
-		)
+		).
+			Run(
+				context.Background(),
+				VarsWithAll(),
+			)
 		assert.NoError(t, checkerr.Contains(err, "field night_kw"))
 	})
 
@@ -94,10 +98,11 @@ func TestCorrection_Run(t *testing.T) {
 				nil,
 			),
 			baseURL,
-		).Run(
-			context.Background(),
-			VarsWithAll(),
-		)
+		).
+			Run(
+				context.Background(),
+				VarsWithAll(),
+			)
 		assert.NoError(t, checkerr.Contains(err, "unexpected response"))
 	})
 
@@ -110,10 +115,11 @@ func TestCorrection_Run(t *testing.T) {
 				nil,
 			),
 			baseURL,
-		).Run(
-			context.Background(),
-			VarsWithAll(),
-		)
+		).
+			Run(
+				context.Background(),
+				VarsWithAll(),
+			)
 		assert.NoError(t, checkerr.Contains(err, "decode body"))
 	})
 
@@ -126,10 +132,11 @@ func TestCorrection_Run(t *testing.T) {
 				errors.New("connection refused"),
 			),
 			baseURL,
-		).Run(
-			context.Background(),
-			VarsWithAll(),
-		)
+		).
+			Run(
+				context.Background(),
+				VarsWithAll(),
+			)
 		assert.NoError(t, checkerr.Contains(err, "connection refused"))
 	})
 
@@ -142,10 +149,11 @@ func TestCorrection_Run(t *testing.T) {
 				nil,
 			),
 			baseURL,
-		).Run(
-			context.Background(),
-			step.NewVariables(),
-		)
+		).
+			Run(
+				context.Background(),
+				step.NewVariables(),
+			)
 		assert.NoError(t, checkerr.Contains(err, fixture.RealtyID))
 	})
 

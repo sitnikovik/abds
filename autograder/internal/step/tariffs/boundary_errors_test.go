@@ -34,10 +34,11 @@ func TestBoundary_RunErrors(t *testing.T) {
 			"energosbyt",
 			cli,
 			"http://localhost:8080",
-		).Run(
-			context.Background(),
-			VarsWithTariff(),
-		)
+		).
+			Run(
+				context.Background(),
+				VarsWithTariff(),
+			)
 		assert.NoError(t, checkerr.Contains(err, "unexpected response"))
 	})
 
@@ -55,10 +56,11 @@ func TestBoundary_RunErrors(t *testing.T) {
 			"energosbyt",
 			cli,
 			"http://localhost:8080",
-		).Run(
-			context.Background(),
-			VarsWithTariff(),
-		)
+		).
+			Run(
+				context.Background(),
+				VarsWithTariff(),
+			)
 		assert.NoError(t, checkerr.Contains(err, "connection reset"))
 	})
 
@@ -79,10 +81,11 @@ func TestBoundary_RunErrors(t *testing.T) {
 			"energosbyt",
 			cli,
 			"http://localhost:8080",
-		).Run(
-			context.Background(),
-			VarsWithTariff(),
-		)
+		).
+			Run(
+				context.Background(),
+				VarsWithTariff(),
+			)
 		assert.NoError(t, checkerr.Contains(err, "decode body"))
 	})
 }

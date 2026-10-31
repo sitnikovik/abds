@@ -34,10 +34,11 @@ func TestGet_Run(t *testing.T) {
 				nil,
 			),
 			baseURL,
-		).Run(
-			context.Background(),
-			step.NewVariables(),
-		)
+		).
+			Run(
+				context.Background(),
+				step.NewVariables(),
+			)
 		assert.NoError(t, checkerr.NoError(err))
 	})
 
@@ -52,10 +53,11 @@ func TestGet_Run(t *testing.T) {
 				nil,
 			),
 			baseURL,
-		).Run(
-			context.Background(),
-			step.NewVariables(),
-		)
+		).
+			Run(
+				context.Background(),
+				step.NewVariables(),
+			)
 		assert.NoError(t, checkerr.Contains(err, "field price_day_kwph"))
 	})
 
@@ -70,10 +72,11 @@ func TestGet_Run(t *testing.T) {
 				nil,
 			),
 			baseURL,
-		).Run(
-			context.Background(),
-			step.NewVariables(),
-		)
+		).
+			Run(
+				context.Background(),
+				step.NewVariables(),
+			)
 		assert.NoError(t, checkerr.Contains(err, "field name"))
 	})
 
@@ -87,10 +90,11 @@ func TestGet_Run(t *testing.T) {
 				nil,
 			),
 			baseURL,
-		).Run(
-			context.Background(),
-			step.NewVariables(),
-		)
+		).
+			Run(
+				context.Background(),
+				step.NewVariables(),
+			)
 		assert.NoError(t, checkerr.Contains(err, "field valid_from"))
 	})
 
@@ -103,10 +107,11 @@ func TestGet_Run(t *testing.T) {
 				nil,
 			),
 			baseURL,
-		).Run(
-			context.Background(),
-			step.NewVariables(),
-		)
+		).
+			Run(
+				context.Background(),
+				step.NewVariables(),
+			)
 		assert.NoError(t, checkerr.Contains(err, "unexpected response"))
 	})
 
@@ -119,10 +124,11 @@ func TestGet_Run(t *testing.T) {
 				nil,
 			),
 			baseURL,
-		).Run(
-			context.Background(),
-			step.NewVariables(),
-		)
+		).
+			Run(
+				context.Background(),
+				step.NewVariables(),
+			)
 		assert.NoError(t, checkerr.Contains(err, "decode body"))
 	})
 
@@ -135,10 +141,11 @@ func TestGet_Run(t *testing.T) {
 				errors.New("connection refused"),
 			),
 			baseURL,
-		).Run(
-			context.Background(),
-			step.NewVariables(),
-		)
+		).
+			Run(
+				context.Background(),
+				step.NewVariables(),
+			)
 		assert.NoError(t, checkerr.Contains(err, "connection refused"))
 	})
 
@@ -174,10 +181,11 @@ func TestBadRequest_Run(t *testing.T) {
 				nil,
 			),
 			baseURL,
-		).Run(
-			context.Background(),
-			step.NewVariables(),
-		)
+		).
+			Run(
+				context.Background(),
+				step.NewVariables(),
+			)
 		assert.NoError(t, checkerr.NoError(err))
 	})
 
@@ -190,10 +198,11 @@ func TestBadRequest_Run(t *testing.T) {
 				nil,
 			),
 			baseURL,
-		).Run(
-			context.Background(),
-			step.NewVariables(),
-		)
+		).
+			Run(
+				context.Background(),
+				step.NewVariables(),
+			)
 		assert.NoError(t, checkerr.Contains(err, "status code must be 400"))
 	})
 
@@ -206,10 +215,11 @@ func TestBadRequest_Run(t *testing.T) {
 				nil,
 			),
 			baseURL,
-		).Run(
-			context.Background(),
-			step.NewVariables(),
-		)
+		).
+			Run(
+				context.Background(),
+				step.NewVariables(),
+			)
 		assert.NoError(t, checkerr.Contains(err, "field message"))
 	})
 
@@ -222,10 +232,11 @@ func TestBadRequest_Run(t *testing.T) {
 				nil,
 			),
 			baseURL,
-		).Run(
-			context.Background(),
-			step.NewVariables(),
-		)
+		).
+			Run(
+				context.Background(),
+				step.NewVariables(),
+			)
 		assert.NoError(t, checkerr.Contains(err, "unexpected response"))
 	})
 
@@ -238,10 +249,11 @@ func TestBadRequest_Run(t *testing.T) {
 				errors.New("connection refused"),
 			),
 			baseURL,
-		).Run(
-			context.Background(),
-			step.NewVariables(),
-		)
+		).
+			Run(
+				context.Background(),
+				step.NewVariables(),
+			)
 		assert.NoError(t, checkerr.Contains(err, "connection refused"))
 	})
 

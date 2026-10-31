@@ -28,10 +28,11 @@ func TestPagination_RunErrors(t *testing.T) {
 		)
 		vars := step.NewVariables()
 		vars.Set(fixture.RealtyID, "1")
-		err := invoices.NewPagination(cli, "http://localhost:8080").Run(
-			context.Background(),
-			vars,
-		)
+		err := invoices.NewPagination(cli, "http://localhost:8080").
+			Run(
+				context.Background(),
+				vars,
+			)
 		assert.NoError(t, checkerr.Contains(err, "decode body"))
 	})
 
@@ -40,10 +41,11 @@ func TestPagination_RunErrors(t *testing.T) {
 		cli := fakehttp.NewSequence(fakehttp.NewResponse(fakehttp.WithErr(errors.New("connection refused"))))
 		vars := step.NewVariables()
 		vars.Set(fixture.RealtyID, "1")
-		err := invoices.NewPagination(cli, "http://localhost:8080").Run(
-			context.Background(),
-			vars,
-		)
+		err := invoices.NewPagination(cli, "http://localhost:8080").
+			Run(
+				context.Background(),
+				vars,
+			)
 		assert.NoError(t, checkerr.Contains(err, "connection refused"))
 	})
 }

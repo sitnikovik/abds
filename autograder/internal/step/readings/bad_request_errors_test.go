@@ -27,10 +27,11 @@ func TestBadRequest_RunErrors(t *testing.T) {
 				nil,
 			),
 			baseURL,
-		).Run(
-			context.Background(),
-			step.NewVariables(),
-		)
+		).
+			Run(
+				context.Background(),
+				step.NewVariables(),
+			)
 		assert.NoError(t, checkerr.Contains(err, fixture.RealtyID))
 	})
 
@@ -43,10 +44,11 @@ func TestBadRequest_RunErrors(t *testing.T) {
 				nil,
 			),
 			baseURL,
-		).Run(
-			context.Background(),
-			VarsWithAll(),
-		)
+		).
+			Run(
+				context.Background(),
+				VarsWithAll(),
+			)
 		assert.NoError(t, checkerr.Contains(err, "unexpected response"))
 	})
 }

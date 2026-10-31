@@ -25,10 +25,11 @@ func TestStep_Run(t *testing.T) {
 		err := ping.NewStep(
 			httpclient.NewClient(http.StatusOK, "", nil),
 			"http://localhost:8080/ping",
-		).Run(
-			context.Background(),
-			step.NewVariables(),
-		)
+		).
+			Run(
+				context.Background(),
+				step.NewVariables(),
+			)
 		assert.NoError(
 			t,
 			errs.NoError(err),
@@ -40,10 +41,11 @@ func TestStep_Run(t *testing.T) {
 		err := ping.NewStep(
 			httpclient.NewClient(http.StatusInternalServerError, "", nil),
 			"http://localhost:8080/ping",
-		).Run(
-			context.Background(),
-			step.NewVariables(),
-		)
+		).
+			Run(
+				context.Background(),
+				step.NewVariables(),
+			)
 		assert.NoError(
 			t,
 			errs.Error(err),
@@ -55,10 +57,11 @@ func TestStep_Run(t *testing.T) {
 		err := ping.NewStep(
 			httpclient.NewClient(http.StatusOK, `{"status":"ok"}`, nil),
 			"http://localhost:8080/ping",
-		).Run(
-			context.Background(),
-			step.NewVariables(),
-		)
+		).
+			Run(
+				context.Background(),
+				step.NewVariables(),
+			)
 		assert.NoError(
 			t,
 			errs.Error(err),
@@ -70,10 +73,11 @@ func TestStep_Run(t *testing.T) {
 		err := ping.NewStep(
 			httpclient.NewClient(0, "", errors.New("connection refused")),
 			"http://localhost:8080/ping",
-		).Run(
-			context.Background(),
-			step.NewVariables(),
-		)
+		).
+			Run(
+				context.Background(),
+				step.NewVariables(),
+			)
 		assert.NoError(
 			t,
 			expect.All(

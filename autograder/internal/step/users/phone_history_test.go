@@ -43,10 +43,11 @@ func TestPhoneHistory_Run(t *testing.T) {
 			"energosbyt",
 			cli,
 			"http://localhost:8080",
-		).Run(
-			context.Background(),
-			VarsWithUser(),
-		)
+		).
+			Run(
+				context.Background(),
+				VarsWithUser(),
+			)
 		assert.NoError(t, checkerr.NoError(err))
 	})
 
@@ -64,10 +65,11 @@ func TestPhoneHistory_Run(t *testing.T) {
 			"energosbyt",
 			cli,
 			"http://localhost:8080",
-		).Run(
-			context.Background(),
-			VarsWithUser(),
-		)
+		).
+			Run(
+				context.Background(),
+				VarsWithUser(),
+			)
 		assert.NoError(t, checkerr.Contains(err, "field phone_prev"))
 	})
 
@@ -85,10 +87,11 @@ func TestPhoneHistory_Run(t *testing.T) {
 			"energosbyt",
 			cli,
 			"http://localhost:8080",
-		).Run(
-			context.Background(),
-			VarsWithUser(),
-		)
+		).
+			Run(
+				context.Background(),
+				VarsWithUser(),
+			)
 		assert.NoError(t, checkerr.Contains(err, "field phone"))
 	})
 
@@ -104,10 +107,11 @@ func TestPhoneHistory_Run(t *testing.T) {
 			"energosbyt",
 			cli,
 			"http://localhost:8080",
-		).Run(
-			context.Background(),
-			VarsWithUser(),
-		)
+		).
+			Run(
+				context.Background(),
+				VarsWithUser(),
+			)
 		assert.NoError(t, checkerr.Contains(err, "status code must be 204"))
 	})
 
@@ -125,10 +129,11 @@ func TestPhoneHistory_Run(t *testing.T) {
 			"energosbyt",
 			cli,
 			"http://localhost:8080",
-		).Run(
-			context.Background(),
-			VarsWithUser(),
-		)
+		).
+			Run(
+				context.Background(),
+				VarsWithUser(),
+			)
 		assert.NoError(t, checkerr.Contains(err, "decode body"))
 	})
 
@@ -146,10 +151,11 @@ func TestPhoneHistory_Run(t *testing.T) {
 			"energosbyt",
 			cli,
 			"http://localhost:8080",
-		).Run(
-			context.Background(),
-			VarsWithUser(),
-		)
+		).
+			Run(
+				context.Background(),
+				VarsWithUser(),
+			)
 		assert.NoError(t, checkerr.Contains(err, "status code must be 200"))
 	})
 
@@ -166,10 +172,11 @@ func TestPhoneHistory_Run(t *testing.T) {
 				nil,
 			),
 			"http://localhost:8080",
-		).Run(
-			context.Background(),
-			VarsWithUser(),
-		)
+		).
+			Run(
+				context.Background(),
+				VarsWithUser(),
+			)
 		assert.NoError(t, checkerr.Contains(err, "owner must be stored"))
 	})
 
@@ -185,10 +192,11 @@ func TestPhoneHistory_Run(t *testing.T) {
 			"energosbyt",
 			cli,
 			"http://localhost:8080",
-		).Run(
-			context.Background(),
-			VarsWithUser(),
-		)
+		).
+			Run(
+				context.Background(),
+				VarsWithUser(),
+			)
 		assert.NoError(t, checkerr.Contains(err, "connection refused"))
 	})
 
@@ -203,10 +211,11 @@ func TestPhoneHistory_Run(t *testing.T) {
 				nil,
 			),
 			"http://localhost:8080",
-		).Run(
-			context.Background(),
-			step.NewVariables(),
-		)
+		).
+			Run(
+				context.Background(),
+				step.NewVariables(),
+			)
 		assert.NoError(t, checkerr.Contains(err, fixture.UserID))
 	})
 

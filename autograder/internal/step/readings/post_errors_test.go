@@ -32,10 +32,11 @@ func TestPost_RunErrors(t *testing.T) {
 				nil,
 			),
 			baseURL,
-		).Run(
-			context.Background(),
-			vars,
-		)
+		).
+			Run(
+				context.Background(),
+				vars,
+			)
 		assert.NoError(t, checkerr.Contains(err, fixture.UserID))
 	})
 
@@ -52,10 +53,11 @@ func TestPost_RunErrors(t *testing.T) {
 				nil,
 			),
 			baseURL,
-		).Run(
-			context.Background(),
-			vars,
-		)
+		).
+			Run(
+				context.Background(),
+				vars,
+			)
 		assert.NoError(t, checkerr.Contains(err, fixture.GaugeID))
 	})
 
@@ -72,10 +74,11 @@ func TestPost_RunErrors(t *testing.T) {
 				nil,
 			),
 			baseURL,
-		).Run(
-			context.Background(),
-			vars,
-		)
+		).
+			Run(
+				context.Background(),
+				vars,
+			)
 		assert.NoError(t, checkerr.Contains(err, fixture.TariffID))
 	})
 
@@ -88,10 +91,11 @@ func TestPost_RunErrors(t *testing.T) {
 				errors.New("connection refused"),
 			),
 			baseURL,
-		).Run(
-			context.Background(),
-			VarsWithAll(),
-		)
+		).
+			Run(
+				context.Background(),
+				VarsWithAll(),
+			)
 		assert.NoError(t, checkerr.Contains(err, "connection refused"))
 	})
 }

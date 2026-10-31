@@ -39,10 +39,11 @@ func TestGet_Run(t *testing.T) {
 				nil,
 			),
 			baseURL,
-		).Run(
-			context.Background(),
-			VarsWithUser(),
-		)
+		).
+			Run(
+				context.Background(),
+				VarsWithUser(),
+			)
 		assert.NoError(t, checkerr.NoError(err))
 	})
 
@@ -55,10 +56,11 @@ func TestGet_Run(t *testing.T) {
 				nil,
 			),
 			baseURL,
-		).Run(
-			context.Background(),
-			VarsWithUser(),
-		)
+		).
+			Run(
+				context.Background(),
+				VarsWithUser(),
+			)
 		assert.NoError(t, checkerr.Contains(err, "field id"))
 	})
 
@@ -71,10 +73,11 @@ func TestGet_Run(t *testing.T) {
 				nil,
 			),
 			baseURL,
-		).Run(
-			context.Background(),
-			VarsWithUser(),
-		)
+		).
+			Run(
+				context.Background(),
+				VarsWithUser(),
+			)
 		assert.NoError(t, checkerr.Contains(err, "unexpected response"))
 	})
 
@@ -87,10 +90,11 @@ func TestGet_Run(t *testing.T) {
 				nil,
 			),
 			baseURL,
-		).Run(
-			context.Background(),
-			VarsWithUser(),
-		)
+		).
+			Run(
+				context.Background(),
+				VarsWithUser(),
+			)
 		assert.NoError(t, checkerr.Contains(err, "decode body"))
 	})
 
@@ -103,10 +107,11 @@ func TestGet_Run(t *testing.T) {
 				errors.New("connection refused"),
 			),
 			baseURL,
-		).Run(
-			context.Background(),
-			VarsWithUser(),
-		)
+		).
+			Run(
+				context.Background(),
+				VarsWithUser(),
+			)
 		assert.NoError(t, checkerr.Contains(err, "connection refused"))
 	})
 
@@ -119,10 +124,11 @@ func TestGet_Run(t *testing.T) {
 				nil,
 			),
 			baseURL,
-		).Run(
-			context.Background(),
-			step.NewVariables(),
-		)
+		).
+			Run(
+				context.Background(),
+				step.NewVariables(),
+			)
 		assert.NoError(t, checkerr.Contains(err, fixture.UserID))
 	})
 
@@ -158,10 +164,11 @@ func TestNotFound_Run(t *testing.T) {
 				nil,
 			),
 			baseURL,
-		).Run(
-			context.Background(),
-			step.NewVariables(),
-		)
+		).
+			Run(
+				context.Background(),
+				step.NewVariables(),
+			)
 		assert.NoError(t, checkerr.NoError(err))
 	})
 
@@ -174,10 +181,11 @@ func TestNotFound_Run(t *testing.T) {
 				nil,
 			),
 			baseURL,
-		).Run(
-			context.Background(),
-			step.NewVariables(),
-		)
+		).
+			Run(
+				context.Background(),
+				step.NewVariables(),
+			)
 		assert.NoError(t, checkerr.Contains(err, "status code must be 404"))
 	})
 
@@ -190,10 +198,11 @@ func TestNotFound_Run(t *testing.T) {
 				nil,
 			),
 			baseURL,
-		).Run(
-			context.Background(),
-			step.NewVariables(),
-		)
+		).
+			Run(
+				context.Background(),
+				step.NewVariables(),
+			)
 		assert.NoError(t, checkerr.Contains(err, "field message"))
 	})
 
@@ -206,10 +215,11 @@ func TestNotFound_Run(t *testing.T) {
 				nil,
 			),
 			baseURL,
-		).Run(
-			context.Background(),
-			step.NewVariables(),
-		)
+		).
+			Run(
+				context.Background(),
+				step.NewVariables(),
+			)
 		assert.NoError(t, checkerr.Contains(err, "unexpected response"))
 	})
 
@@ -222,10 +232,11 @@ func TestNotFound_Run(t *testing.T) {
 				errors.New("connection refused"),
 			),
 			baseURL,
-		).Run(
-			context.Background(),
-			step.NewVariables(),
-		)
+		).
+			Run(
+				context.Background(),
+				step.NewVariables(),
+			)
 		assert.NoError(t, checkerr.Contains(err, "connection refused"))
 	})
 
@@ -261,10 +272,11 @@ func TestPatch_Run(t *testing.T) {
 				nil,
 			),
 			baseURL,
-		).Run(
-			context.Background(),
-			VarsWithUser(),
-		)
+		).
+			Run(
+				context.Background(),
+				VarsWithUser(),
+			)
 		assert.NoError(t, checkerr.NoError(err))
 	})
 
@@ -277,10 +289,11 @@ func TestPatch_Run(t *testing.T) {
 				nil,
 			),
 			baseURL,
-		).Run(
-			context.Background(),
-			VarsWithUser(),
-		)
+		).
+			Run(
+				context.Background(),
+				VarsWithUser(),
+			)
 		assert.NoError(t, checkerr.Contains(err, "status code must be 204"))
 	})
 
@@ -293,10 +306,11 @@ func TestPatch_Run(t *testing.T) {
 				nil,
 			),
 			baseURL,
-		).Run(
-			context.Background(),
-			VarsWithUser(),
-		)
+		).
+			Run(
+				context.Background(),
+				VarsWithUser(),
+			)
 		assert.NoError(t, checkerr.Error(err))
 	})
 
@@ -309,10 +323,11 @@ func TestPatch_Run(t *testing.T) {
 				errors.New("connection refused"),
 			),
 			baseURL,
-		).Run(
-			context.Background(),
-			VarsWithUser(),
-		)
+		).
+			Run(
+				context.Background(),
+				VarsWithUser(),
+			)
 		assert.NoError(t, checkerr.Contains(err, "connection refused"))
 	})
 
@@ -325,10 +340,11 @@ func TestPatch_Run(t *testing.T) {
 				nil,
 			),
 			baseURL,
-		).Run(
-			context.Background(),
-			step.NewVariables(),
-		)
+		).
+			Run(
+				context.Background(),
+				step.NewVariables(),
+			)
 		assert.NoError(t, checkerr.Contains(err, fixture.UserID))
 	})
 

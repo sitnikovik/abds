@@ -31,10 +31,11 @@ func TestFio_RunErrors(t *testing.T) {
 			"energosbyt",
 			cli,
 			"http://localhost:8080",
-		).Run(
-			context.Background(),
-			VarsWithUser(),
-		)
+		).
+			Run(
+				context.Background(),
+				VarsWithUser(),
+			)
 		assert.NoError(t, checkerr.Contains(err, "unexpected response"))
 	})
 
@@ -52,10 +53,11 @@ func TestFio_RunErrors(t *testing.T) {
 			"energosbyt",
 			cli,
 			"http://localhost:8080",
-		).Run(
-			context.Background(),
-			VarsWithUser(),
-		)
+		).
+			Run(
+				context.Background(),
+				VarsWithUser(),
+			)
 		assert.NoError(t, checkerr.Contains(err, "decode body"))
 	})
 
@@ -70,10 +72,11 @@ func TestFio_RunErrors(t *testing.T) {
 			"energosbyt",
 			cli,
 			"http://localhost:8080",
-		).Run(
-			context.Background(),
-			VarsWithUser(),
-		)
+		).
+			Run(
+				context.Background(),
+				VarsWithUser(),
+			)
 		assert.NoError(t, checkerr.Contains(err, "connection reset"))
 	})
 }

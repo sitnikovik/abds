@@ -30,10 +30,11 @@ func TestStep_Run(t *testing.T) {
 				fakeclickhouse.WithStrings("dim_gauges", [][]string{{"4"}, {"5"}}),
 			),
 			"energosbyt",
-		).Run(
-			context.Background(),
-			vars,
-		)
+		).
+			Run(
+				context.Background(),
+				vars,
+			)
 		realty, _ := vars.Lookup(fixture.RealtyID)
 		gauge, _ := vars.Lookup(fixture.GaugeID)
 		newGauge, _ := vars.Lookup(fixture.NewGaugeID)
@@ -58,10 +59,11 @@ func TestStep_Run(t *testing.T) {
 				fakeclickhouse.WithStrings("dim_gauges", [][]string{{"4"}}),
 			),
 			"energosbyt",
-		).Run(
-			context.Background(),
-			step.NewVariables(),
-		)
+		).
+			Run(
+				context.Background(),
+				step.NewVariables(),
+			)
 		assert.NoError(
 			t,
 			checkerr.Contains(err, "rows in dim_gauges"),
@@ -75,10 +77,11 @@ func TestStep_Run(t *testing.T) {
 				fakeclickhouse.WithError(errors.New("connection refused")),
 			),
 			"energosbyt",
-		).Run(
-			context.Background(),
-			step.NewVariables(),
-		)
+		).
+			Run(
+				context.Background(),
+				step.NewVariables(),
+			)
 		assert.NoError(
 			t,
 			checkerr.Contains(err, "read ids of dim_realty"),

@@ -40,10 +40,11 @@ func TestPost_Run(t *testing.T) {
 				nil,
 			),
 			baseURL,
-		).Run(
-			context.Background(),
-			VarsWithRealtyAndGauge(),
-		)
+		).
+			Run(
+				context.Background(),
+				VarsWithRealtyAndGauge(),
+			)
 		assert.NoError(t, checkerr.NoError(err))
 	})
 
@@ -56,10 +57,11 @@ func TestPost_Run(t *testing.T) {
 				nil,
 			),
 			baseURL,
-		).Run(
-			context.Background(),
-			VarsWithRealtyAndGauge(),
-		)
+		).
+			Run(
+				context.Background(),
+				VarsWithRealtyAndGauge(),
+			)
 		assert.NoError(t, checkerr.Contains(err, "status code must be 201"))
 	})
 
@@ -72,10 +74,11 @@ func TestPost_Run(t *testing.T) {
 				nil,
 			),
 			baseURL,
-		).Run(
-			context.Background(),
-			VarsWithRealtyAndGauge(),
-		)
+		).
+			Run(
+				context.Background(),
+				VarsWithRealtyAndGauge(),
+			)
 		assert.NoError(t, checkerr.Contains(err, "body must be empty"))
 	})
 
@@ -88,10 +91,11 @@ func TestPost_Run(t *testing.T) {
 				errors.New("connection refused"),
 			),
 			baseURL,
-		).Run(
-			context.Background(),
-			VarsWithRealtyAndGauge(),
-		)
+		).
+			Run(
+				context.Background(),
+				VarsWithRealtyAndGauge(),
+			)
 		assert.NoError(t, checkerr.Contains(err, "connection refused"))
 	})
 
@@ -104,10 +108,11 @@ func TestPost_Run(t *testing.T) {
 				nil,
 			),
 			baseURL,
-		).Run(
-			context.Background(),
-			step.NewVariables(),
-		)
+		).
+			Run(
+				context.Background(),
+				step.NewVariables(),
+			)
 		assert.NoError(t, checkerr.Contains(err, fixture.RealtyID))
 	})
 
@@ -122,10 +127,11 @@ func TestPost_Run(t *testing.T) {
 				nil,
 			),
 			baseURL,
-		).Run(
-			context.Background(),
-			vars,
-		)
+		).
+			Run(
+				context.Background(),
+				vars,
+			)
 		assert.NoError(t, checkerr.Contains(err, fixture.NewGaugeID))
 	})
 

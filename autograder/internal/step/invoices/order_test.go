@@ -27,10 +27,11 @@ func TestList_Order(t *testing.T) {
 		)
 		vars := step.NewVariables()
 		vars.Set(fixture.RealtyID, "1")
-		err := invoices.NewList(cli, "http://localhost:8080").Run(
-			context.Background(),
-			vars,
-		)
+		err := invoices.NewList(cli, "http://localhost:8080").
+			Run(
+				context.Background(),
+				vars,
+			)
 		assert.NoError(t, checkerr.NoError(err))
 	})
 
@@ -43,10 +44,11 @@ func TestList_Order(t *testing.T) {
 		)
 		vars := step.NewVariables()
 		vars.Set(fixture.RealtyID, "1")
-		err := invoices.NewList(cli, "http://localhost:8080").Run(
-			context.Background(),
-			vars,
-		)
+		err := invoices.NewList(cli, "http://localhost:8080").
+			Run(
+				context.Background(),
+				vars,
+			)
 		assert.NoError(t, checkerr.Contains(err, "sorted by created_at"))
 	})
 }

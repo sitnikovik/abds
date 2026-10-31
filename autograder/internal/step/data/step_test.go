@@ -61,10 +61,11 @@ func TestStep_Run(t *testing.T) {
 		err := data.NewStep(
 			ClientWithout(""),
 			"energosbyt",
-		).Run(
-			context.Background(),
-			step.NewVariables(),
-		)
+		).
+			Run(
+				context.Background(),
+				step.NewVariables(),
+			)
 		assert.NoError(t, checkerr.NoError(err))
 	})
 
@@ -83,10 +84,11 @@ func TestStep_Run(t *testing.T) {
 		err := data.NewStep(
 			db,
 			"energosbyt",
-		).Run(
-			context.Background(),
-			step.NewVariables(),
-		)
+		).
+			Run(
+				context.Background(),
+				step.NewVariables(),
+			)
 		assert.NoError(t, checkerr.Contains(err, "rows in fact_meter_readings"))
 	})
 
@@ -105,10 +107,11 @@ func TestStep_Run(t *testing.T) {
 		err := data.NewStep(
 			db,
 			"energosbyt",
-		).Run(
-			context.Background(),
-			step.NewVariables(),
-		)
+		).
+			Run(
+				context.Background(),
+				step.NewVariables(),
+			)
 		assert.NoError(t, checkerr.Contains(err, "gauge bindings after a replacement"))
 	})
 
@@ -127,10 +130,11 @@ func TestStep_Run(t *testing.T) {
 		err := data.NewStep(
 			db,
 			"energosbyt",
-		).Run(
-			context.Background(),
-			step.NewVariables(),
-		)
+		).
+			Run(
+				context.Background(),
+				step.NewVariables(),
+			)
 		assert.NoError(t, checkerr.Contains(err, "tariffs with at least two versions"))
 	})
 
@@ -149,10 +153,11 @@ func TestStep_Run(t *testing.T) {
 		err := data.NewStep(
 			db,
 			"energosbyt",
-		).Run(
-			context.Background(),
-			step.NewVariables(),
-		)
+		).
+			Run(
+				context.Background(),
+				step.NewVariables(),
+			)
 		assert.NoError(t, checkerr.Contains(err, "rows in dim_gauges"))
 	})
 
@@ -161,10 +166,11 @@ func TestStep_Run(t *testing.T) {
 		err := data.NewStep(
 			ClientWithout("dim_realty"),
 			"energosbyt",
-		).Run(
-			context.Background(),
-			step.NewVariables(),
-		)
+		).
+			Run(
+				context.Background(),
+				step.NewVariables(),
+			)
 		assert.NoError(t, checkerr.Contains(err, "count dim_realty"))
 	})
 
@@ -173,10 +179,11 @@ func TestStep_Run(t *testing.T) {
 		err := data.NewStep(
 			ClientWithout("dim_gauges"),
 			"energosbyt",
-		).Run(
-			context.Background(),
-			step.NewVariables(),
-		)
+		).
+			Run(
+				context.Background(),
+				step.NewVariables(),
+			)
 		assert.NoError(t, checkerr.Contains(err, "count dim_gauges"))
 	})
 
@@ -185,10 +192,11 @@ func TestStep_Run(t *testing.T) {
 		err := data.NewStep(
 			ClientWithout("dim_users"),
 			"energosbyt",
-		).Run(
-			context.Background(),
-			step.NewVariables(),
-		)
+		).
+			Run(
+				context.Background(),
+				step.NewVariables(),
+			)
 		assert.NoError(t, checkerr.Contains(err, "count dim_users"))
 	})
 
@@ -197,10 +205,11 @@ func TestStep_Run(t *testing.T) {
 		err := data.NewStep(
 			ClientWithout("fact_gauge_bindings"),
 			"energosbyt",
-		).Run(
-			context.Background(),
-			step.NewVariables(),
-		)
+		).
+			Run(
+				context.Background(),
+				step.NewVariables(),
+			)
 		assert.NoError(t, checkerr.Contains(err, "count fact_gauge_bindings"))
 	})
 
@@ -209,10 +218,11 @@ func TestStep_Run(t *testing.T) {
 		err := data.NewStep(
 			ClientWithout("fact_meter_readings"),
 			"energosbyt",
-		).Run(
-			context.Background(),
-			step.NewVariables(),
-		)
+		).
+			Run(
+				context.Background(),
+				step.NewVariables(),
+			)
 		assert.NoError(t, checkerr.Contains(err, "count fact_meter_readings"))
 	})
 
@@ -221,10 +231,11 @@ func TestStep_Run(t *testing.T) {
 		err := data.NewStep(
 			ClientWithout("fact_invoice"),
 			"energosbyt",
-		).Run(
-			context.Background(),
-			step.NewVariables(),
-		)
+		).
+			Run(
+				context.Background(),
+				step.NewVariables(),
+			)
 		assert.NoError(t, checkerr.Contains(err, "count fact_invoice"))
 	})
 
@@ -233,10 +244,11 @@ func TestStep_Run(t *testing.T) {
 		err := data.NewStep(
 			ClientWithout("dim_tariffs"),
 			"energosbyt",
-		).Run(
-			context.Background(),
-			step.NewVariables(),
-		)
+		).
+			Run(
+				context.Background(),
+				step.NewVariables(),
+			)
 		assert.NoError(t, checkerr.Contains(err, "count tariffs with versions"))
 	})
 
@@ -246,10 +258,11 @@ func TestStep_Run(t *testing.T) {
 		err := data.NewStep(
 			db,
 			"energosbyt",
-		).Run(
-			context.Background(),
-			step.NewVariables(),
-		)
+		).
+			Run(
+				context.Background(),
+				step.NewVariables(),
+			)
 		assert.NoError(
 			t,
 			expect.All(

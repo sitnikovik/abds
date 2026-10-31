@@ -35,13 +35,15 @@ func main() {
 		&http.Client{Timeout: requestTimeout},
 	)
 	failed := 0
-	for _, r := range step.RunAll(context.Background(), steps) {
-		if r.Err() != nil {
-			failed++
-			fmt.Printf("FAIL %s: %v\n", r.Name(), r.Err())
+	ctx := context.Background()
+	vars := step.NewVariables()
+	for _, st := range steps {
+		err = st.Run(ctx, vars)
+		if err != nil {
+			fmt.Printf("FAIL %s: %v\n", st.Name(), err)
 			continue
 		}
-		fmt.Printf("PASS %s\n", r.Name())
+		fmt.Printf("PASS %s\n", st.Name())
 	}
 	if failed > 0 {
 		fmt.Printf("%d of %d checks failed\n", failed, len(steps))

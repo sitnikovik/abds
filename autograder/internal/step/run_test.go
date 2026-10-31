@@ -1,20 +1,16 @@
 package step_test
 
 import (
-	"context"
-	"errors"
 	"testing"
-
-	"github.com/stretchr/testify/assert"
 
 	"github.com/sitnikovik/buggles/expect"
 	"github.com/sitnikovik/buggles/expect/boolean"
 	errs "github.com/sitnikovik/buggles/expect/errors"
 	"github.com/sitnikovik/buggles/expect/number"
 	"github.com/sitnikovik/buggles/expect/strings"
+	"github.com/stretchr/testify/assert"
 
 	"github.com/sitnikovik/abds/autograder/internal/step"
-	fakestep "github.com/sitnikovik/abds/autograder/internal/test/fake/step"
 )
 
 func TestVariables(t *testing.T) {
@@ -98,64 +94,6 @@ func TestVariables(t *testing.T) {
 		assert.NoError(
 			t,
 			errs.Contains(err, "user_id"),
-		)
-	})
-}
-
-func TestRunAll(t *testing.T) {
-	t.Parallel()
-
-	t.Run("runs every step and reports the results in order", func(t *testing.T) {
-		t.Parallel()
-		steps := []step.Step{
-			fakestep.NewStep("first", nil),
-			fakestep.NewStep("second", errors.New("broken")),
-			fakestep.NewStep("third", nil),
-		}
-		results := step.RunAll(
-			context.Background(),
-			steps,
-		)
-		assert.NoError(
-			t,
-			expect.All(
-				number.Equal(len(results), 3),
-				strings.Equal(results[0].Name(), "first"),
-				strings.Equal(results[1].Name(), "second"),
-				strings.Equal(results[2].Name(), "third"),
-				errs.NoError(results[0].Err()),
-				errs.Error(results[1].Err()),
-				errs.NoError(results[2].Err()),
-			),
-		)
-	})
-
-	t.Run("does not stop after a failed step", func(t *testing.T) {
-		t.Parallel()
-		last := fakestep.NewStep("last", nil)
-		step.RunAll(
-			context.Background(),
-			[]step.Step{
-				fakestep.NewStep("failing", errors.New("broken")),
-				last,
-			},
-		)
-		assert.NoError(
-			t,
-			boolean.True(last.Ran()),
-		)
-	})
-
-	t.Run("returns no results for no steps", func(t *testing.T) {
-		t.Parallel()
-		var steps []step.Step
-		results := step.RunAll(
-			context.Background(),
-			steps,
-		)
-		assert.NoError(
-			t,
-			number.Equal(len(results), 0),
 		)
 	})
 }

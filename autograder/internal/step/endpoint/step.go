@@ -1,5 +1,5 @@
-// Package httpcase provides the declarative step that sends one request and checks its status and error message.
-package httpcase
+// Package endpoint provides the declarative step that sends one request and checks its status and error message.
+package endpoint
 
 import (
 	"context"

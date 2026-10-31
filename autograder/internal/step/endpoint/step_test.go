@@ -1,4 +1,4 @@
-package httpcase_test
+package endpoint_test
 
 import (
 	"context"
@@ -13,7 +13,7 @@ import (
 	"github.com/sitnikovik/buggles/expect/strings"
 
 	"github.com/sitnikovik/abds/autograder/internal/step"
-	"github.com/sitnikovik/abds/autograder/internal/step/httpcase"
+	"github.com/sitnikovik/abds/autograder/internal/step/endpoint"
 	fakehttp "github.com/sitnikovik/abds/autograder/internal/test/fake/httpclient"
 )
 
@@ -26,7 +26,7 @@ func TestStep_Run(t *testing.T) {
 		t.Parallel()
 		vars := step.NewVariables()
 		vars.Set("user_id", "1")
-		err := httpcase.NewStep(
+		err := endpoint.NewStep(
 			fakehttp.NewClient(
 				http.StatusNotFound,
 				`{"message":"Not found"}`,
@@ -34,8 +34,8 @@ func TestStep_Run(t *testing.T) {
 			),
 			baseURL,
 			step.NewDesc("users get not found", "Checks 404."),
-			httpcase.WithPath("/users/%s", "user_id"),
-			httpcase.WithStatus(http.StatusNotFound),
+			endpoint.WithPath("/users/%s", "user_id"),
+			endpoint.WithStatus(http.StatusNotFound),
 		).Run(
 			context.Background(),
 			vars,
@@ -45,7 +45,7 @@ func TestStep_Run(t *testing.T) {
 
 	t.Run("fails on a wrong status code", func(t *testing.T) {
 		t.Parallel()
-		err := httpcase.NewStep(
+		err := endpoint.NewStep(
 			fakehttp.NewClient(
 				http.StatusOK,
 				`{"message":"x"}`,
@@ -53,7 +53,7 @@ func TestStep_Run(t *testing.T) {
 			),
 			baseURL,
 			step.NewDesc("case", ""),
-			httpcase.WithStatus(http.StatusBadRequest),
+			endpoint.WithStatus(http.StatusBadRequest),
 		).Run(
 			context.Background(),
 			step.NewVariables(),
@@ -63,7 +63,7 @@ func TestStep_Run(t *testing.T) {
 
 	t.Run("fails when the message is empty", func(t *testing.T) {
 		t.Parallel()
-		err := httpcase.NewStep(
+		err := endpoint.NewStep(
 			fakehttp.NewClient(
 				http.StatusBadRequest,
 				`{"message":""}`,
@@ -71,7 +71,7 @@ func TestStep_Run(t *testing.T) {
 			),
 			baseURL,
 			step.NewDesc("case", ""),
-			httpcase.WithStatus(http.StatusBadRequest),
+			endpoint.WithStatus(http.StatusBadRequest),
 		).Run(
 			context.Background(),
 			step.NewVariables(),
@@ -81,7 +81,7 @@ func TestStep_Run(t *testing.T) {
 
 	t.Run("fails when the body is not JSON", func(t *testing.T) {
 		t.Parallel()
-		err := httpcase.NewStep(
+		err := endpoint.NewStep(
 			fakehttp.NewClient(
 				http.StatusBadRequest,
 				`x`,
@@ -89,7 +89,7 @@ func TestStep_Run(t *testing.T) {
 			),
 			baseURL,
 			step.NewDesc("case", ""),
-			httpcase.WithStatus(http.StatusBadRequest),
+			endpoint.WithStatus(http.StatusBadRequest),
 		).Run(
 			context.Background(),
 			step.NewVariables(),
@@ -99,7 +99,7 @@ func TestStep_Run(t *testing.T) {
 
 	t.Run("fails when the request fails", func(t *testing.T) {
 		t.Parallel()
-		err := httpcase.NewStep(
+		err := endpoint.NewStep(
 			fakehttp.NewClient(
 				0,
 				"",
@@ -116,7 +116,7 @@ func TestStep_Run(t *testing.T) {
 
 	t.Run("fails when a path variable is not stored", func(t *testing.T) {
 		t.Parallel()
-		err := httpcase.NewStep(
+		err := endpoint.NewStep(
 			fakehttp.NewClient(
 				http.StatusOK,
 				"",
@@ -124,7 +124,7 @@ func TestStep_Run(t *testing.T) {
 			),
 			baseURL,
 			step.NewDesc("case", ""),
-			httpcase.WithPath("/realty/%s", "realty_id"),
+			endpoint.WithPath("/realty/%s", "realty_id"),
 		).Run(
 			context.Background(),
 			step.NewVariables(),
@@ -134,7 +134,7 @@ func TestStep_Run(t *testing.T) {
 
 	t.Run("fails on an invalid base url", func(t *testing.T) {
 		t.Parallel()
-		err := httpcase.NewStep(
+		err := endpoint.NewStep(
 			fakehttp.NewClient(
 				http.StatusOK,
 				"",
@@ -151,7 +151,7 @@ func TestStep_Run(t *testing.T) {
 
 	t.Run("uses the name and the description of the desc", func(t *testing.T) {
 		t.Parallel()
-		s := httpcase.NewStep(
+		s := endpoint.NewStep(
 			fakehttp.NewClient(
 				http.StatusOK,
 				"",
@@ -171,7 +171,7 @@ func TestStep_Run(t *testing.T) {
 
 	t.Run("sends a body with the method option", func(t *testing.T) {
 		t.Parallel()
-		err := httpcase.NewStep(
+		err := endpoint.NewStep(
 			fakehttp.NewClient(
 				http.StatusBadRequest,
 				`{"message":"invalid \"gauge_id\" field"}`,
@@ -179,9 +179,9 @@ func TestStep_Run(t *testing.T) {
 			),
 			baseURL,
 			step.NewDesc("case", ""),
-			httpcase.WithMethod(http.MethodPost),
-			httpcase.WithBody(map[string]int{"gauge_id": 0}),
-			httpcase.WithStatus(http.StatusBadRequest),
+			endpoint.WithMethod(http.MethodPost),
+			endpoint.WithBody(map[string]int{"gauge_id": 0}),
+			endpoint.WithStatus(http.StatusBadRequest),
 		).Run(
 			context.Background(),
 			step.NewVariables(),

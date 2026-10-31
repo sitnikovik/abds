@@ -82,10 +82,10 @@ func (s Fio) Run(ctx context.Context, vars step.Variables) error {
 	if old == next {
 		next = "Автограйдер Тест 2"
 	}
-	if err := s.patch(ctx, id, next); err != nil {
+	if err := s.Patch(ctx, id, next); err != nil {
 		return err
 	}
-	fio, err := s.fetch(ctx, id)
+	fio, err := s.Fetch(ctx, id)
 	if err != nil {
 		return err
 	}
@@ -110,8 +110,8 @@ func (s Fio) Run(ctx context.Context, vars step.Variables) error {
 	)
 }
 
-// patch sends the new full name of the owner and expects 204 No Content.
-func (s Fio) patch(ctx context.Context, id uint64, fio string) error {
+// Patch sends the new full name of the owner and expects 204 No Content.
+func (s Fio) Patch(ctx context.Context, id uint64, fio string) error {
 	req, err := httpx.NewRequest(
 		ctx,
 		http.MethodPatch,
@@ -141,8 +141,8 @@ func (s Fio) patch(ctx context.Context, id uint64, fio string) error {
 	)
 }
 
-// fetch returns the full name of the owner from GET /users/{id}.
-func (s Fio) fetch(ctx context.Context, id uint64) (string, error) {
+// Fetch returns the full name of the owner from GET /users/{id}.
+func (s Fio) Fetch(ctx context.Context, id uint64) (string, error) {
 	req, err := httpx.NewRequest(ctx, http.MethodGet, fmt.Sprintf("%s/users/%s", s.baseURL, strconv.FormatUint(id, 10)), nil)
 	if err != nil {
 		return "", err

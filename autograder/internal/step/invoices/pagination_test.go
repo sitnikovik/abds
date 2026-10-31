@@ -26,9 +26,9 @@ func TestPagination_Run(t *testing.T) {
 	t.Run("passes when the pages differ", func(t *testing.T) {
 		t.Parallel()
 		cli := fakehttp.NewSequence(
-			fakehttp.Canned{Status: http.StatusOK, Body: `{"invoices":[{"created_at":"2026-10-27 10:00:00"}],"count":2}`},
-			fakehttp.Canned{Status: http.StatusOK, Body: `{"invoices":[{"created_at":"2026-10-27 10:00:00"}],"count":2}`},
-			fakehttp.Canned{Status: http.StatusOK, Body: `{"invoices":[{"created_at":"2026-09-27 10:00:00"}],"count":2}`},
+			fakehttp.NewResponse(fakehttp.WithStatus(http.StatusOK), fakehttp.WithBody(`{"invoices":[{"created_at":"2026-10-27 10:00:00"}],"count":2}`)),
+			fakehttp.NewResponse(fakehttp.WithStatus(http.StatusOK), fakehttp.WithBody(`{"invoices":[{"created_at":"2026-10-27 10:00:00"}],"count":2}`)),
+			fakehttp.NewResponse(fakehttp.WithStatus(http.StatusOK), fakehttp.WithBody(`{"invoices":[{"created_at":"2026-09-27 10:00:00"}],"count":2}`)),
 		)
 		s := invoices.NewPagination(cli, "http://localhost:8080")
 		vars := step.NewVariables()
@@ -39,9 +39,9 @@ func TestPagination_Run(t *testing.T) {
 	t.Run("fails when the offset returns the same invoice", func(t *testing.T) {
 		t.Parallel()
 		cli := fakehttp.NewSequence(
-			fakehttp.Canned{Status: http.StatusOK, Body: twoInvoices},
-			fakehttp.Canned{Status: http.StatusOK, Body: twoInvoices},
-			fakehttp.Canned{Status: http.StatusOK, Body: twoInvoices},
+			fakehttp.NewResponse(fakehttp.WithStatus(http.StatusOK), fakehttp.WithBody(twoInvoices)),
+			fakehttp.NewResponse(fakehttp.WithStatus(http.StatusOK), fakehttp.WithBody(twoInvoices)),
+			fakehttp.NewResponse(fakehttp.WithStatus(http.StatusOK), fakehttp.WithBody(twoInvoices)),
 		)
 		s := invoices.NewPagination(cli, "http://localhost:8080")
 		vars := step.NewVariables()
@@ -52,9 +52,9 @@ func TestPagination_Run(t *testing.T) {
 	t.Run("fails when the second page is empty", func(t *testing.T) {
 		t.Parallel()
 		cli := fakehttp.NewSequence(
-			fakehttp.Canned{Status: http.StatusOK, Body: twoInvoices},
-			fakehttp.Canned{Status: http.StatusOK, Body: twoInvoices},
-			fakehttp.Canned{Status: http.StatusOK, Body: `{"invoices":[],"count":2}`},
+			fakehttp.NewResponse(fakehttp.WithStatus(http.StatusOK), fakehttp.WithBody(twoInvoices)),
+			fakehttp.NewResponse(fakehttp.WithStatus(http.StatusOK), fakehttp.WithBody(twoInvoices)),
+			fakehttp.NewResponse(fakehttp.WithStatus(http.StatusOK), fakehttp.WithBody(`{"invoices":[],"count":2}`)),
 		)
 		s := invoices.NewPagination(cli, "http://localhost:8080")
 		vars := step.NewVariables()
@@ -67,7 +67,7 @@ func TestPagination_Run(t *testing.T) {
 		big := `{"invoices":[{"created_at":"1"},{"created_at":"2"},{"created_at":"3"},{"created_at":"4"},` +
 			`{"created_at":"5"},{"created_at":"6"},{"created_at":"7"},{"created_at":"8"},{"created_at":"9"},` +
 			`{"created_at":"10"},{"created_at":"11"}],"count":11}`
-		cli := fakehttp.NewSequence(fakehttp.Canned{Status: http.StatusOK, Body: big})
+		cli := fakehttp.NewSequence(fakehttp.NewResponse(fakehttp.WithStatus(http.StatusOK), fakehttp.WithBody(big)))
 		s := invoices.NewPagination(cli, "http://localhost:8080")
 		vars := step.NewVariables()
 		vars.Set(fixture.RealtyID, "1")

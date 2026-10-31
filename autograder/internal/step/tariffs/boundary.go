@@ -61,8 +61,8 @@ func (s Boundary) Description() string {
 	return "Checks that the tariff version in force changes on the day its second version starts."
 }
 
-// version is the part of the tariff version returned by GET /tariffs the step checks.
-type version struct {
+// Version is the part of the tariff version returned by GET /tariffs the step checks.
+type Version struct {
 	// ValidFrom is the start of the version.
 	ValidFrom string `json:"valid_from"`
 	// ValidTo is the end of the version.
@@ -95,11 +95,11 @@ func (s Boundary) Run(ctx context.Context, vars step.Variables) error {
 	}
 	before := start.AddDate(0, 0, -1).Format(dayLayout)
 	after := start.Format(dayLayout)
-	prev, err := s.version(ctx, before)
+	prev, err := s.Version(ctx, before)
 	if err != nil {
 		return err
 	}
-	cur, err := s.version(ctx, after)
+	cur, err := s.Version(ctx, after)
 	if err != nil {
 		return err
 	}
@@ -119,29 +119,29 @@ func (s Boundary) Run(ctx context.Context, vars step.Variables) error {
 	)
 }
 
-// version requests the tariff in force on the day and returns its validity.
-func (s Boundary) version(ctx context.Context, day string) (version, error) {
+// Version requests the tariff in force on the day and returns its validity.
+func (s Boundary) Version(ctx context.Context, day string) (Version, error) {
 	req, err := httpx.NewRequest(ctx, http.MethodGet, fmt.Sprintf("%s/tariffs?date=%s", s.baseURL, day), nil)
 	if err != nil {
-		return version{}, err
+		return Version{}, err
 	}
 	rsp, err := s.cli.Do(req)
 	if err != nil {
-		return version{}, fmt.Errorf("send request: %w", err)
+		return Version{}, fmt.Errorf("send request: %w", err)
 	}
 	defer func() {
 		_ = rsp.Body.Close()
 	}()
 	body, err := httpx.ReadBody(rsp)
 	if err != nil {
-		return version{}, err
+		return Version{}, err
 	}
 	if err := expect.All(httpx.Status(rsp, http.StatusOK), httpx.JSONContent(rsp)); err != nil {
-		return version{}, errs.Wrap(err, "unexpected response")
+		return Version{}, errs.Wrap(err, "unexpected response")
 	}
-	var got version
+	var got Version
 	if err := httpx.Decode(body, &got); err != nil {
-		return version{}, err
+		return Version{}, err
 	}
 	return got, nil
 }

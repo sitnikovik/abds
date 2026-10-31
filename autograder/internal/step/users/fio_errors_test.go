@@ -20,31 +20,31 @@ func TestFio_RunErrors(t *testing.T) {
 	t.Run("fails when the read after the patch has a wrong status", func(t *testing.T) {
 		t.Parallel()
 		cli := fakehttp.NewSequence(
-			fakehttp.Canned{Status: http.StatusNoContent},
-			fakehttp.Canned{Status: http.StatusNotFound, Body: `{"message":"Not found"}`},
+			fakehttp.NewResponse(fakehttp.WithStatus(http.StatusNoContent)),
+			fakehttp.NewResponse(fakehttp.WithStatus(http.StatusNotFound), fakehttp.WithBody(`{"message":"Not found"}`)),
 		)
-		s := users.NewFio(ownerDB(0), "energosbyt", cli, "http://localhost:8080")
-		err := s.Run(context.Background(), varsWithUser())
+		s := users.NewFio(OwnerDB(0), "energosbyt", cli, "http://localhost:8080")
+		err := s.Run(context.Background(), VarsWithUser())
 		assert.NoError(t, checkerr.Contains(err, "unexpected response"))
 	})
 	t.Run("fails when the read after the patch is not JSON", func(t *testing.T) {
 		t.Parallel()
 		cli := fakehttp.NewSequence(
-			fakehttp.Canned{Status: http.StatusNoContent},
-			fakehttp.Canned{Status: http.StatusOK, Body: `{`},
+			fakehttp.NewResponse(fakehttp.WithStatus(http.StatusNoContent)),
+			fakehttp.NewResponse(fakehttp.WithStatus(http.StatusOK), fakehttp.WithBody(`{`)),
 		)
-		s := users.NewFio(ownerDB(0), "energosbyt", cli, "http://localhost:8080")
-		err := s.Run(context.Background(), varsWithUser())
+		s := users.NewFio(OwnerDB(0), "energosbyt", cli, "http://localhost:8080")
+		err := s.Run(context.Background(), VarsWithUser())
 		assert.NoError(t, checkerr.Contains(err, "decode body"))
 	})
 	t.Run("fails when the read after the patch fails", func(t *testing.T) {
 		t.Parallel()
 		cli := fakehttp.NewSequence(
-			fakehttp.Canned{Status: http.StatusNoContent},
-			fakehttp.Canned{Err: errors.New("connection reset")},
+			fakehttp.NewResponse(fakehttp.WithStatus(http.StatusNoContent)),
+			fakehttp.NewResponse(fakehttp.WithErr(errors.New("connection reset"))),
 		)
-		s := users.NewFio(ownerDB(0), "energosbyt", cli, "http://localhost:8080")
-		err := s.Run(context.Background(), varsWithUser())
+		s := users.NewFio(OwnerDB(0), "energosbyt", cli, "http://localhost:8080")
+		err := s.Run(context.Background(), VarsWithUser())
 		assert.NoError(t, checkerr.Contains(err, "connection reset"))
 	})
 }

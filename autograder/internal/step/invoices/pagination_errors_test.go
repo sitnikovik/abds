@@ -30,7 +30,7 @@ func TestPagination_RunErrors(t *testing.T) {
 	})
 	t.Run("fails when a page request fails", func(t *testing.T) {
 		t.Parallel()
-		cli := fakehttp.NewSequence(fakehttp.Canned{Err: errors.New("connection refused")})
+		cli := fakehttp.NewSequence(fakehttp.NewResponse(fakehttp.WithErr(errors.New("connection refused"))))
 		s := invoices.NewPagination(cli, "http://localhost:8080")
 		vars := step.NewVariables()
 		vars.Set(fixture.RealtyID, "1")

@@ -20,8 +20,8 @@ import (
 
 const baseURL = "http://localhost:8080"
 
-// varsWithUser returns variables that hold the user id 1.
-func varsWithUser() step.Variables {
+// VarsWithUser returns variables that hold the user id 1.
+func VarsWithUser() step.Variables {
 	vars := step.NewVariables()
 	vars.Set(fixture.UserID, "1")
 	return vars
@@ -36,7 +36,7 @@ func TestGet_Run(t *testing.T) {
 			fakehttp.NewClient(http.StatusOK, `{"id":1,"fio":"Иванов Иван","phone":"+79000000001","phone_prev":""}`, nil),
 			baseURL,
 		)
-		err := s.Run(context.Background(), varsWithUser())
+		err := s.Run(context.Background(), VarsWithUser())
 		assert.NoError(t, checkerr.NoError(err))
 	})
 	t.Run("fails when the id differs", func(t *testing.T) {
@@ -45,7 +45,7 @@ func TestGet_Run(t *testing.T) {
 			fakehttp.NewClient(http.StatusOK, `{"id":2,"fio":"Иванов Иван","phone":"+79000000001"}`, nil),
 			baseURL,
 		)
-		err := s.Run(context.Background(), varsWithUser())
+		err := s.Run(context.Background(), VarsWithUser())
 		assert.NoError(t, checkerr.Contains(err, "field id"))
 	})
 	t.Run("fails on a wrong status code", func(t *testing.T) {
@@ -54,7 +54,7 @@ func TestGet_Run(t *testing.T) {
 			fakehttp.NewClient(http.StatusNotFound, `{"message":"Not found"}`, nil),
 			baseURL,
 		)
-		err := s.Run(context.Background(), varsWithUser())
+		err := s.Run(context.Background(), VarsWithUser())
 		assert.NoError(t, checkerr.Contains(err, "unexpected response"))
 	})
 	t.Run("fails on a body that is not JSON", func(t *testing.T) {
@@ -63,7 +63,7 @@ func TestGet_Run(t *testing.T) {
 			fakehttp.NewClient(http.StatusOK, `{`, nil),
 			baseURL,
 		)
-		err := s.Run(context.Background(), varsWithUser())
+		err := s.Run(context.Background(), VarsWithUser())
 		assert.NoError(t, checkerr.Contains(err, "decode body"))
 	})
 	t.Run("fails when the request fails", func(t *testing.T) {
@@ -72,7 +72,7 @@ func TestGet_Run(t *testing.T) {
 			fakehttp.NewClient(0, "", errors.New("connection refused")),
 			baseURL,
 		)
-		err := s.Run(context.Background(), varsWithUser())
+		err := s.Run(context.Background(), VarsWithUser())
 		assert.NoError(t, checkerr.Contains(err, "connection refused"))
 	})
 	t.Run("fails when the user id is not stored", func(t *testing.T) {
@@ -161,25 +161,25 @@ func TestPatch_Run(t *testing.T) {
 	t.Run("passes on 204 with an empty body", func(t *testing.T) {
 		t.Parallel()
 		s := users.NewPatch(fakehttp.NewClient(http.StatusNoContent, "", nil), baseURL)
-		err := s.Run(context.Background(), varsWithUser())
+		err := s.Run(context.Background(), VarsWithUser())
 		assert.NoError(t, checkerr.NoError(err))
 	})
 	t.Run("fails on a wrong status code", func(t *testing.T) {
 		t.Parallel()
 		s := users.NewPatch(fakehttp.NewClient(http.StatusOK, "", nil), baseURL)
-		err := s.Run(context.Background(), varsWithUser())
+		err := s.Run(context.Background(), VarsWithUser())
 		assert.NoError(t, checkerr.Contains(err, "status code must be 204"))
 	})
 	t.Run("fails on a non-empty body", func(t *testing.T) {
 		t.Parallel()
 		s := users.NewPatch(fakehttp.NewClient(http.StatusNoContent, "x", nil), baseURL)
-		err := s.Run(context.Background(), varsWithUser())
+		err := s.Run(context.Background(), VarsWithUser())
 		assert.NoError(t, checkerr.Error(err))
 	})
 	t.Run("fails when the request fails", func(t *testing.T) {
 		t.Parallel()
 		s := users.NewPatch(fakehttp.NewClient(0, "", errors.New("connection refused")), baseURL)
-		err := s.Run(context.Background(), varsWithUser())
+		err := s.Run(context.Background(), VarsWithUser())
 		assert.NoError(t, checkerr.Contains(err, "connection refused"))
 	})
 	t.Run("fails when the user id is not stored", func(t *testing.T) {

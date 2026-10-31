@@ -37,8 +37,8 @@ func (v Variables) Set(key, value string) {
 	v.values[key] = value
 }
 
-// Get returns the value stored under key and reports whether it exists.
-func (v Variables) Get(key string) (string, bool) {
+// Lookup returns the value stored under key and reports whether it exists.
+func (v Variables) Lookup(key string) (string, bool) {
 	val, ok := v.values[key]
 	return val, ok
 }

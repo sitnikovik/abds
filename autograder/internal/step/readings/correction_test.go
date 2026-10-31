@@ -27,7 +27,7 @@ func TestCorrection_Run(t *testing.T) {
 			fakehttp.NewClient(http.StatusOK, `{"readings":[{"day_kw":1250,"night_kw":300}],"count":1}`, nil),
 			baseURL,
 		)
-		err := s.Run(context.Background(), varsWithAll())
+		err := s.Run(context.Background(), VarsWithAll())
 		assert.NoError(t, checkerr.NoError(err))
 	})
 	t.Run("fails when the date has two readings", func(t *testing.T) {
@@ -36,7 +36,7 @@ func TestCorrection_Run(t *testing.T) {
 			fakehttp.NewClient(http.StatusOK, `{"readings":[{"day_kw":1250,"night_kw":300},{"day_kw":1,"night_kw":1}],"count":2}`, nil),
 			baseURL,
 		)
-		err := s.Run(context.Background(), varsWithAll())
+		err := s.Run(context.Background(), VarsWithAll())
 		assert.NoError(t, checkerr.Contains(err, "one actual reading"))
 	})
 	t.Run("fails when the day value is an old one", func(t *testing.T) {
@@ -45,7 +45,7 @@ func TestCorrection_Run(t *testing.T) {
 			fakehttp.NewClient(http.StatusOK, `{"readings":[{"day_kw":1,"night_kw":300}],"count":1}`, nil),
 			baseURL,
 		)
-		err := s.Run(context.Background(), varsWithAll())
+		err := s.Run(context.Background(), VarsWithAll())
 		assert.NoError(t, checkerr.Contains(err, "field day_kw"))
 	})
 	t.Run("fails when the night value is an old one", func(t *testing.T) {
@@ -54,25 +54,25 @@ func TestCorrection_Run(t *testing.T) {
 			fakehttp.NewClient(http.StatusOK, `{"readings":[{"day_kw":1250,"night_kw":1}],"count":1}`, nil),
 			baseURL,
 		)
-		err := s.Run(context.Background(), varsWithAll())
+		err := s.Run(context.Background(), VarsWithAll())
 		assert.NoError(t, checkerr.Contains(err, "field night_kw"))
 	})
 	t.Run("fails on a wrong status code", func(t *testing.T) {
 		t.Parallel()
 		s := readings.NewCorrection(fakehttp.NewClient(http.StatusNotFound, `{"message":"x"}`, nil), baseURL)
-		err := s.Run(context.Background(), varsWithAll())
+		err := s.Run(context.Background(), VarsWithAll())
 		assert.NoError(t, checkerr.Contains(err, "unexpected response"))
 	})
 	t.Run("fails when the body is not JSON", func(t *testing.T) {
 		t.Parallel()
 		s := readings.NewCorrection(fakehttp.NewClient(http.StatusOK, `{`, nil), baseURL)
-		err := s.Run(context.Background(), varsWithAll())
+		err := s.Run(context.Background(), VarsWithAll())
 		assert.NoError(t, checkerr.Contains(err, "decode body"))
 	})
 	t.Run("fails when the request fails", func(t *testing.T) {
 		t.Parallel()
 		s := readings.NewCorrection(fakehttp.NewClient(0, "", errors.New("connection refused")), baseURL)
-		err := s.Run(context.Background(), varsWithAll())
+		err := s.Run(context.Background(), VarsWithAll())
 		assert.NoError(t, checkerr.Contains(err, "connection refused"))
 	})
 	t.Run("fails when the realty id is not stored", func(t *testing.T) {

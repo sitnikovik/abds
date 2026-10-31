@@ -93,7 +93,7 @@ func (s PhoneHistory) Run(ctx context.Context, vars step.Variables) error {
 	if err := expect.All(httpx.Status(rsp, http.StatusNoContent), errs.Wrap(strings.Empty(string(patchBody)), "body must be empty")); err != nil {
 		return err
 	}
-	got, err := s.fetch(ctx, id)
+	got, err := s.Fetch(ctx, id)
 	if err != nil {
 		return err
 	}
@@ -109,35 +109,35 @@ func (s PhoneHistory) Run(ctx context.Context, vars step.Variables) error {
 	)
 }
 
-// owner is the part of the owner returned by GET /users/{id} the step checks.
-type owner struct {
+// Owner is the part of the owner returned by GET /users/{id} the step checks.
+type Owner struct {
 	// Phone is the current phone of the owner.
 	Phone string `json:"phone"`
 	// PhonePrev is the phone the owner had before the current one.
 	PhonePrev string `json:"phone_prev"`
 }
 
-// fetch returns the owner from GET /users/{id}.
-func (s PhoneHistory) fetch(ctx context.Context, id uint64) (owner, error) {
+// Fetch returns the owner from GET /users/{id}.
+func (s PhoneHistory) Fetch(ctx context.Context, id uint64) (Owner, error) {
 	req, err := httpx.NewRequest(ctx, http.MethodGet, fmt.Sprintf("%s/users/%d", s.baseURL, id), nil)
 	if err != nil {
-		return owner{}, err
+		return Owner{}, err
 	}
 	rsp, err := s.cli.Do(req)
 	if err != nil {
-		return owner{}, fmt.Errorf("send request: %w", err)
+		return Owner{}, fmt.Errorf("send request: %w", err)
 	}
 	body, err := httpx.ReadBody(rsp)
 	_ = rsp.Body.Close()
 	if err != nil {
-		return owner{}, err
+		return Owner{}, err
 	}
 	if err := expect.All(httpx.Status(rsp, http.StatusOK), httpx.JSONContent(rsp)); err != nil {
-		return owner{}, errs.Wrap(err, "unexpected response")
+		return Owner{}, errs.Wrap(err, "unexpected response")
 	}
-	var got owner
+	var got Owner
 	if err := httpx.Decode(body, &got); err != nil {
-		return owner{}, err
+		return Owner{}, err
 	}
 	return got, nil
 }

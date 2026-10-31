@@ -32,9 +32,9 @@ func TestStep_Run(t *testing.T) {
 		)
 		vars := step.NewVariables()
 		err := s.Run(context.Background(), vars)
-		realty, _ := vars.Get(fixture.RealtyID)
-		gauge, _ := vars.Get(fixture.GaugeID)
-		newGauge, _ := vars.Get(fixture.NewGaugeID)
+		realty, _ := vars.Lookup(fixture.RealtyID)
+		gauge, _ := vars.Lookup(fixture.GaugeID)
+		newGauge, _ := vars.Lookup(fixture.NewGaugeID)
 		assert.NoError(
 			t,
 			expect.All(

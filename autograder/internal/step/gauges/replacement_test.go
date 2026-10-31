@@ -17,8 +17,8 @@ import (
 	fakeclickhouse "github.com/sitnikovik/abds/autograder/internal/test/fake/clickhouse"
 )
 
-// varsWithRealtyAndNewGauge returns variables with the realty id 1 and the new gauge id 2.
-func varsWithRealtyAndNewGauge() step.Variables {
+// VarsWithRealtyAndNewGauge returns variables with the realty id 1 and the new gauge id 2.
+func VarsWithRealtyAndNewGauge() step.Variables {
 	vars := step.NewVariables()
 	vars.Set(fixture.RealtyID, "1")
 	vars.Set(fixture.NewGaugeID, "2")
@@ -34,7 +34,7 @@ func TestReplacement_Run(t *testing.T) {
 			fakeclickhouse.WithStrings("fact_gauge_bindings", [][]string{{"2"}}),
 		)
 		s := gauges.NewReplacement(db, "energosbyt")
-		err := s.Run(context.Background(), varsWithRealtyAndNewGauge())
+		err := s.Run(context.Background(), VarsWithRealtyAndNewGauge())
 		assert.NoError(t, checkerr.NoError(err))
 	})
 	t.Run("fails when the old gauge is still active", func(t *testing.T) {
@@ -43,7 +43,7 @@ func TestReplacement_Run(t *testing.T) {
 			fakeclickhouse.WithStrings("fact_gauge_bindings", [][]string{{"1"}, {"2"}}),
 		)
 		s := gauges.NewReplacement(db, "energosbyt")
-		err := s.Run(context.Background(), varsWithRealtyAndNewGauge())
+		err := s.Run(context.Background(), VarsWithRealtyAndNewGauge())
 		assert.NoError(t, checkerr.Contains(err, "exactly one active gauge"))
 	})
 	t.Run("fails when another gauge is active", func(t *testing.T) {
@@ -52,14 +52,14 @@ func TestReplacement_Run(t *testing.T) {
 			fakeclickhouse.WithStrings("fact_gauge_bindings", [][]string{{"1"}}),
 		)
 		s := gauges.NewReplacement(db, "energosbyt")
-		err := s.Run(context.Background(), varsWithRealtyAndNewGauge())
+		err := s.Run(context.Background(), VarsWithRealtyAndNewGauge())
 		assert.NoError(t, checkerr.Contains(err, "installed one"))
 	})
 	t.Run("fails when the query fails", func(t *testing.T) {
 		t.Parallel()
 		db := fakeclickhouse.NewClient(fakeclickhouse.WithError(errors.New("connection refused")))
 		s := gauges.NewReplacement(db, "energosbyt")
-		err := s.Run(context.Background(), varsWithRealtyAndNewGauge())
+		err := s.Run(context.Background(), VarsWithRealtyAndNewGauge())
 		assert.NoError(t, checkerr.Contains(err, "read bindings"))
 	})
 	t.Run("fails when the realty id is not stored", func(t *testing.T) {

@@ -52,15 +52,15 @@ func (s Pagination) Run(ctx context.Context, vars step.Variables) error {
 	if err != nil {
 		return err
 	}
-	defaults, err := s.page(ctx, id, "")
+	defaults, err := s.Page(ctx, id, "")
 	if err != nil {
 		return err
 	}
-	first, err := s.page(ctx, id, "?limit=1&offset=0")
+	first, err := s.Page(ctx, id, "?limit=1&offset=0")
 	if err != nil {
 		return err
 	}
-	second, err := s.page(ctx, id, "?limit=1&offset=1")
+	second, err := s.Page(ctx, id, "?limit=1&offset=1")
 	if err != nil {
 		return err
 	}
@@ -86,8 +86,8 @@ func (s Pagination) Run(ctx context.Context, vars step.Variables) error {
 	)
 }
 
-// page requests the invoices of the object with the query string and returns their created_at values.
-func (s Pagination) page(ctx context.Context, id, query string) ([]string, error) {
+// Page requests the invoices of the object with the query string and returns their created_at values.
+func (s Pagination) Page(ctx context.Context, id, query string) ([]string, error) {
 	req, err := httpx.NewRequest(ctx, http.MethodGet, fmt.Sprintf("%s/realty/%s/invoices%s", s.baseURL, id, query), nil)
 	if err != nil {
 		return nil, err

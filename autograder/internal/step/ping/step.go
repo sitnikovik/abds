@@ -4,13 +4,13 @@ package ping
 import (
 	"context"
 	"fmt"
-	"io"
 	"net/http"
 
 	"github.com/sitnikovik/buggles/expect"
 	"github.com/sitnikovik/buggles/expect/number"
 	"github.com/sitnikovik/buggles/expect/strings"
 
+	"github.com/sitnikovik/abds/autograder/internal/client/httpx"
 	"github.com/sitnikovik/abds/autograder/internal/step"
 )
 
@@ -57,7 +57,7 @@ func (s Step) Run(_ context.Context, _ step.Variables) error {
 	defer func() {
 		_ = rsp.Body.Close()
 	}()
-	body, err := io.ReadAll(rsp.Body)
+	body, err := httpx.ReadBody(rsp)
 	if err != nil {
 		return fmt.Errorf("read body: %w", err)
 	}

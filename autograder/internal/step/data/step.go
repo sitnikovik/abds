@@ -48,27 +48,27 @@ func (s Step) Description() string {
 //
 // It returns an error if a query fails or a table has fewer rows than required.
 func (s Step) Run(ctx context.Context, _ step.Variables) error {
-	realties, err := s.count(ctx, countQuery, realtyTable)
+	realties, err := s.Count(ctx, countQuery, realtyTable)
 	if err != nil {
 		return err
 	}
-	gauges, err := s.count(ctx, countQuery, gaugesTable)
+	gauges, err := s.Count(ctx, countQuery, gaugesTable)
 	if err != nil {
 		return err
 	}
-	users, err := s.count(ctx, countQuery, usersTable)
+	users, err := s.Count(ctx, countQuery, usersTable)
 	if err != nil {
 		return err
 	}
-	bindings, err := s.count(ctx, countQuery, bindingsTable)
+	bindings, err := s.Count(ctx, countQuery, bindingsTable)
 	if err != nil {
 		return err
 	}
-	readings, err := s.count(ctx, countFinalQuery, readingsTable)
+	readings, err := s.Count(ctx, countFinalQuery, readingsTable)
 	if err != nil {
 		return err
 	}
-	invoices, err := s.count(ctx, countQuery, invoicesTable)
+	invoices, err := s.Count(ctx, countQuery, invoicesTable)
 	if err != nil {
 		return err
 	}
@@ -116,8 +116,8 @@ func (s Step) Run(ctx context.Context, _ step.Variables) error {
 	)
 }
 
-// count runs the counting query of the table in the database.
-func (s Step) count(ctx context.Context, query, table string) (uint64, error) {
+// Count runs the counting query of the table in the database.
+func (s Step) Count(ctx context.Context, query, table string) (uint64, error) {
 	n, err := s.db.Count(ctx, fmt.Sprintf(query, s.database, table))
 	if err != nil {
 		return 0, fmt.Errorf("count %s: %w", table, err)

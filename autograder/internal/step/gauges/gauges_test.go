@@ -20,8 +20,8 @@ import (
 
 const baseURL = "http://localhost:8080"
 
-// varsWithRealtyAndGauge returns variables with a realty id and a new gauge id.
-func varsWithRealtyAndGauge() step.Variables {
+// VarsWithRealtyAndGauge returns variables with a realty id and a new gauge id.
+func VarsWithRealtyAndGauge() step.Variables {
 	vars := step.NewVariables()
 	vars.Set(fixture.RealtyID, "1")
 	vars.Set(fixture.NewGaugeID, "2")
@@ -34,25 +34,25 @@ func TestPost_Run(t *testing.T) {
 	t.Run("passes on 201 with an empty body", func(t *testing.T) {
 		t.Parallel()
 		s := gauges.NewPost(fakehttp.NewClient(http.StatusCreated, "", nil), baseURL)
-		err := s.Run(context.Background(), varsWithRealtyAndGauge())
+		err := s.Run(context.Background(), VarsWithRealtyAndGauge())
 		assert.NoError(t, checkerr.NoError(err))
 	})
 	t.Run("fails on a wrong status code", func(t *testing.T) {
 		t.Parallel()
 		s := gauges.NewPost(fakehttp.NewClient(http.StatusBadRequest, "", nil), baseURL)
-		err := s.Run(context.Background(), varsWithRealtyAndGauge())
+		err := s.Run(context.Background(), VarsWithRealtyAndGauge())
 		assert.NoError(t, checkerr.Contains(err, "status code must be 201"))
 	})
 	t.Run("fails on a non-empty body", func(t *testing.T) {
 		t.Parallel()
 		s := gauges.NewPost(fakehttp.NewClient(http.StatusCreated, "{}", nil), baseURL)
-		err := s.Run(context.Background(), varsWithRealtyAndGauge())
+		err := s.Run(context.Background(), VarsWithRealtyAndGauge())
 		assert.NoError(t, checkerr.Contains(err, "body must be empty"))
 	})
 	t.Run("fails when the request fails", func(t *testing.T) {
 		t.Parallel()
 		s := gauges.NewPost(fakehttp.NewClient(0, "", errors.New("connection refused")), baseURL)
-		err := s.Run(context.Background(), varsWithRealtyAndGauge())
+		err := s.Run(context.Background(), VarsWithRealtyAndGauge())
 		assert.NoError(t, checkerr.Contains(err, "connection refused"))
 	})
 	t.Run("fails when the realty id is not stored", func(t *testing.T) {

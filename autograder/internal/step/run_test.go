@@ -24,7 +24,7 @@ func TestVariables(t *testing.T) {
 		t.Parallel()
 		vars := step.NewVariables()
 		vars.Set("realty_id", "1")
-		val, ok := vars.Get("realty_id")
+		val, ok := vars.Lookup("realty_id")
 		assert.NoError(
 			t,
 			expect.All(
@@ -36,7 +36,7 @@ func TestVariables(t *testing.T) {
 	t.Run("reports a missing key", func(t *testing.T) {
 		t.Parallel()
 		vars := step.NewVariables()
-		_, ok := vars.Get("missing")
+		_, ok := vars.Lookup("missing")
 		assert.NoError(
 			t,
 			boolean.False(ok),

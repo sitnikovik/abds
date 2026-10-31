@@ -20,8 +20,8 @@ import (
 
 const baseURL = "http://localhost:8080"
 
-// varsWithRealty returns variables that hold the realty id 1.
-func varsWithRealty() step.Variables {
+// VarsWithRealty returns variables that hold the realty id 1.
+func VarsWithRealty() step.Variables {
 	vars := step.NewVariables()
 	vars.Set(fixture.RealtyID, "1")
 	return vars
@@ -36,7 +36,7 @@ func TestGet_Run(t *testing.T) {
 			fakehttp.NewClient(http.StatusOK, `{"id":1,"address":"г. Москва","square":41,"type":"flat","floor":10,"porch":1}`, nil),
 			baseURL,
 		)
-		err := s.Run(context.Background(), varsWithRealty())
+		err := s.Run(context.Background(), VarsWithRealty())
 		assert.NoError(t, checkerr.NoError(err))
 	})
 	t.Run("passes on a non-residential premises", func(t *testing.T) {
@@ -45,7 +45,7 @@ func TestGet_Run(t *testing.T) {
 			fakehttp.NewClient(http.StatusOK, `{"id":1,"address":"г. Москва","square":50,"type":"nrcp","floor":10,"porch":1}`, nil),
 			baseURL,
 		)
-		err := s.Run(context.Background(), varsWithRealty())
+		err := s.Run(context.Background(), VarsWithRealty())
 		assert.NoError(t, checkerr.NoError(err))
 	})
 	t.Run("fails on an unknown type", func(t *testing.T) {
@@ -54,7 +54,7 @@ func TestGet_Run(t *testing.T) {
 			fakehttp.NewClient(http.StatusOK, `{"id":1,"address":"г. Москва","square":41,"type":"house"}`, nil),
 			baseURL,
 		)
-		err := s.Run(context.Background(), varsWithRealty())
+		err := s.Run(context.Background(), VarsWithRealty())
 		assert.NoError(t, checkerr.Contains(err, "field type"))
 	})
 	t.Run("fails when the square is empty", func(t *testing.T) {
@@ -63,7 +63,7 @@ func TestGet_Run(t *testing.T) {
 			fakehttp.NewClient(http.StatusOK, `{"id":1,"address":"г. Москва","square":0,"type":"flat","floor":10,"porch":1}`, nil),
 			baseURL,
 		)
-		err := s.Run(context.Background(), varsWithRealty())
+		err := s.Run(context.Background(), VarsWithRealty())
 		assert.NoError(t, checkerr.Contains(err, "field square"))
 	})
 	t.Run("fails when the id differs", func(t *testing.T) {
@@ -72,25 +72,25 @@ func TestGet_Run(t *testing.T) {
 			fakehttp.NewClient(http.StatusOK, `{"id":2,"address":"г. Москва","square":41,"type":"flat","floor":10,"porch":1}`, nil),
 			baseURL,
 		)
-		err := s.Run(context.Background(), varsWithRealty())
+		err := s.Run(context.Background(), VarsWithRealty())
 		assert.NoError(t, checkerr.Contains(err, "field id"))
 	})
 	t.Run("fails on a wrong status code", func(t *testing.T) {
 		t.Parallel()
 		s := realty.NewGet(fakehttp.NewClient(http.StatusNotFound, `{"message":"Not found"}`, nil), baseURL)
-		err := s.Run(context.Background(), varsWithRealty())
+		err := s.Run(context.Background(), VarsWithRealty())
 		assert.NoError(t, checkerr.Contains(err, "unexpected response"))
 	})
 	t.Run("fails on a body that is not JSON", func(t *testing.T) {
 		t.Parallel()
 		s := realty.NewGet(fakehttp.NewClient(http.StatusOK, `{`, nil), baseURL)
-		err := s.Run(context.Background(), varsWithRealty())
+		err := s.Run(context.Background(), VarsWithRealty())
 		assert.NoError(t, checkerr.Contains(err, "decode body"))
 	})
 	t.Run("fails when the request fails", func(t *testing.T) {
 		t.Parallel()
 		s := realty.NewGet(fakehttp.NewClient(0, "", errors.New("connection refused")), baseURL)
-		err := s.Run(context.Background(), varsWithRealty())
+		err := s.Run(context.Background(), VarsWithRealty())
 		assert.NoError(t, checkerr.Contains(err, "connection refused"))
 	})
 	t.Run("fails when the realty id is not stored", func(t *testing.T) {

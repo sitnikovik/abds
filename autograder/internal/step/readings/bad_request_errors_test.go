@@ -27,7 +27,7 @@ func TestBadRequest_RunErrors(t *testing.T) {
 	t.Run("fails when the body is not JSON", func(t *testing.T) {
 		t.Parallel()
 		s := readings.NewBadRequest(fakehttp.NewClient(http.StatusBadRequest, `{`, nil), baseURL)
-		err := s.Run(context.Background(), varsWithAll())
+		err := s.Run(context.Background(), VarsWithAll())
 		assert.NoError(t, checkerr.Contains(err, "unexpected response"))
 	})
 }

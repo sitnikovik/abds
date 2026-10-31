@@ -52,7 +52,7 @@ func TestPost_RunErrors(t *testing.T) {
 	t.Run("fails when the request fails", func(t *testing.T) {
 		t.Parallel()
 		s := readings.NewPost(fakehttp.NewClient(0, "", errors.New("connection refused")), baseURL)
-		err := s.Run(context.Background(), varsWithAll())
+		err := s.Run(context.Background(), VarsWithAll())
 		assert.NoError(t, checkerr.Contains(err, "connection refused"))
 	})
 }

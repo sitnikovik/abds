@@ -57,7 +57,7 @@ func Load(lookup func(key string) (string, bool)) (Config, error) {
 		env[key] = val
 	}
 	for _, key := range []string{keyAppPort, keyClickHousePort} {
-		if err := validatePort(env[key]); err != nil {
+		if err := ValidatePort(env[key]); err != nil {
 			return Config{}, fmt.Errorf("environment variable %s: %w", key, err)
 		}
 	}
@@ -98,8 +98,8 @@ func (c Config) ClickHousePassword() string {
 	return c.chPassword
 }
 
-// validatePort returns an error if val is not a TCP port number from 1 to 65535.
-func validatePort(val string) error {
+// ValidatePort returns an error if val is not a TCP port number from 1 to 65535.
+func ValidatePort(val string) error {
 	port, err := strconv.ParseUint(val, 10, 16)
 	if err != nil {
 		return fmt.Errorf("%q is not a number: %w", val, err)

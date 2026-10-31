@@ -41,6 +41,14 @@ Guidance for AI agents working in this repository.
   and return the combined error from `Run`.
 - Do not write `if err != nil { return ... }` for assertions.
 - Each step is a package under `internal/step/...` with a `Run(ctx, vars) error` method.
+- Every step lives in its own package `internal/step/<group>/<operation>/` with exactly
+  the directory and file structure of `internal/step/invoices/list/`:
+  - `step.go` — the `Step` type with the constructor `NewStep`, `Name` and `Description`;
+  - `run.go` — the `Run(ctx, vars) error` method;
+  - `run_test.go` — the tests of the step in a `<operation>_test` package.
+- In step tests import the checked package with the alias `impl`.
+- Name step packages as one concatenated word without underscores
+  (`notfound`, `badrequest`, `invaliddate`), matching the directory name.
 - Pin the `buggles` version in `autograder/go.mod`. The framework is not stable yet.
 - ClickHouse access uses `github.com/ClickHouse/clickhouse-go/v2` over the native protocol.
   - Declarative repo layer: `internal/repo/<entity>/<operation>/`.

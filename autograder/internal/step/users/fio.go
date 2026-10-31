@@ -1,0 +1,171 @@
+package users
+
+import (
+	"context"
+	"encoding/json"
+	"fmt"
+	"net/http"
+	"strconv"
+
+	"github.com/sitnikovik/buggles/expect"
+	"github.com/sitnikovik/buggles/expect/number"
+	"github.com/sitnikovik/buggles/expect/strings"
+
+	"github.com/sitnikovik/abds/autograder/internal/client/httpx"
+	"github.com/sitnikovik/abds/autograder/internal/errs"
+	"github.com/sitnikovik/abds/autograder/internal/step"
+	"github.com/sitnikovik/abds/autograder/internal/step/fixture"
+)
+
+// clickhouseClient is the part of the ClickHouse client the steps of the owners use.
+type clickhouseClient interface {
+	// Strings runs the query and returns the rows with the given number of string columns.
+	Strings(ctx context.Context, query string, columns int, args ...any) ([][]string, error)
+	// Count runs the query and returns the value of its first row.
+	Count(ctx context.Context, query string, args ...any) (uint64, error)
+}
+
+// Fio checks that PATCH /users/{id} overwrites the full name and the previous name is not stored anymore.
+type Fio struct {
+	// db reads the stored owner.
+	db clickhouseClient
+	// database is the name of the database the student's tables live in.
+	database string
+	// cli sends the requests.
+	cli httpx.Doer
+	// baseURL is the base URL of the application, without a trailing slash.
+	baseURL string
+}
+
+// NewFio creates a Fio step that reads the owner from database through db and sends its requests through cli.
+func NewFio(db clickhouseClient, database string, cli httpx.Doer, baseURL string) Fio {
+	return Fio{
+		db:       db,
+		database: database,
+		cli:      cli,
+		baseURL:  baseURL,
+	}
+}
+
+// Name returns the name of the step.
+func (s Fio) Name() string {
+	return "users fio"
+}
+
+// Description returns a brief explanation of what the step checks.
+func (s Fio) Description() string {
+	return "Checks that PATCH /users/{id} overwrites the full name and the previous name is not stored."
+}
+
+// Run changes the full name of the owner and checks the API and the stored rows.
+//
+// It returns an error if a query fails, a request fails or the result does not match the expectations.
+func (s Fio) Run(ctx context.Context, vars step.Variables) error {
+	id, err := vars.RequireUint64(fixture.UserID)
+	if err != nil {
+		return err
+	}
+	rows, err := s.db.Strings(
+		ctx,
+		fmt.Sprintf("SELECT fio FROM %s.dim_users FINAL WHERE id = ?", s.database),
+		1,
+		id,
+	)
+	if err != nil {
+		return fmt.Errorf("read owner: %w", err)
+	}
+	if err := expect.All(errs.Wrap(number.Positive(len(rows)), "owner must be stored")); err != nil {
+		return err
+	}
+	old := rows[0][0]
+	next := "Автограйдер Тест"
+	if old == next {
+		next = "Автограйдер Тест 2"
+	}
+	if err := s.patch(ctx, id, next); err != nil {
+		return err
+	}
+	fio, err := s.fetch(ctx, id)
+	if err != nil {
+		return err
+	}
+	stale, err := s.db.Count(
+		ctx,
+		fmt.Sprintf("SELECT count() FROM %s.dim_users FINAL WHERE id = ? AND fio = ?", s.database),
+		id,
+		old,
+	)
+	if err != nil {
+		return fmt.Errorf("count previous name: %w", err)
+	}
+	return expect.All(
+		errs.Wrap(
+			strings.Equal(fio, next),
+			"field fio",
+		),
+		errs.Wrap(
+			number.Equal(stale, 0),
+			"previous name must not be stored",
+		),
+	)
+}
+
+// patch sends the new full name of the owner and expects 204 No Content.
+func (s Fio) patch(ctx context.Context, id uint64, fio string) error {
+	req, err := httpx.NewRequest(
+		ctx,
+		http.MethodPatch,
+		fmt.Sprintf("%s/users/%d", s.baseURL, id),
+		map[string]string{"fio": fio},
+	)
+	if err != nil {
+		return err
+	}
+	rsp, err := s.cli.Do(req)
+	if err != nil {
+		return fmt.Errorf("send request: %w", err)
+	}
+	defer func() {
+		_ = rsp.Body.Close()
+	}()
+	body, err := httpx.ReadBody(rsp)
+	if err != nil {
+		return err
+	}
+	return expect.All(
+		httpx.Status(rsp, http.StatusNoContent),
+		errs.Wrap(
+			strings.Empty(string(body)),
+			"body must be empty",
+		),
+	)
+}
+
+// fetch returns the full name of the owner from GET /users/{id}.
+func (s Fio) fetch(ctx context.Context, id uint64) (string, error) {
+	req, err := httpx.NewRequest(ctx, http.MethodGet, fmt.Sprintf("%s/users/%s", s.baseURL, strconv.FormatUint(id, 10)), nil)
+	if err != nil {
+		return "", err
+	}
+	rsp, err := s.cli.Do(req)
+	if err != nil {
+		return "", fmt.Errorf("send request: %w", err)
+	}
+	defer func() {
+		_ = rsp.Body.Close()
+	}()
+	body, err := httpx.ReadBody(rsp)
+	if err != nil {
+		return "", err
+	}
+	if err := expect.All(httpx.Status(rsp, http.StatusOK), httpx.JSONContent(rsp)); err != nil {
+		return "", errs.Wrap(err, "unexpected response")
+	}
+	var got struct {
+		FIO string `json:"fio"`
+	}
+	if err := json.Unmarshal(body, &got); err != nil {
+		return "", fmt.Errorf("decode body: %w", err)
+	}
+	return got.FIO, nil
+}

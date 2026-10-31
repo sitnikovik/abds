@@ -1,4 +1,4 @@
-name: Autograder
+name: Energosbyt Autograder
 
 on:
   pull_request:
@@ -6,7 +6,7 @@ on:
       - 'autograder/**'
       - '.github/ci.env'
       - 'make/**'
-      - '.github/workflows/autograder.yml'
+      - '.github/workflows/energosbyt.lab.yml'
 
 jobs:
   check:

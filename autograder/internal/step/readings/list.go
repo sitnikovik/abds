@@ -1,0 +1,93 @@
+package readings
+
+import (
+	"context"
+	"fmt"
+	"net/http"
+
+	"github.com/sitnikovik/buggles/expect"
+	"github.com/sitnikovik/buggles/expect/number"
+
+	"github.com/sitnikovik/abds/autograder/internal/client/httpx"
+	"github.com/sitnikovik/abds/autograder/internal/errs"
+	"github.com/sitnikovik/abds/autograder/internal/step"
+	"github.com/sitnikovik/abds/autograder/internal/step/fixture"
+)
+
+// List checks that GET /realty/{id}/readings returns the readings of a period with a matching count.
+type List struct {
+	// cli sends the request.
+	cli httpx.Doer
+	// baseURL is the base URL of the application, without a trailing slash.
+	baseURL string
+}
+
+// NewList creates a List step that sends its request to baseURL through cli.
+func NewList(cli httpx.Doer, baseURL string) List {
+	return List{
+		cli:     cli,
+		baseURL: baseURL,
+	}
+}
+
+// Name returns the name of the step.
+func (s List) Name() string {
+	return "readings list"
+}
+
+// Description returns a brief explanation of what the step checks.
+func (s List) Description() string {
+	return "Checks that GET /realty/{id}/readings returns the readings of a period and a matching count."
+}
+
+// Run requests the readings of October 2026 for the object and checks the response.
+//
+// It returns an error if the request fails or the response does not match the expectations.
+func (s List) Run(ctx context.Context, vars step.Variables) error {
+	id, err := vars.Require(fixture.RealtyID)
+	if err != nil {
+		return err
+	}
+	req, err := httpx.NewRequest(
+		ctx,
+		http.MethodGet,
+		s.baseURL+"/realty/"+id+"/readings?date_from=2026-10-01&date_to=2026-10-31",
+		nil,
+	)
+	if err != nil {
+		return err
+	}
+	rsp, err := s.cli.Do(req)
+	if err != nil {
+		return fmt.Errorf("send request: %w", err)
+	}
+	defer func() {
+		_ = rsp.Body.Close()
+	}()
+	body, err := httpx.ReadBody(rsp)
+	if err != nil {
+		return err
+	}
+	if err := expect.All(httpx.Status(rsp, http.StatusOK), httpx.JSONContent(rsp)); err != nil {
+		return errs.Wrap(err, "unexpected response")
+	}
+	var got struct {
+		Readings []struct {
+			ReadingDate string `json:"reading_date"`
+		} `json:"readings"`
+		Count int `json:"count"`
+	}
+	if err := httpx.Decode(body, &got); err != nil {
+		return err
+	}
+	return expect.All(
+		errs.Wrap(
+			number.Equal(got.Count, len(got.Readings)),
+			"count must match the number of readings",
+		),
+		errs.Wrap(
+			number.Positive(got.Count),
+			"October 2026 must have readings",
+		),
+	)
+}

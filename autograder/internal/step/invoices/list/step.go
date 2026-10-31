@@ -1,3 +1,4 @@
+// Package list provides the step that checks the page of invoices of an object.
 package list
 
 import (
@@ -25,7 +26,7 @@ func NewStep(cli httpx.Doer, baseURL string) Step {
 
 // Name returns the name of the step.
 func (s Step) Name() string {
-	return "invoices Step"
+	return "invoices list"
 }
 
 // Description returns a brief explanation of what the step checks.

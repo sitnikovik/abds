@@ -56,6 +56,13 @@ Guidance for AI agents working in this repository.
 - Call `t.Parallel()` wherever it is safe.
 - No table-driven tests. Write one `t.Run` block per case.
 - Put tests in `_test` packages.
+- Get the checked result directly: call the constructor and the method
+  in one expression instead of storing one-time intermediate objects
+  in variables (see STYLE.md, "Direct result in tests").
+- Do not pass a literal `nil` for a non-error parameter. Declare a variable
+  with the default zero value named after the parameter and pass it.
+  A literal `nil` stays fine for `error` parameters (see STYLE.md,
+  "Named defaults instead of nil").
 - Keep coverage at or above `COVERAGE_THRESHOLD` from `.github/ci.env`.
 
 ## Commands

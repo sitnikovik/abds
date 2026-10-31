@@ -32,3 +32,6 @@ __pycache__/
 
 # Other files
 .DS_Store
+
+# Local dev projects (never committed)
+/dev/

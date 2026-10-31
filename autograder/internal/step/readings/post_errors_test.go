@@ -25,8 +25,17 @@ func TestPost_RunErrors(t *testing.T) {
 		vars.Set(fixture.RealtyID, "1")
 		vars.Set(fixture.GaugeID, "1")
 		vars.Set(fixture.TariffID, "1")
-		s := readings.NewPost(fakehttp.NewClient(http.StatusCreated, "", nil), baseURL)
-		err := s.Run(context.Background(), vars)
+		err := readings.NewPost(
+			fakehttp.NewClient(
+				http.StatusCreated,
+				"",
+				nil,
+			),
+			baseURL,
+		).Run(
+			context.Background(),
+			vars,
+		)
 		assert.NoError(t, checkerr.Contains(err, fixture.UserID))
 	})
 
@@ -36,8 +45,17 @@ func TestPost_RunErrors(t *testing.T) {
 		vars.Set(fixture.RealtyID, "1")
 		vars.Set(fixture.UserID, "1")
 		vars.Set(fixture.TariffID, "1")
-		s := readings.NewPost(fakehttp.NewClient(http.StatusCreated, "", nil), baseURL)
-		err := s.Run(context.Background(), vars)
+		err := readings.NewPost(
+			fakehttp.NewClient(
+				http.StatusCreated,
+				"",
+				nil,
+			),
+			baseURL,
+		).Run(
+			context.Background(),
+			vars,
+		)
 		assert.NoError(t, checkerr.Contains(err, fixture.GaugeID))
 	})
 
@@ -47,15 +65,33 @@ func TestPost_RunErrors(t *testing.T) {
 		vars.Set(fixture.RealtyID, "1")
 		vars.Set(fixture.UserID, "1")
 		vars.Set(fixture.GaugeID, "1")
-		s := readings.NewPost(fakehttp.NewClient(http.StatusCreated, "", nil), baseURL)
-		err := s.Run(context.Background(), vars)
+		err := readings.NewPost(
+			fakehttp.NewClient(
+				http.StatusCreated,
+				"",
+				nil,
+			),
+			baseURL,
+		).Run(
+			context.Background(),
+			vars,
+		)
 		assert.NoError(t, checkerr.Contains(err, fixture.TariffID))
 	})
 
 	t.Run("fails when the request fails", func(t *testing.T) {
 		t.Parallel()
-		s := readings.NewPost(fakehttp.NewClient(0, "", errors.New("connection refused")), baseURL)
-		err := s.Run(context.Background(), VarsWithAll())
+		err := readings.NewPost(
+			fakehttp.NewClient(
+				0,
+				"",
+				errors.New("connection refused"),
+			),
+			baseURL,
+		).Run(
+			context.Background(),
+			VarsWithAll(),
+		)
 		assert.NoError(t, checkerr.Contains(err, "connection refused"))
 	})
 }

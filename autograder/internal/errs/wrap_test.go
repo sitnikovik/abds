@@ -25,7 +25,10 @@ func TestWrap(t *testing.T) {
 
 	t.Run("annotates the error with the message", func(t *testing.T) {
 		t.Parallel()
-		err := errs.Wrap(errors.New("boom"), "table dim_realty")
+		err := errs.Wrap(
+			errors.New("boom"),
+			"table dim_realty",
+		)
 		assert.NoError(
 			t,
 			expect.All(

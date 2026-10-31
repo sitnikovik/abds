@@ -22,14 +22,16 @@ func TestStep_Run(t *testing.T) {
 
 	t.Run("passes on the expected schema", func(t *testing.T) {
 		t.Parallel()
-		s := schema.NewStep(
+		err := schema.NewStep(
 			fakeclickhouse.NewClient(
 				fakeclickhouse.WithStrings("system.tables", fixtureschema.Engines()),
 				fakeclickhouse.WithStrings("system.columns", fixtureschema.Columns()),
 			),
 			"energosbyt",
+		).Run(
+			context.Background(),
+			step.NewVariables(),
 		)
-		err := s.Run(context.Background(), step.NewVariables())
 		assert.NoError(
 			t,
 			checkerr.NoError(err),
@@ -38,14 +40,17 @@ func TestStep_Run(t *testing.T) {
 
 	t.Run("fails when no tables exist", func(t *testing.T) {
 		t.Parallel()
-		s := schema.NewStep(
+		var rows [][]string
+		err := schema.NewStep(
 			fakeclickhouse.NewClient(
-				fakeclickhouse.WithStrings("system.tables", nil),
+				fakeclickhouse.WithStrings("system.tables", rows),
 				fakeclickhouse.WithStrings("system.columns", fixtureschema.Columns()),
 			),
 			"energosbyt",
+		).Run(
+			context.Background(),
+			step.NewVariables(),
 		)
-		err := s.Run(context.Background(), step.NewVariables())
 		assert.NoError(
 			t,
 			checkerr.Contains(err, "table dim_realty engine"),
@@ -54,14 +59,17 @@ func TestStep_Run(t *testing.T) {
 
 	t.Run("fails when no columns exist", func(t *testing.T) {
 		t.Parallel()
-		s := schema.NewStep(
+		var rows [][]string
+		err := schema.NewStep(
 			fakeclickhouse.NewClient(
 				fakeclickhouse.WithStrings("system.tables", fixtureschema.Engines()),
-				fakeclickhouse.WithStrings("system.columns", nil),
+				fakeclickhouse.WithStrings("system.columns", rows),
 			),
 			"energosbyt",
+		).Run(
+			context.Background(),
+			step.NewVariables(),
 		)
-		err := s.Run(context.Background(), step.NewVariables())
 		assert.NoError(
 			t,
 			checkerr.Contains(err, "column dim_realty.id type"),
@@ -70,13 +78,15 @@ func TestStep_Run(t *testing.T) {
 
 	t.Run("fails when reading table engines fails", func(t *testing.T) {
 		t.Parallel()
-		s := schema.NewStep(
+		err := schema.NewStep(
 			fakeclickhouse.NewClient(
 				fakeclickhouse.WithError(errors.New("connection refused")),
 			),
 			"energosbyt",
+		).Run(
+			context.Background(),
+			step.NewVariables(),
 		)
-		err := s.Run(context.Background(), step.NewVariables())
 		assert.NoError(
 			t,
 			expect.All(
@@ -88,13 +98,15 @@ func TestStep_Run(t *testing.T) {
 
 	t.Run("fails when reading columns fails", func(t *testing.T) {
 		t.Parallel()
-		s := schema.NewStep(
+		err := schema.NewStep(
 			fakeclickhouse.NewClient(
 				fakeclickhouse.WithStrings("system.tables", fixtureschema.Engines()),
 			),
 			"energosbyt",
+		).Run(
+			context.Background(),
+			step.NewVariables(),
 		)
-		err := s.Run(context.Background(), step.NewVariables())
 		assert.NoError(
 			t,
 			checkerr.Contains(err, "read columns"),
@@ -103,7 +115,10 @@ func TestStep_Run(t *testing.T) {
 
 	t.Run("has a name and a description", func(t *testing.T) {
 		t.Parallel()
-		s := schema.NewStep(fakeclickhouse.NewClient(), "energosbyt")
+		s := schema.NewStep(
+			fakeclickhouse.NewClient(),
+			"energosbyt",
+		)
 		assert.NoError(
 			t,
 			expect.All(

@@ -18,7 +18,11 @@ func TestCases_Names(t *testing.T) {
 
 	t.Run("names the error cases", func(t *testing.T) {
 		t.Parallel()
-		cli := fakehttp.NewClient(http.StatusBadRequest, "", nil)
+		cli := fakehttp.NewClient(
+			http.StatusBadRequest,
+			"",
+			nil,
+		)
 		invalid := tariffs.NewInvalidDate(cli, baseURL)
 		notFound := tariffs.NewNotFound(cli, baseURL)
 		assert.NoError(

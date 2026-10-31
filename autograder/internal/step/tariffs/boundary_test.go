@@ -46,22 +46,48 @@ func TestBoundary_Run(t *testing.T) {
 	t.Run("passes when the version changes on the boundary day", func(t *testing.T) {
 		t.Parallel()
 		cli := fakehttp.NewSequence(
-			fakehttp.NewResponse(fakehttp.WithStatus(http.StatusOK), fakehttp.WithBody(oldVersion)),
-			fakehttp.NewResponse(fakehttp.WithStatus(http.StatusOK), fakehttp.WithBody(newVersion)),
+			fakehttp.NewResponse(
+				fakehttp.WithStatus(http.StatusOK),
+				fakehttp.WithBody(oldVersion),
+			),
+			fakehttp.NewResponse(
+				fakehttp.WithStatus(http.StatusOK),
+				fakehttp.WithBody(newVersion),
+			),
 		)
-		s := tariffs.NewBoundary(TwoVersions(), "energosbyt", cli, "http://localhost:8080")
-		err := s.Run(context.Background(), VarsWithTariff())
+		err := tariffs.NewBoundary(
+			TwoVersions(),
+			"energosbyt",
+			cli,
+			"http://localhost:8080",
+		).Run(
+			context.Background(),
+			VarsWithTariff(),
+		)
 		assert.NoError(t, checkerr.NoError(err))
 	})
 
 	t.Run("fails when the version does not change on the boundary day", func(t *testing.T) {
 		t.Parallel()
 		cli := fakehttp.NewSequence(
-			fakehttp.NewResponse(fakehttp.WithStatus(http.StatusOK), fakehttp.WithBody(oldVersion)),
-			fakehttp.NewResponse(fakehttp.WithStatus(http.StatusOK), fakehttp.WithBody(oldVersion)),
+			fakehttp.NewResponse(
+				fakehttp.WithStatus(http.StatusOK),
+				fakehttp.WithBody(oldVersion),
+			),
+			fakehttp.NewResponse(
+				fakehttp.WithStatus(http.StatusOK),
+				fakehttp.WithBody(oldVersion),
+			),
 		)
-		s := tariffs.NewBoundary(TwoVersions(), "energosbyt", cli, "http://localhost:8080")
-		err := s.Run(context.Background(), VarsWithTariff())
+		err := tariffs.NewBoundary(
+			TwoVersions(),
+			"energosbyt",
+			cli,
+			"http://localhost:8080",
+		).Run(
+			context.Background(),
+			VarsWithTariff(),
+		)
 		assert.NoError(t, checkerr.Contains(err, "version must change"))
 	})
 
@@ -70,11 +96,24 @@ func TestBoundary_Run(t *testing.T) {
 		later := `{"id":1,"name":"x","price_day_kwph":1,"price_night_kwph":1,` +
 			`"valid_from":"2026-06-01 00:00:00","valid_to":"2099-01-01 00:00:00"}`
 		cli := fakehttp.NewSequence(
-			fakehttp.NewResponse(fakehttp.WithStatus(http.StatusOK), fakehttp.WithBody(later)),
-			fakehttp.NewResponse(fakehttp.WithStatus(http.StatusOK), fakehttp.WithBody(newVersion)),
+			fakehttp.NewResponse(
+				fakehttp.WithStatus(http.StatusOK),
+				fakehttp.WithBody(later),
+			),
+			fakehttp.NewResponse(
+				fakehttp.WithStatus(http.StatusOK),
+				fakehttp.WithBody(newVersion),
+			),
 		)
-		s := tariffs.NewBoundary(TwoVersions(), "energosbyt", cli, "http://localhost:8080")
-		err := s.Run(context.Background(), VarsWithTariff())
+		err := tariffs.NewBoundary(
+			TwoVersions(),
+			"energosbyt",
+			cli,
+			"http://localhost:8080",
+		).Run(
+			context.Background(),
+			VarsWithTariff(),
+		)
 		assert.NoError(t, checkerr.Contains(err, "day before the boundary"))
 	})
 
@@ -83,8 +122,19 @@ func TestBoundary_Run(t *testing.T) {
 		db := fakeclickhouse.NewClient(
 			fakeclickhouse.WithStrings("dim_tariffs", [][]string{{"2023-01-01 00:00:00"}}),
 		)
-		s := tariffs.NewBoundary(db, "energosbyt", fakehttp.NewClient(http.StatusOK, "", nil), "http://localhost:8080")
-		err := s.Run(context.Background(), VarsWithTariff())
+		err := tariffs.NewBoundary(
+			db,
+			"energosbyt",
+			fakehttp.NewClient(
+				http.StatusOK,
+				"",
+				nil,
+			),
+			"http://localhost:8080",
+		).Run(
+			context.Background(),
+			VarsWithTariff(),
+		)
 		assert.NoError(t, checkerr.Contains(err, "two versions"))
 	})
 
@@ -93,39 +143,91 @@ func TestBoundary_Run(t *testing.T) {
 		db := fakeclickhouse.NewClient(
 			fakeclickhouse.WithStrings("dim_tariffs", [][]string{{"2023-01-01 00:00:00"}, {"not a date"}}),
 		)
-		s := tariffs.NewBoundary(db, "energosbyt", fakehttp.NewClient(http.StatusOK, "", nil), "http://localhost:8080")
-		err := s.Run(context.Background(), VarsWithTariff())
+		err := tariffs.NewBoundary(
+			db,
+			"energosbyt",
+			fakehttp.NewClient(
+				http.StatusOK,
+				"",
+				nil,
+			),
+			"http://localhost:8080",
+		).Run(
+			context.Background(),
+			VarsWithTariff(),
+		)
 		assert.NoError(t, checkerr.Contains(err, "parse valid_from"))
 	})
 
 	t.Run("fails on a wrong status code", func(t *testing.T) {
 		t.Parallel()
 		cli := fakehttp.NewSequence(
-			fakehttp.NewResponse(fakehttp.WithStatus(http.StatusNotFound), fakehttp.WithBody(`{"message":"Not found"}`)),
+			fakehttp.NewResponse(
+				fakehttp.WithStatus(http.StatusNotFound),
+				fakehttp.WithBody(`{"message":"Not found"}`),
+			),
 		)
-		s := tariffs.NewBoundary(TwoVersions(), "energosbyt", cli, "http://localhost:8080")
-		err := s.Run(context.Background(), VarsWithTariff())
+		err := tariffs.NewBoundary(
+			TwoVersions(),
+			"energosbyt",
+			cli,
+			"http://localhost:8080",
+		).Run(
+			context.Background(),
+			VarsWithTariff(),
+		)
 		assert.NoError(t, checkerr.Contains(err, "unexpected response"))
 	})
 
 	t.Run("fails when the request fails", func(t *testing.T) {
 		t.Parallel()
-		cli := fakehttp.NewClient(0, "", errors.New("connection refused"))
-		s := tariffs.NewBoundary(TwoVersions(), "energosbyt", cli, "http://localhost:8080")
-		err := s.Run(context.Background(), VarsWithTariff())
+		cli := fakehttp.NewClient(
+			0,
+			"",
+			errors.New("connection refused"),
+		)
+		err := tariffs.NewBoundary(
+			TwoVersions(),
+			"energosbyt",
+			cli,
+			"http://localhost:8080",
+		).Run(
+			context.Background(),
+			VarsWithTariff(),
+		)
 		assert.NoError(t, checkerr.Contains(err, "connection refused"))
 	})
 
 	t.Run("fails when the tariff id is not stored", func(t *testing.T) {
 		t.Parallel()
-		s := tariffs.NewBoundary(TwoVersions(), "energosbyt", fakehttp.NewClient(http.StatusOK, "", nil), "http://localhost:8080")
-		err := s.Run(context.Background(), step.NewVariables())
+		err := tariffs.NewBoundary(
+			TwoVersions(),
+			"energosbyt",
+			fakehttp.NewClient(
+				http.StatusOK,
+				"",
+				nil,
+			),
+			"http://localhost:8080",
+		).Run(
+			context.Background(),
+			step.NewVariables(),
+		)
 		assert.NoError(t, checkerr.Contains(err, fixture.TariffID))
 	})
 
 	t.Run("has a name and a description", func(t *testing.T) {
 		t.Parallel()
-		s := tariffs.NewBoundary(TwoVersions(), "energosbyt", fakehttp.NewClient(http.StatusOK, "", nil), "http://localhost:8080")
+		s := tariffs.NewBoundary(
+			TwoVersions(),
+			"energosbyt",
+			fakehttp.NewClient(
+				http.StatusOK,
+				"",
+				nil,
+			),
+			"http://localhost:8080",
+		)
 		assert.NoError(
 			t,
 			expect.All(

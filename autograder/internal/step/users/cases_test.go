@@ -17,7 +17,11 @@ func TestCases_Names(t *testing.T) {
 
 	t.Run("names the patch error cases", func(t *testing.T) {
 		t.Parallel()
-		cli := fakehttp.NewClient(400, "", nil)
+		cli := fakehttp.NewClient(
+			400,
+			"",
+			nil,
+		)
 		bad := users.NewPatchBadRequest(cli, "http://localhost:8080")
 		notFound := users.NewPatchNotFound(cli, "http://localhost:8080")
 		assert.NoError(

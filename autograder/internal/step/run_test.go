@@ -112,7 +112,10 @@ func TestRunAll(t *testing.T) {
 			fakestep.NewStep("second", errors.New("broken")),
 			fakestep.NewStep("third", nil),
 		}
-		results := step.RunAll(context.Background(), steps)
+		results := step.RunAll(
+			context.Background(),
+			steps,
+		)
 		assert.NoError(
 			t,
 			expect.All(
@@ -145,7 +148,11 @@ func TestRunAll(t *testing.T) {
 
 	t.Run("returns no results for no steps", func(t *testing.T) {
 		t.Parallel()
-		results := step.RunAll(context.Background(), nil)
+		var steps []step.Step
+		results := step.RunAll(
+			context.Background(),
+			steps,
+		)
 		assert.NoError(
 			t,
 			number.Equal(len(results), 0),

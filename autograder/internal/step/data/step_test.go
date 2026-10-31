@@ -40,7 +40,11 @@ var loadedCounts = []loadedCount{
 
 // ClientWithout returns a fake database that answers every count except the ones containing skip.
 func ClientWithout(skip string) *fakeclickhouse.Client {
-	opts := make([]fakeclickhouse.Option, 0, len(loadedCounts))
+	opts := make(
+		[]fakeclickhouse.Option,
+		0,
+		len(loadedCounts),
+	)
 	for _, c := range loadedCounts {
 		if c.substr != skip {
 			opts = append(opts, fakeclickhouse.WithCount(c.substr, c.n))
@@ -54,8 +58,13 @@ func TestStep_Run(t *testing.T) {
 
 	t.Run("passes when every table has enough rows", func(t *testing.T) {
 		t.Parallel()
-		s := data.NewStep(ClientWithout(""), "energosbyt")
-		err := s.Run(context.Background(), step.NewVariables())
+		err := data.NewStep(
+			ClientWithout(""),
+			"energosbyt",
+		).Run(
+			context.Background(),
+			step.NewVariables(),
+		)
 		assert.NoError(t, checkerr.NoError(err))
 	})
 
@@ -71,7 +80,13 @@ func TestStep_Run(t *testing.T) {
 			fakeclickhouse.WithCount("fact_gauge_bindings", 1000),
 			fakeclickhouse.WithCount("dim_tariffs", 1),
 		)
-		err := data.NewStep(db, "energosbyt").Run(context.Background(), step.NewVariables())
+		err := data.NewStep(
+			db,
+			"energosbyt",
+		).Run(
+			context.Background(),
+			step.NewVariables(),
+		)
 		assert.NoError(t, checkerr.Contains(err, "rows in fact_meter_readings"))
 	})
 
@@ -87,7 +102,13 @@ func TestStep_Run(t *testing.T) {
 			fakeclickhouse.WithCount("fact_gauge_bindings", 1000),
 			fakeclickhouse.WithCount("dim_tariffs", 1),
 		)
-		err := data.NewStep(db, "energosbyt").Run(context.Background(), step.NewVariables())
+		err := data.NewStep(
+			db,
+			"energosbyt",
+		).Run(
+			context.Background(),
+			step.NewVariables(),
+		)
 		assert.NoError(t, checkerr.Contains(err, "gauge bindings after a replacement"))
 	})
 
@@ -103,7 +124,13 @@ func TestStep_Run(t *testing.T) {
 			fakeclickhouse.WithCount("fact_gauge_bindings", 1000),
 			fakeclickhouse.WithCount("dim_tariffs", 0),
 		)
-		err := data.NewStep(db, "energosbyt").Run(context.Background(), step.NewVariables())
+		err := data.NewStep(
+			db,
+			"energosbyt",
+		).Run(
+			context.Background(),
+			step.NewVariables(),
+		)
 		assert.NoError(t, checkerr.Contains(err, "tariffs with at least two versions"))
 	})
 
@@ -119,56 +146,110 @@ func TestStep_Run(t *testing.T) {
 			fakeclickhouse.WithCount("fact_gauge_bindings", 1000),
 			fakeclickhouse.WithCount("dim_tariffs", 1),
 		)
-		err := data.NewStep(db, "energosbyt").Run(context.Background(), step.NewVariables())
+		err := data.NewStep(
+			db,
+			"energosbyt",
+		).Run(
+			context.Background(),
+			step.NewVariables(),
+		)
 		assert.NoError(t, checkerr.Contains(err, "rows in dim_gauges"))
 	})
 
 	t.Run("fails when the realty count fails", func(t *testing.T) {
 		t.Parallel()
-		err := data.NewStep(ClientWithout("dim_realty"), "energosbyt").Run(context.Background(), step.NewVariables())
+		err := data.NewStep(
+			ClientWithout("dim_realty"),
+			"energosbyt",
+		).Run(
+			context.Background(),
+			step.NewVariables(),
+		)
 		assert.NoError(t, checkerr.Contains(err, "count dim_realty"))
 	})
 
 	t.Run("fails when the gauges count fails", func(t *testing.T) {
 		t.Parallel()
-		err := data.NewStep(ClientWithout("dim_gauges"), "energosbyt").Run(context.Background(), step.NewVariables())
+		err := data.NewStep(
+			ClientWithout("dim_gauges"),
+			"energosbyt",
+		).Run(
+			context.Background(),
+			step.NewVariables(),
+		)
 		assert.NoError(t, checkerr.Contains(err, "count dim_gauges"))
 	})
 
 	t.Run("fails when the users count fails", func(t *testing.T) {
 		t.Parallel()
-		err := data.NewStep(ClientWithout("dim_users"), "energosbyt").Run(context.Background(), step.NewVariables())
+		err := data.NewStep(
+			ClientWithout("dim_users"),
+			"energosbyt",
+		).Run(
+			context.Background(),
+			step.NewVariables(),
+		)
 		assert.NoError(t, checkerr.Contains(err, "count dim_users"))
 	})
 
 	t.Run("fails when the bindings count fails", func(t *testing.T) {
 		t.Parallel()
-		err := data.NewStep(ClientWithout("fact_gauge_bindings"), "energosbyt").Run(context.Background(), step.NewVariables())
+		err := data.NewStep(
+			ClientWithout("fact_gauge_bindings"),
+			"energosbyt",
+		).Run(
+			context.Background(),
+			step.NewVariables(),
+		)
 		assert.NoError(t, checkerr.Contains(err, "count fact_gauge_bindings"))
 	})
 
 	t.Run("fails when the readings count fails", func(t *testing.T) {
 		t.Parallel()
-		err := data.NewStep(ClientWithout("fact_meter_readings"), "energosbyt").Run(context.Background(), step.NewVariables())
+		err := data.NewStep(
+			ClientWithout("fact_meter_readings"),
+			"energosbyt",
+		).Run(
+			context.Background(),
+			step.NewVariables(),
+		)
 		assert.NoError(t, checkerr.Contains(err, "count fact_meter_readings"))
 	})
 
 	t.Run("fails when the invoices count fails", func(t *testing.T) {
 		t.Parallel()
-		err := data.NewStep(ClientWithout("fact_invoice"), "energosbyt").Run(context.Background(), step.NewVariables())
+		err := data.NewStep(
+			ClientWithout("fact_invoice"),
+			"energosbyt",
+		).Run(
+			context.Background(),
+			step.NewVariables(),
+		)
 		assert.NoError(t, checkerr.Contains(err, "count fact_invoice"))
 	})
 
 	t.Run("fails when the tariffs count fails", func(t *testing.T) {
 		t.Parallel()
-		err := data.NewStep(ClientWithout("dim_tariffs"), "energosbyt").Run(context.Background(), step.NewVariables())
+		err := data.NewStep(
+			ClientWithout("dim_tariffs"),
+			"energosbyt",
+		).Run(
+			context.Background(),
+			step.NewVariables(),
+		)
 		assert.NoError(t, checkerr.Contains(err, "count tariffs with versions"))
 	})
 
 	t.Run("fails when every count query fails", func(t *testing.T) {
 		t.Parallel()
 		db := fakeclickhouse.NewClient(fakeclickhouse.WithError(errors.New("connection refused")))
-		err := data.NewStep(db, "energosbyt").Run(context.Background(), step.NewVariables())
+		err := data.NewStep(
+			db,
+			"energosbyt",
+		).Run(
+			context.Background(),
+			step.NewVariables(),
+		)
 		assert.NoError(
 			t,
 			expect.All(
@@ -180,7 +261,10 @@ func TestStep_Run(t *testing.T) {
 
 	t.Run("has a name and a description", func(t *testing.T) {
 		t.Parallel()
-		s := data.NewStep(fakeclickhouse.NewClient(), "energosbyt")
+		s := data.NewStep(
+			fakeclickhouse.NewClient(),
+			"energosbyt",
+		)
 		assert.NoError(
 			t,
 			expect.All(

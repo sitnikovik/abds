@@ -20,15 +20,33 @@ func TestBadRequest_RunErrors(t *testing.T) {
 
 	t.Run("fails when the realty id is not stored", func(t *testing.T) {
 		t.Parallel()
-		s := readings.NewBadRequest(fakehttp.NewClient(http.StatusBadRequest, `{"message":"x"}`, nil), baseURL)
-		err := s.Run(context.Background(), step.NewVariables())
+		err := readings.NewBadRequest(
+			fakehttp.NewClient(
+				http.StatusBadRequest,
+				`{"message":"x"}`,
+				nil,
+			),
+			baseURL,
+		).Run(
+			context.Background(),
+			step.NewVariables(),
+		)
 		assert.NoError(t, checkerr.Contains(err, fixture.RealtyID))
 	})
 
 	t.Run("fails when the body is not JSON", func(t *testing.T) {
 		t.Parallel()
-		s := readings.NewBadRequest(fakehttp.NewClient(http.StatusBadRequest, `{`, nil), baseURL)
-		err := s.Run(context.Background(), VarsWithAll())
+		err := readings.NewBadRequest(
+			fakehttp.NewClient(
+				http.StatusBadRequest,
+				`{`,
+				nil,
+			),
+			baseURL,
+		).Run(
+			context.Background(),
+			VarsWithAll(),
+		)
 		assert.NoError(t, checkerr.Contains(err, "unexpected response"))
 	})
 }

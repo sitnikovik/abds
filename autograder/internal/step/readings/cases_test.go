@@ -18,7 +18,11 @@ func TestCases_Names(t *testing.T) {
 
 	t.Run("names the list and post error cases", func(t *testing.T) {
 		t.Parallel()
-		cli := fakehttp.NewClient(http.StatusNotFound, "", nil)
+		cli := fakehttp.NewClient(
+			http.StatusNotFound,
+			"",
+			nil,
+		)
 		listNotFound := readings.NewListNotFound(cli, baseURL)
 		postBad := readings.NewPostBadRequest(cli, baseURL)
 		postNotFound := readings.NewPostNotFound(cli, baseURL)

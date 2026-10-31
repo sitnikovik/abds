@@ -21,7 +21,8 @@ func TestStep_Run(t *testing.T) {
 
 	t.Run("stores the first ids of every table", func(t *testing.T) {
 		t.Parallel()
-		s := fixture.NewStep(
+		vars := step.NewVariables()
+		err := fixture.NewStep(
 			fakeclickhouse.NewClient(
 				fakeclickhouse.WithStrings("dim_realty", [][]string{{"1"}}),
 				fakeclickhouse.WithStrings("dim_users", [][]string{{"2"}}),
@@ -29,9 +30,10 @@ func TestStep_Run(t *testing.T) {
 				fakeclickhouse.WithStrings("dim_gauges", [][]string{{"4"}, {"5"}}),
 			),
 			"energosbyt",
+		).Run(
+			context.Background(),
+			vars,
 		)
-		vars := step.NewVariables()
-		err := s.Run(context.Background(), vars)
 		realty, _ := vars.Lookup(fixture.RealtyID)
 		gauge, _ := vars.Lookup(fixture.GaugeID)
 		newGauge, _ := vars.Lookup(fixture.NewGaugeID)
@@ -48,7 +50,7 @@ func TestStep_Run(t *testing.T) {
 
 	t.Run("fails when a table has too few rows", func(t *testing.T) {
 		t.Parallel()
-		s := fixture.NewStep(
+		err := fixture.NewStep(
 			fakeclickhouse.NewClient(
 				fakeclickhouse.WithStrings("dim_realty", [][]string{{"1"}}),
 				fakeclickhouse.WithStrings("dim_users", [][]string{{"2"}}),
@@ -56,8 +58,10 @@ func TestStep_Run(t *testing.T) {
 				fakeclickhouse.WithStrings("dim_gauges", [][]string{{"4"}}),
 			),
 			"energosbyt",
+		).Run(
+			context.Background(),
+			step.NewVariables(),
 		)
-		err := s.Run(context.Background(), step.NewVariables())
 		assert.NoError(
 			t,
 			checkerr.Contains(err, "rows in dim_gauges"),
@@ -66,13 +70,15 @@ func TestStep_Run(t *testing.T) {
 
 	t.Run("fails when the query fails", func(t *testing.T) {
 		t.Parallel()
-		s := fixture.NewStep(
+		err := fixture.NewStep(
 			fakeclickhouse.NewClient(
 				fakeclickhouse.WithError(errors.New("connection refused")),
 			),
 			"energosbyt",
+		).Run(
+			context.Background(),
+			step.NewVariables(),
 		)
-		err := s.Run(context.Background(), step.NewVariables())
 		assert.NoError(
 			t,
 			checkerr.Contains(err, "read ids of dim_realty"),
@@ -81,7 +87,10 @@ func TestStep_Run(t *testing.T) {
 
 	t.Run("has a name and a description", func(t *testing.T) {
 		t.Parallel()
-		s := fixture.NewStep(fakeclickhouse.NewClient(), "energosbyt")
+		s := fixture.NewStep(
+			fakeclickhouse.NewClient(),
+			"energosbyt",
+		)
 		assert.NoError(
 			t,
 			expect.All(

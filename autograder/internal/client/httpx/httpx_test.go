@@ -40,7 +40,13 @@ func TestNewRequest(t *testing.T) {
 
 	t.Run("creates a request without a body", func(t *testing.T) {
 		t.Parallel()
-		req, err := httpx.NewRequest(context.Background(), http.MethodGet, "http://localhost:8080/ping", nil)
+		var body any
+		req, err := httpx.NewRequest(
+			context.Background(),
+			http.MethodGet,
+			"http://localhost:8080/ping",
+			body,
+		)
 		assert.NoError(
 			t,
 			expect.All(
@@ -52,7 +58,12 @@ func TestNewRequest(t *testing.T) {
 
 	t.Run("fails on a body that cannot be encoded", func(t *testing.T) {
 		t.Parallel()
-		_, err := httpx.NewRequest(context.Background(), http.MethodPost, "http://localhost:8080", make(chan int))
+		_, err := httpx.NewRequest(
+			context.Background(),
+			http.MethodPost,
+			"http://localhost:8080",
+			make(chan int),
+		)
 		assert.NoError(
 			t,
 			checkerr.Contains(err, "encode body"),
@@ -61,7 +72,13 @@ func TestNewRequest(t *testing.T) {
 
 	t.Run("fails on an invalid url", func(t *testing.T) {
 		t.Parallel()
-		_, err := httpx.NewRequest(context.Background(), http.MethodGet, "://bad", nil)
+		var body any
+		_, err := httpx.NewRequest(
+			context.Background(),
+			http.MethodGet,
+			"://bad",
+			body,
+		)
 		assert.NoError(
 			t,
 			checkerr.Contains(err, "build request"),
@@ -146,7 +163,10 @@ func TestDecode(t *testing.T) {
 		var dst struct {
 			Status string `json:"status"`
 		}
-		err := httpx.Decode([]byte(`{"status":"ok"}`), &dst)
+		err := httpx.Decode(
+			[]byte(`{"status":"ok"}`),
+			&dst,
+		)
 		assert.NoError(
 			t,
 			expect.All(

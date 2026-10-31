@@ -22,11 +22,13 @@ func TestStep_Run(t *testing.T) {
 
 	t.Run("passes on 200 with an empty body", func(t *testing.T) {
 		t.Parallel()
-		s := ping.NewStep(
+		err := ping.NewStep(
 			httpclient.NewClient(http.StatusOK, "", nil),
 			"http://localhost:8080/ping",
+		).Run(
+			context.Background(),
+			step.NewVariables(),
 		)
-		err := s.Run(context.Background(), step.NewVariables())
 		assert.NoError(
 			t,
 			errs.NoError(err),
@@ -35,11 +37,13 @@ func TestStep_Run(t *testing.T) {
 
 	t.Run("fails on a wrong status code", func(t *testing.T) {
 		t.Parallel()
-		s := ping.NewStep(
+		err := ping.NewStep(
 			httpclient.NewClient(http.StatusInternalServerError, "", nil),
 			"http://localhost:8080/ping",
+		).Run(
+			context.Background(),
+			step.NewVariables(),
 		)
-		err := s.Run(context.Background(), step.NewVariables())
 		assert.NoError(
 			t,
 			errs.Error(err),
@@ -48,11 +52,13 @@ func TestStep_Run(t *testing.T) {
 
 	t.Run("fails on a non-empty body", func(t *testing.T) {
 		t.Parallel()
-		s := ping.NewStep(
+		err := ping.NewStep(
 			httpclient.NewClient(http.StatusOK, `{"status":"ok"}`, nil),
 			"http://localhost:8080/ping",
+		).Run(
+			context.Background(),
+			step.NewVariables(),
 		)
-		err := s.Run(context.Background(), step.NewVariables())
 		assert.NoError(
 			t,
 			errs.Error(err),
@@ -61,11 +67,13 @@ func TestStep_Run(t *testing.T) {
 
 	t.Run("fails when the request fails", func(t *testing.T) {
 		t.Parallel()
-		s := ping.NewStep(
+		err := ping.NewStep(
 			httpclient.NewClient(0, "", errors.New("connection refused")),
 			"http://localhost:8080/ping",
+		).Run(
+			context.Background(),
+			step.NewVariables(),
 		)
-		err := s.Run(context.Background(), step.NewVariables())
 		assert.NoError(
 			t,
 			expect.All(
@@ -77,7 +85,14 @@ func TestStep_Run(t *testing.T) {
 
 	t.Run("has a name and a description", func(t *testing.T) {
 		t.Parallel()
-		s := ping.NewStep(httpclient.NewClient(http.StatusOK, "", nil), "")
+		s := ping.NewStep(
+			httpclient.NewClient(
+				http.StatusOK,
+				"",
+				nil,
+			),
+			"",
+		)
 		assert.NoError(
 			t,
 			expect.All(

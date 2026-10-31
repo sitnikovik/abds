@@ -31,9 +31,10 @@ func TestSteps(t *testing.T) {
 			"CLICKHOUSE_USER":     "default",
 		}))
 		assert.NoError(t, checkerr.NoError(err))
+		var rows *driver.Rows
 		steps := lab1.Steps(
 			cfg,
-			clickhouse.NewClient(driver.NewConn(nil, nil)),
+			clickhouse.NewClient(driver.NewConn(rows, nil)),
 			&http.Client{},
 		)
 		assert.NoError(

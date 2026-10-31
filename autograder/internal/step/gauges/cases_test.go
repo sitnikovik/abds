@@ -18,7 +18,11 @@ func TestCases_Names(t *testing.T) {
 
 	t.Run("names the post error cases", func(t *testing.T) {
 		t.Parallel()
-		cli := fakehttp.NewClient(http.StatusBadRequest, "", nil)
+		cli := fakehttp.NewClient(
+			http.StatusBadRequest,
+			"",
+			nil,
+		)
 		bad := gauges.NewPostBadRequest(cli, baseURL)
 		notFound := gauges.NewPostNotFound(cli, baseURL)
 		assert.NoError(

@@ -21,10 +21,20 @@ func TestFio_RunErrors(t *testing.T) {
 		t.Parallel()
 		cli := fakehttp.NewSequence(
 			fakehttp.NewResponse(fakehttp.WithStatus(http.StatusNoContent)),
-			fakehttp.NewResponse(fakehttp.WithStatus(http.StatusNotFound), fakehttp.WithBody(`{"message":"Not found"}`)),
+			fakehttp.NewResponse(
+				fakehttp.WithStatus(http.StatusNotFound),
+				fakehttp.WithBody(`{"message":"Not found"}`),
+			),
 		)
-		s := users.NewFio(OwnerDB(0), "energosbyt", cli, "http://localhost:8080")
-		err := s.Run(context.Background(), VarsWithUser())
+		err := users.NewFio(
+			OwnerDB(0),
+			"energosbyt",
+			cli,
+			"http://localhost:8080",
+		).Run(
+			context.Background(),
+			VarsWithUser(),
+		)
 		assert.NoError(t, checkerr.Contains(err, "unexpected response"))
 	})
 
@@ -32,10 +42,20 @@ func TestFio_RunErrors(t *testing.T) {
 		t.Parallel()
 		cli := fakehttp.NewSequence(
 			fakehttp.NewResponse(fakehttp.WithStatus(http.StatusNoContent)),
-			fakehttp.NewResponse(fakehttp.WithStatus(http.StatusOK), fakehttp.WithBody(`{`)),
+			fakehttp.NewResponse(
+				fakehttp.WithStatus(http.StatusOK),
+				fakehttp.WithBody(`{`),
+			),
 		)
-		s := users.NewFio(OwnerDB(0), "energosbyt", cli, "http://localhost:8080")
-		err := s.Run(context.Background(), VarsWithUser())
+		err := users.NewFio(
+			OwnerDB(0),
+			"energosbyt",
+			cli,
+			"http://localhost:8080",
+		).Run(
+			context.Background(),
+			VarsWithUser(),
+		)
 		assert.NoError(t, checkerr.Contains(err, "decode body"))
 	})
 
@@ -45,8 +65,15 @@ func TestFio_RunErrors(t *testing.T) {
 			fakehttp.NewResponse(fakehttp.WithStatus(http.StatusNoContent)),
 			fakehttp.NewResponse(fakehttp.WithErr(errors.New("connection reset"))),
 		)
-		s := users.NewFio(OwnerDB(0), "energosbyt", cli, "http://localhost:8080")
-		err := s.Run(context.Background(), VarsWithUser())
+		err := users.NewFio(
+			OwnerDB(0),
+			"energosbyt",
+			cli,
+			"http://localhost:8080",
+		).Run(
+			context.Background(),
+			VarsWithUser(),
+		)
 		assert.NoError(t, checkerr.Contains(err, "connection reset"))
 	})
 }

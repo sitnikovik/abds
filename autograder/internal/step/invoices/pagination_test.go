@@ -36,6 +36,7 @@ func TestPagination_Run(t *testing.T) {
 		err := s.Run(context.Background(), vars)
 		assert.NoError(t, checkerr.NoError(err))
 	})
+
 	t.Run("fails when the offset returns the same invoice", func(t *testing.T) {
 		t.Parallel()
 		cli := fakehttp.NewSequence(
@@ -49,6 +50,7 @@ func TestPagination_Run(t *testing.T) {
 		err := s.Run(context.Background(), vars)
 		assert.NoError(t, checkerr.Contains(err, "offset must move"))
 	})
+
 	t.Run("fails when the second page is empty", func(t *testing.T) {
 		t.Parallel()
 		cli := fakehttp.NewSequence(
@@ -62,6 +64,7 @@ func TestPagination_Run(t *testing.T) {
 		err := s.Run(context.Background(), vars)
 		assert.NoError(t, checkerr.Contains(err, "second page"))
 	})
+
 	t.Run("fails when the default page is too large", func(t *testing.T) {
 		t.Parallel()
 		big := `{"invoices":[{"created_at":"1"},{"created_at":"2"},{"created_at":"3"},{"created_at":"4"},` +
@@ -74,6 +77,7 @@ func TestPagination_Run(t *testing.T) {
 		err := s.Run(context.Background(), vars)
 		assert.NoError(t, checkerr.Contains(err, "default page"))
 	})
+
 	t.Run("fails on a wrong status code", func(t *testing.T) {
 		t.Parallel()
 		cli := fakehttp.NewClient(http.StatusNotFound, `{"message":"x"}`, nil)
@@ -83,6 +87,7 @@ func TestPagination_Run(t *testing.T) {
 		err := s.Run(context.Background(), vars)
 		assert.NoError(t, checkerr.Contains(err, "unexpected response"))
 	})
+
 	t.Run("fails when the request fails", func(t *testing.T) {
 		t.Parallel()
 		cli := fakehttp.NewClient(0, "", errors.New("connection refused"))
@@ -92,12 +97,14 @@ func TestPagination_Run(t *testing.T) {
 		err := s.Run(context.Background(), vars)
 		assert.NoError(t, checkerr.Contains(err, "connection refused"))
 	})
+
 	t.Run("fails when the realty id is not stored", func(t *testing.T) {
 		t.Parallel()
 		s := invoices.NewPagination(fakehttp.NewClient(http.StatusOK, "", nil), "http://localhost:8080")
 		err := s.Run(context.Background(), step.NewVariables())
 		assert.NoError(t, checkerr.Contains(err, fixture.RealtyID))
 	})
+
 	t.Run("has a name and a description", func(t *testing.T) {
 		t.Parallel()
 		s := invoices.NewPagination(fakehttp.NewClient(http.StatusOK, "", nil), "http://localhost:8080")

@@ -28,6 +28,7 @@ func TestPagination_RunErrors(t *testing.T) {
 		err := s.Run(context.Background(), vars)
 		assert.NoError(t, checkerr.Contains(err, "decode body"))
 	})
+
 	t.Run("fails when a page request fails", func(t *testing.T) {
 		t.Parallel()
 		cli := fakehttp.NewSequence(fakehttp.NewResponse(fakehttp.WithErr(errors.New("connection refused"))))

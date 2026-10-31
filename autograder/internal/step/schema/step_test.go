@@ -35,6 +35,7 @@ func TestStep_Run(t *testing.T) {
 			checkerr.NoError(err),
 		)
 	})
+
 	t.Run("fails when no tables exist", func(t *testing.T) {
 		t.Parallel()
 		s := schema.NewStep(
@@ -50,6 +51,7 @@ func TestStep_Run(t *testing.T) {
 			checkerr.Contains(err, "table dim_realty engine"),
 		)
 	})
+
 	t.Run("fails when no columns exist", func(t *testing.T) {
 		t.Parallel()
 		s := schema.NewStep(
@@ -65,6 +67,7 @@ func TestStep_Run(t *testing.T) {
 			checkerr.Contains(err, "column dim_realty.id type"),
 		)
 	})
+
 	t.Run("fails when reading table engines fails", func(t *testing.T) {
 		t.Parallel()
 		s := schema.NewStep(
@@ -82,6 +85,7 @@ func TestStep_Run(t *testing.T) {
 			),
 		)
 	})
+
 	t.Run("fails when reading columns fails", func(t *testing.T) {
 		t.Parallel()
 		s := schema.NewStep(
@@ -96,6 +100,7 @@ func TestStep_Run(t *testing.T) {
 			checkerr.Contains(err, "read columns"),
 		)
 	})
+
 	t.Run("has a name and a description", func(t *testing.T) {
 		t.Parallel()
 		s := schema.NewStep(fakeclickhouse.NewClient(), "energosbyt")

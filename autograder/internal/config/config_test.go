@@ -38,6 +38,7 @@ func TestLoad(t *testing.T) {
 			),
 		)
 	})
+
 	t.Run("allows empty password", func(t *testing.T) {
 		t.Parallel()
 		cfg, err := config.Load(env.NewLookup(map[string]string{
@@ -55,6 +56,7 @@ func TestLoad(t *testing.T) {
 			),
 		)
 	})
+
 	t.Run("fails when a required variable is missing", func(t *testing.T) {
 		t.Parallel()
 		_, err := config.Load(env.NewLookup(map[string]string{
@@ -71,6 +73,7 @@ func TestLoad(t *testing.T) {
 			),
 		)
 	})
+
 	t.Run("fails when a required variable is empty", func(t *testing.T) {
 		t.Parallel()
 		_, err := config.Load(env.NewLookup(map[string]string{
@@ -85,6 +88,7 @@ func TestLoad(t *testing.T) {
 			errors.Error(err),
 		)
 	})
+
 	t.Run("fails when a port is not a number", func(t *testing.T) {
 		t.Parallel()
 		_, err := config.Load(env.NewLookup(map[string]string{
@@ -102,6 +106,7 @@ func TestLoad(t *testing.T) {
 			),
 		)
 	})
+
 	t.Run("fails when a port is zero", func(t *testing.T) {
 		t.Parallel()
 		_, err := config.Load(env.NewLookup(map[string]string{

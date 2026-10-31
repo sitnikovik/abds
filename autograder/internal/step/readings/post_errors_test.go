@@ -29,6 +29,7 @@ func TestPost_RunErrors(t *testing.T) {
 		err := s.Run(context.Background(), vars)
 		assert.NoError(t, checkerr.Contains(err, fixture.UserID))
 	})
+
 	t.Run("fails when the gauge id is not stored", func(t *testing.T) {
 		t.Parallel()
 		vars := step.NewVariables()
@@ -39,6 +40,7 @@ func TestPost_RunErrors(t *testing.T) {
 		err := s.Run(context.Background(), vars)
 		assert.NoError(t, checkerr.Contains(err, fixture.GaugeID))
 	})
+
 	t.Run("fails when the tariff id is not stored", func(t *testing.T) {
 		t.Parallel()
 		vars := step.NewVariables()
@@ -49,6 +51,7 @@ func TestPost_RunErrors(t *testing.T) {
 		err := s.Run(context.Background(), vars)
 		assert.NoError(t, checkerr.Contains(err, fixture.TariffID))
 	})
+
 	t.Run("fails when the request fails", func(t *testing.T) {
 		t.Parallel()
 		s := readings.NewPost(fakehttp.NewClient(0, "", errors.New("connection refused")), baseURL)

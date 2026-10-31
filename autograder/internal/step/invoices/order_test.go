@@ -31,6 +31,7 @@ func TestList_Order(t *testing.T) {
 		err := s.Run(context.Background(), vars)
 		assert.NoError(t, checkerr.NoError(err))
 	})
+
 	t.Run("fails when invoices are sorted oldest first", func(t *testing.T) {
 		t.Parallel()
 		cli := fakehttp.NewClient(

@@ -27,6 +27,7 @@ func TestBoundary_RunErrors(t *testing.T) {
 		err := s.Run(context.Background(), VarsWithTariff())
 		assert.NoError(t, checkerr.Contains(err, "unexpected response"))
 	})
+
 	t.Run("fails when the request for the boundary day fails", func(t *testing.T) {
 		t.Parallel()
 		cli := fakehttp.NewSequence(
@@ -37,6 +38,7 @@ func TestBoundary_RunErrors(t *testing.T) {
 		err := s.Run(context.Background(), VarsWithTariff())
 		assert.NoError(t, checkerr.Contains(err, "connection reset"))
 	})
+
 	t.Run("fails when the version on the boundary day is not JSON", func(t *testing.T) {
 		t.Parallel()
 		cli := fakehttp.NewSequence(

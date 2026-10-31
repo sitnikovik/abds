@@ -39,6 +39,7 @@ func TestList_Run(t *testing.T) {
 		err := s.Run(context.Background(), VarsWithRealty())
 		assert.NoError(t, checkerr.NoError(err))
 	})
+
 	t.Run("fails when the page exceeds the limit", func(t *testing.T) {
 		t.Parallel()
 		body := `{"invoices":[{"price":1},{"price":1},{"price":1},{"price":1},{"price":1},{"price":1},{"price":1},{"price":1},{"price":1},{"price":1},{"price":1}],"count":36}`
@@ -46,36 +47,42 @@ func TestList_Run(t *testing.T) {
 		err := s.Run(context.Background(), VarsWithRealty())
 		assert.NoError(t, checkerr.Contains(err, "page must not exceed the limit"))
 	})
+
 	t.Run("fails when the object has no invoices", func(t *testing.T) {
 		t.Parallel()
 		s := invoices.NewList(fakehttp.NewClient(http.StatusOK, `{"invoices":[],"count":0}`, nil), baseURL)
 		err := s.Run(context.Background(), VarsWithRealty())
 		assert.NoError(t, checkerr.Contains(err, "object must have invoices"))
 	})
+
 	t.Run("fails on a wrong status code", func(t *testing.T) {
 		t.Parallel()
 		s := invoices.NewList(fakehttp.NewClient(http.StatusNotFound, `{"message":"x"}`, nil), baseURL)
 		err := s.Run(context.Background(), VarsWithRealty())
 		assert.NoError(t, checkerr.Contains(err, "unexpected response"))
 	})
+
 	t.Run("fails on a body that is not JSON", func(t *testing.T) {
 		t.Parallel()
 		s := invoices.NewList(fakehttp.NewClient(http.StatusOK, `{`, nil), baseURL)
 		err := s.Run(context.Background(), VarsWithRealty())
 		assert.NoError(t, checkerr.Contains(err, "decode body"))
 	})
+
 	t.Run("fails when the request fails", func(t *testing.T) {
 		t.Parallel()
 		s := invoices.NewList(fakehttp.NewClient(0, "", errors.New("connection refused")), baseURL)
 		err := s.Run(context.Background(), VarsWithRealty())
 		assert.NoError(t, checkerr.Contains(err, "connection refused"))
 	})
+
 	t.Run("fails when the realty id is not stored", func(t *testing.T) {
 		t.Parallel()
 		s := invoices.NewList(fakehttp.NewClient(http.StatusOK, "", nil), baseURL)
 		err := s.Run(context.Background(), step.NewVariables())
 		assert.NoError(t, checkerr.Contains(err, fixture.RealtyID))
 	})
+
 	t.Run("has a name and a description", func(t *testing.T) {
 		t.Parallel()
 		s := invoices.NewList(fakehttp.NewClient(http.StatusOK, "", nil), baseURL)

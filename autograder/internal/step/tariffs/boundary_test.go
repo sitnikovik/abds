@@ -53,6 +53,7 @@ func TestBoundary_Run(t *testing.T) {
 		err := s.Run(context.Background(), VarsWithTariff())
 		assert.NoError(t, checkerr.NoError(err))
 	})
+
 	t.Run("fails when the version does not change on the boundary day", func(t *testing.T) {
 		t.Parallel()
 		cli := fakehttp.NewSequence(
@@ -63,6 +64,7 @@ func TestBoundary_Run(t *testing.T) {
 		err := s.Run(context.Background(), VarsWithTariff())
 		assert.NoError(t, checkerr.Contains(err, "version must change"))
 	})
+
 	t.Run("fails when the version on the day before does not cover that day", func(t *testing.T) {
 		t.Parallel()
 		later := `{"id":1,"name":"x","price_day_kwph":1,"price_night_kwph":1,` +
@@ -75,6 +77,7 @@ func TestBoundary_Run(t *testing.T) {
 		err := s.Run(context.Background(), VarsWithTariff())
 		assert.NoError(t, checkerr.Contains(err, "day before the boundary"))
 	})
+
 	t.Run("fails when the tariff has one version only", func(t *testing.T) {
 		t.Parallel()
 		db := fakeclickhouse.NewClient(
@@ -84,6 +87,7 @@ func TestBoundary_Run(t *testing.T) {
 		err := s.Run(context.Background(), VarsWithTariff())
 		assert.NoError(t, checkerr.Contains(err, "two versions"))
 	})
+
 	t.Run("fails when the start of the version is malformed", func(t *testing.T) {
 		t.Parallel()
 		db := fakeclickhouse.NewClient(
@@ -93,6 +97,7 @@ func TestBoundary_Run(t *testing.T) {
 		err := s.Run(context.Background(), VarsWithTariff())
 		assert.NoError(t, checkerr.Contains(err, "parse valid_from"))
 	})
+
 	t.Run("fails on a wrong status code", func(t *testing.T) {
 		t.Parallel()
 		cli := fakehttp.NewSequence(
@@ -102,6 +107,7 @@ func TestBoundary_Run(t *testing.T) {
 		err := s.Run(context.Background(), VarsWithTariff())
 		assert.NoError(t, checkerr.Contains(err, "unexpected response"))
 	})
+
 	t.Run("fails when the request fails", func(t *testing.T) {
 		t.Parallel()
 		cli := fakehttp.NewClient(0, "", errors.New("connection refused"))
@@ -109,12 +115,14 @@ func TestBoundary_Run(t *testing.T) {
 		err := s.Run(context.Background(), VarsWithTariff())
 		assert.NoError(t, checkerr.Contains(err, "connection refused"))
 	})
+
 	t.Run("fails when the tariff id is not stored", func(t *testing.T) {
 		t.Parallel()
 		s := tariffs.NewBoundary(TwoVersions(), "energosbyt", fakehttp.NewClient(http.StatusOK, "", nil), "http://localhost:8080")
 		err := s.Run(context.Background(), step.NewVariables())
 		assert.NoError(t, checkerr.Contains(err, fixture.TariffID))
 	})
+
 	t.Run("has a name and a description", func(t *testing.T) {
 		t.Parallel()
 		s := tariffs.NewBoundary(TwoVersions(), "energosbyt", fakehttp.NewClient(http.StatusOK, "", nil), "http://localhost:8080")

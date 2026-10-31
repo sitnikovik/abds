@@ -37,6 +37,7 @@ func TestReplacement_Run(t *testing.T) {
 		err := s.Run(context.Background(), VarsWithRealtyAndNewGauge())
 		assert.NoError(t, checkerr.NoError(err))
 	})
+
 	t.Run("fails when the old gauge is still active", func(t *testing.T) {
 		t.Parallel()
 		db := fakeclickhouse.NewClient(
@@ -46,6 +47,7 @@ func TestReplacement_Run(t *testing.T) {
 		err := s.Run(context.Background(), VarsWithRealtyAndNewGauge())
 		assert.NoError(t, checkerr.Contains(err, "exactly one active gauge"))
 	})
+
 	t.Run("fails when another gauge is active", func(t *testing.T) {
 		t.Parallel()
 		db := fakeclickhouse.NewClient(
@@ -55,6 +57,7 @@ func TestReplacement_Run(t *testing.T) {
 		err := s.Run(context.Background(), VarsWithRealtyAndNewGauge())
 		assert.NoError(t, checkerr.Contains(err, "installed one"))
 	})
+
 	t.Run("fails when the query fails", func(t *testing.T) {
 		t.Parallel()
 		db := fakeclickhouse.NewClient(fakeclickhouse.WithError(errors.New("connection refused")))
@@ -62,12 +65,14 @@ func TestReplacement_Run(t *testing.T) {
 		err := s.Run(context.Background(), VarsWithRealtyAndNewGauge())
 		assert.NoError(t, checkerr.Contains(err, "read bindings"))
 	})
+
 	t.Run("fails when the realty id is not stored", func(t *testing.T) {
 		t.Parallel()
 		s := gauges.NewReplacement(fakeclickhouse.NewClient(), "energosbyt")
 		err := s.Run(context.Background(), step.NewVariables())
 		assert.NoError(t, checkerr.Contains(err, fixture.RealtyID))
 	})
+
 	t.Run("fails when the new gauge id is not stored", func(t *testing.T) {
 		t.Parallel()
 		vars := step.NewVariables()
@@ -76,6 +81,7 @@ func TestReplacement_Run(t *testing.T) {
 		err := s.Run(context.Background(), vars)
 		assert.NoError(t, checkerr.Contains(err, fixture.NewGaugeID))
 	})
+
 	t.Run("has a name and a description", func(t *testing.T) {
 		t.Parallel()
 		s := gauges.NewReplacement(fakeclickhouse.NewClient(), "energosbyt")

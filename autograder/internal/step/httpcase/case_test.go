@@ -36,6 +36,7 @@ func TestStep_Run(t *testing.T) {
 		err := s.Run(context.Background(), vars)
 		assert.NoError(t, checkerr.NoError(err))
 	})
+
 	t.Run("fails on a wrong status code", func(t *testing.T) {
 		t.Parallel()
 		s := httpcase.NewStep(
@@ -47,6 +48,7 @@ func TestStep_Run(t *testing.T) {
 		err := s.Run(context.Background(), step.NewVariables())
 		assert.NoError(t, checkerr.Contains(err, "status code must be 400"))
 	})
+
 	t.Run("fails when the message is empty", func(t *testing.T) {
 		t.Parallel()
 		s := httpcase.NewStep(
@@ -58,6 +60,7 @@ func TestStep_Run(t *testing.T) {
 		err := s.Run(context.Background(), step.NewVariables())
 		assert.NoError(t, checkerr.Contains(err, "field message"))
 	})
+
 	t.Run("fails when the body is not JSON", func(t *testing.T) {
 		t.Parallel()
 		s := httpcase.NewStep(
@@ -69,6 +72,7 @@ func TestStep_Run(t *testing.T) {
 		err := s.Run(context.Background(), step.NewVariables())
 		assert.NoError(t, checkerr.Contains(err, "unexpected response"))
 	})
+
 	t.Run("fails when the request fails", func(t *testing.T) {
 		t.Parallel()
 		s := httpcase.NewStep(
@@ -79,6 +83,7 @@ func TestStep_Run(t *testing.T) {
 		err := s.Run(context.Background(), step.NewVariables())
 		assert.NoError(t, checkerr.Contains(err, "connection refused"))
 	})
+
 	t.Run("fails when a path variable is not stored", func(t *testing.T) {
 		t.Parallel()
 		s := httpcase.NewStep(
@@ -90,6 +95,7 @@ func TestStep_Run(t *testing.T) {
 		err := s.Run(context.Background(), step.NewVariables())
 		assert.NoError(t, checkerr.Contains(err, "realty_id"))
 	})
+
 	t.Run("fails on an invalid base url", func(t *testing.T) {
 		t.Parallel()
 		s := httpcase.NewStep(
@@ -100,6 +106,7 @@ func TestStep_Run(t *testing.T) {
 		err := s.Run(context.Background(), step.NewVariables())
 		assert.NoError(t, checkerr.Contains(err, "build request"))
 	})
+
 	t.Run("uses the name and the description of the desc", func(t *testing.T) {
 		t.Parallel()
 		s := httpcase.NewStep(
@@ -115,6 +122,7 @@ func TestStep_Run(t *testing.T) {
 			),
 		)
 	})
+
 	t.Run("sends a body with the method option", func(t *testing.T) {
 		t.Parallel()
 		s := httpcase.NewStep(

@@ -37,6 +37,7 @@ func TestNewRequest(t *testing.T) {
 			),
 		)
 	})
+
 	t.Run("creates a request without a body", func(t *testing.T) {
 		t.Parallel()
 		req, err := httpx.NewRequest(context.Background(), http.MethodGet, "http://localhost:8080/ping", nil)
@@ -48,6 +49,7 @@ func TestNewRequest(t *testing.T) {
 			),
 		)
 	})
+
 	t.Run("fails on a body that cannot be encoded", func(t *testing.T) {
 		t.Parallel()
 		_, err := httpx.NewRequest(context.Background(), http.MethodPost, "http://localhost:8080", make(chan int))
@@ -56,6 +58,7 @@ func TestNewRequest(t *testing.T) {
 			checkerr.Contains(err, "encode body"),
 		)
 	})
+
 	t.Run("fails on an invalid url", func(t *testing.T) {
 		t.Parallel()
 		_, err := httpx.NewRequest(context.Background(), http.MethodGet, "://bad", nil)
@@ -92,6 +95,7 @@ func TestStatus(t *testing.T) {
 			httpx.Status(&http.Response{StatusCode: http.StatusCreated}, http.StatusCreated),
 		)
 	})
+
 	t.Run("fails on another status", func(t *testing.T) {
 		t.Parallel()
 		assert.NoError(
@@ -102,6 +106,7 @@ func TestStatus(t *testing.T) {
 			),
 		)
 	})
+
 	t.Run("compares numbers", func(t *testing.T) {
 		t.Parallel()
 		assert.NoError(
@@ -122,6 +127,7 @@ func TestJSONContent(t *testing.T) {
 			httpx.JSONContent(rsp),
 		)
 	})
+
 	t.Run("fails on another content type", func(t *testing.T) {
 		t.Parallel()
 		rsp := &http.Response{Header: http.Header{"Content-Type": []string{"text/plain"}}}
@@ -149,6 +155,7 @@ func TestDecode(t *testing.T) {
 			),
 		)
 	})
+
 	t.Run("fails on invalid JSON", func(t *testing.T) {
 		t.Parallel()
 		var dst struct{}

@@ -33,6 +33,7 @@ func TestVariables(t *testing.T) {
 			),
 		)
 	})
+
 	t.Run("reports a missing key", func(t *testing.T) {
 		t.Parallel()
 		vars := step.NewVariables()
@@ -42,6 +43,7 @@ func TestVariables(t *testing.T) {
 			boolean.False(ok),
 		)
 	})
+
 	t.Run("requires a stored value", func(t *testing.T) {
 		t.Parallel()
 		vars := step.NewVariables()
@@ -55,6 +57,7 @@ func TestVariables(t *testing.T) {
 			),
 		)
 	})
+
 	t.Run("fails to require a missing value", func(t *testing.T) {
 		t.Parallel()
 		_, err := step.NewVariables().Require("missing")
@@ -63,6 +66,7 @@ func TestVariables(t *testing.T) {
 			errs.Contains(err, "missing"),
 		)
 	})
+
 	t.Run("requires an unsigned integer", func(t *testing.T) {
 		t.Parallel()
 		vars := step.NewVariables()
@@ -76,6 +80,7 @@ func TestVariables(t *testing.T) {
 			),
 		)
 	})
+
 	t.Run("fails to require a value that is not an integer", func(t *testing.T) {
 		t.Parallel()
 		vars := step.NewVariables()
@@ -86,6 +91,7 @@ func TestVariables(t *testing.T) {
 			errs.Contains(err, "not an unsigned integer"),
 		)
 	})
+
 	t.Run("fails to require an unsigned integer that is missing", func(t *testing.T) {
 		t.Parallel()
 		_, err := step.NewVariables().RequireUint64("user_id")
@@ -120,6 +126,7 @@ func TestRunAll(t *testing.T) {
 			),
 		)
 	})
+
 	t.Run("does not stop after a failed step", func(t *testing.T) {
 		t.Parallel()
 		last := fakestep.NewStep("last", nil)
@@ -135,6 +142,7 @@ func TestRunAll(t *testing.T) {
 			boolean.True(last.Ran()),
 		)
 	})
+
 	t.Run("returns no results for no steps", func(t *testing.T) {
 		t.Parallel()
 		results := step.RunAll(context.Background(), nil)

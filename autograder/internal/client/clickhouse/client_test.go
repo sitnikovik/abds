@@ -43,6 +43,7 @@ func TestClient_Count(t *testing.T) {
 			),
 		)
 	})
+
 	t.Run("fails when the query fails", func(t *testing.T) {
 		t.Parallel()
 		cli := clickhouse.NewClient(
@@ -54,6 +55,7 @@ func TestClient_Count(t *testing.T) {
 			errs.Contains(err, "connection refused"),
 		)
 	})
+
 	t.Run("fails when the query returns no rows", func(t *testing.T) {
 		t.Parallel()
 		cli := clickhouse.NewClient(
@@ -65,6 +67,7 @@ func TestClient_Count(t *testing.T) {
 			errs.Contains(err, "no rows"),
 		)
 	})
+
 	t.Run("fails when iteration fails", func(t *testing.T) {
 		t.Parallel()
 		cli := clickhouse.NewClient(
@@ -76,6 +79,7 @@ func TestClient_Count(t *testing.T) {
 			errs.Contains(err, "broken stream"),
 		)
 	})
+
 	t.Run("fails when the value cannot be scanned", func(t *testing.T) {
 		t.Parallel()
 		cli := clickhouse.NewClient(
@@ -125,6 +129,7 @@ func TestClient_Strings(t *testing.T) {
 			),
 		)
 	})
+
 	t.Run("returns no rows for an empty result", func(t *testing.T) {
 		t.Parallel()
 		cli := clickhouse.NewClient(
@@ -139,6 +144,7 @@ func TestClient_Strings(t *testing.T) {
 			),
 		)
 	})
+
 	t.Run("fails when the query fails", func(t *testing.T) {
 		t.Parallel()
 		cli := clickhouse.NewClient(
@@ -150,6 +156,7 @@ func TestClient_Strings(t *testing.T) {
 			errs.Contains(err, "unknown table"),
 		)
 	})
+
 	t.Run("fails when a row cannot be scanned", func(t *testing.T) {
 		t.Parallel()
 		cli := clickhouse.NewClient(
@@ -169,6 +176,7 @@ func TestClient_Strings(t *testing.T) {
 			errs.Contains(err, "scan row"),
 		)
 	})
+
 	t.Run("fails when iteration fails", func(t *testing.T) {
 		t.Parallel()
 		cli := clickhouse.NewClient(

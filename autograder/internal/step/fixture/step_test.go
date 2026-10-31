@@ -45,6 +45,7 @@ func TestStep_Run(t *testing.T) {
 			),
 		)
 	})
+
 	t.Run("fails when a table has too few rows", func(t *testing.T) {
 		t.Parallel()
 		s := fixture.NewStep(
@@ -62,6 +63,7 @@ func TestStep_Run(t *testing.T) {
 			checkerr.Contains(err, "rows in dim_gauges"),
 		)
 	})
+
 	t.Run("fails when the query fails", func(t *testing.T) {
 		t.Parallel()
 		s := fixture.NewStep(
@@ -76,6 +78,7 @@ func TestStep_Run(t *testing.T) {
 			checkerr.Contains(err, "read ids of dim_realty"),
 		)
 	})
+
 	t.Run("has a name and a description", func(t *testing.T) {
 		t.Parallel()
 		s := fixture.NewStep(fakeclickhouse.NewClient(), "energosbyt")

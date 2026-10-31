@@ -32,6 +32,7 @@ func TestStep_Run(t *testing.T) {
 			errs.NoError(err),
 		)
 	})
+
 	t.Run("fails on a wrong status code", func(t *testing.T) {
 		t.Parallel()
 		s := ping.NewStep(
@@ -44,6 +45,7 @@ func TestStep_Run(t *testing.T) {
 			errs.Error(err),
 		)
 	})
+
 	t.Run("fails on a non-empty body", func(t *testing.T) {
 		t.Parallel()
 		s := ping.NewStep(
@@ -56,6 +58,7 @@ func TestStep_Run(t *testing.T) {
 			errs.Error(err),
 		)
 	})
+
 	t.Run("fails when the request fails", func(t *testing.T) {
 		t.Parallel()
 		s := ping.NewStep(
@@ -71,6 +74,7 @@ func TestStep_Run(t *testing.T) {
 			),
 		)
 	})
+
 	t.Run("has a name and a description", func(t *testing.T) {
 		t.Parallel()
 		s := ping.NewStep(httpclient.NewClient(http.StatusOK, "", nil), "")

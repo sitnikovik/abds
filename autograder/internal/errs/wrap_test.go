@@ -22,6 +22,7 @@ func TestWrap(t *testing.T) {
 			checkerr.NoError(errs.Wrap(nil, "table dim_realty")),
 		)
 	})
+
 	t.Run("annotates the error with the message", func(t *testing.T) {
 		t.Parallel()
 		err := errs.Wrap(errors.New("boom"), "table dim_realty")

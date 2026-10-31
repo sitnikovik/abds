@@ -27,6 +27,7 @@ func TestFio_RunErrors(t *testing.T) {
 		err := s.Run(context.Background(), VarsWithUser())
 		assert.NoError(t, checkerr.Contains(err, "unexpected response"))
 	})
+
 	t.Run("fails when the read after the patch is not JSON", func(t *testing.T) {
 		t.Parallel()
 		cli := fakehttp.NewSequence(
@@ -37,6 +38,7 @@ func TestFio_RunErrors(t *testing.T) {
 		err := s.Run(context.Background(), VarsWithUser())
 		assert.NoError(t, checkerr.Contains(err, "decode body"))
 	})
+
 	t.Run("fails when the read after the patch fails", func(t *testing.T) {
 		t.Parallel()
 		cli := fakehttp.NewSequence(

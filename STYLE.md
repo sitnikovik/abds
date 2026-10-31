@@ -50,6 +50,8 @@
   - [Separate test packages](#separate-test-packages)
   - [Canonical test template](#canonical-test-template)
   - [Parallel tests](#parallel-tests)
+  - [Direct result in tests](#direct-result-in-tests)
+  - [Named defaults instead of nil](#named-defaults-instead-of-nil)
 
 ## Declarative style
 
@@ -2435,3 +2437,89 @@ because it may bring your test flacky so you may spend a lot of time to find out
 **📝 Exceptions / Notes**:
 
 Parallelism is the default, but not when shared state, timing sensitivity, or asynchronous behavior makes the test unstable.
+
+### Direct result in tests
+
+**📌 Rule**:
+
+Get the checked result directly from one expression:
+call the constructor and the method you check in the same statement.
+Do not store intermediate objects in variables that are used only once
+to build the checked result.
+
+**🤔 Why**:
+
+An intermediate variable with a single use adds a name without adding any meaning.
+When the result is composed in one expression, the test shows precisely
+what is built, what is called and what is checked - nothing else.
+
+**❌ Bad:**
+
+```go
+cli := clickhouse.NewClient(
+    driver.NewConn(
+        driver.NewRows(data, rowsErr),
+        queryErr,
+    ),
+)
+n, err := cli.Count(ctx, "SELECT count() FROM t")
+```
+
+**✅ Good:**
+
+```go
+n, err := clickhouse.
+    NewClient(
+        driver.NewConn(
+            driver.NewRows(data, rowsErr),
+            queryErr,
+        ),
+    ).
+    Count(ctx, "SELECT count() FROM t")
+```
+
+**📝 Exceptions / Notes**:
+
+Keep the variable when it is reused later in the same test case,
+for example when you check `Name()` and `Description()` of the same value.
+
+### Named defaults instead of nil
+
+**📌 Rule**:
+
+Do not pass a literal `nil` for a non-error parameter.
+Declare a variable that holds the default zero value, name it after the parameter
+and pass that variable instead. A literal `nil` stays fine for `error` parameters.
+
+**🤔 Why**:
+
+Every call argument becomes named, so whoever reads the call sees
+what is passed. A bare `nil` hides the purpose of the argument
+and blurs it with the `Errors can be nil` exception.
+
+**❌ Bad:**
+
+```go
+_, err := clickhouse.
+    NewClient(
+        driver.NewConn(nil, errors.New("unknown table")),
+    ).
+    Count(ctx, "SELECT count() FROM t")
+```
+
+**✅ Good:**
+
+```go
+var rows *driver.Rows
+_, err := clickhouse.
+    NewClient(
+        driver.NewConn(rows, errors.New("unknown table")),
+    ).
+    Count(ctx, "SELECT count() FROM t")
+```
+
+**🔗 Related rules**:
+
+- [Direct result in tests](#direct-result-in-tests)
+- [Errors can be nil](#errors-can-be-nil)
+- [No nil](#no-nil)

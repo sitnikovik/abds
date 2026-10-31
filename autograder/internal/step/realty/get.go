@@ -71,10 +71,10 @@ func (s Get) Run(ctx context.Context, vars step.Variables) error {
 		return errs.Wrap(err, "unexpected response")
 	}
 	var got struct {
-		ID      uint64 `json:"id"`
 		Address string `json:"address"`
-		Square  uint32 `json:"square"`
 		Type    string `json:"type"`
+		ID      uint64 `json:"id"`
+		Square  uint32 `json:"square"`
 		Floor   uint8  `json:"floor"`
 		Porch   uint8  `json:"porch"`
 	}

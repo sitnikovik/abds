@@ -9,10 +9,10 @@ import (
 
 // Step is a fake step that returns a predefined error and remembers whether it ran.
 type Step struct {
-	// name is the name of the step.
-	name string
 	// err is returned by Run.
 	err error
+	// name is the name of the step.
+	name string
 	// ran reports whether Run was called.
 	ran bool
 }

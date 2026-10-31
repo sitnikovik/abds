@@ -4,10 +4,10 @@ import "context"
 
 // Result is the outcome of a single step.
 type Result struct {
-	// name is the name of the step.
-	name string
 	// err is the error the step returned, nil if the step passed.
 	err error
+	// name is the name of the step.
+	name string
 }
 
 // NewResult creates a Result for the step with the given name and error.

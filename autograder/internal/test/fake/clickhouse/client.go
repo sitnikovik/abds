@@ -29,12 +29,12 @@ type stringsRule struct {
 
 // Client is a fake ClickHouse client that answers queries by matching rules.
 type Client struct {
+	// err is returned for every query when it is not nil.
+	err error
 	// counts are the rules for Count.
 	counts []countRule
 	// rows are the rules for Strings.
 	rows []stringsRule
-	// err is returned for every query when it is not nil.
-	err error
 }
 
 // Option configures a fake Client.

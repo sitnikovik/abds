@@ -5,8 +5,8 @@ import (
 
 	"github.com/sitnikovik/abds/autograder/internal/client/httpx"
 	"github.com/sitnikovik/abds/autograder/internal/step"
-	"github.com/sitnikovik/abds/autograder/internal/step/fixture"
 	"github.com/sitnikovik/abds/autograder/internal/step/endpoint"
+	"github.com/sitnikovik/abds/autograder/internal/step/fixture"
 )
 
 // NewBadRequest creates a step that checks GET /realty/{id}/invoices with a negative limit answers 400 with a message.

@@ -70,9 +70,9 @@ func (s Get) Run(ctx context.Context, vars step.Variables) error {
 		return errs.Wrap(err, "unexpected response")
 	}
 	var got struct {
-		ID    uint64 `json:"id"`
 		FIO   string `json:"fio"`
 		Phone string `json:"phone"`
+		ID    uint64 `json:"id"`
 	}
 	err = httpx.Decode(body, &got)
 	if err != nil {

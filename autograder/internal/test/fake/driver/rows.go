@@ -11,12 +11,12 @@ import (
 
 // Rows is a fake driver.Rows that iterates over predefined values.
 type Rows struct {
+	// err is returned by Err after the iteration.
+	err error
 	// data holds the rows, each row holds one value per column.
 	data [][]any
 	// idx is the index of the current row.
 	idx int
-	// err is returned by Err after the iteration.
-	err error
 }
 
 // NewRows creates a Rows that iterates over data and returns err from Err.

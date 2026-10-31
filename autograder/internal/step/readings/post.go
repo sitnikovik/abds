@@ -26,14 +26,14 @@ const nightKW = 300
 
 // postBody is the JSON body of POST /realty/{id}/readings.
 type postBody struct {
+	// ReadingDate is the date of the reading in the YYYY-MM-DD format.
+	ReadingDate string `json:"reading_date"`
 	// UserID is the id of the owner who sends the reading.
 	UserID uint64 `json:"user_id"`
 	// GaugeID is the id of the gauge installed on the object.
 	GaugeID uint64 `json:"gauge_id"`
 	// TariffID is the id of the tariff the reading is billed by.
 	TariffID uint64 `json:"tariff_id"`
-	// ReadingDate is the date of the reading in the YYYY-MM-DD format.
-	ReadingDate string `json:"reading_date"`
 	// DayKW is the day counter value.
 	DayKW uint32 `json:"day_kw"`
 	// NightKW is the night counter value.

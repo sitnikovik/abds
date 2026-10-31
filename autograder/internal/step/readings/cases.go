@@ -5,8 +5,8 @@ import (
 
 	"github.com/sitnikovik/abds/autograder/internal/client/httpx"
 	"github.com/sitnikovik/abds/autograder/internal/step"
-	"github.com/sitnikovik/abds/autograder/internal/step/fixture"
 	"github.com/sitnikovik/abds/autograder/internal/step/endpoint"
+	"github.com/sitnikovik/abds/autograder/internal/step/fixture"
 )
 
 // NewListNotFound creates a step that checks GET /realty/{id}/readings for an unknown object answers 404 with a message.

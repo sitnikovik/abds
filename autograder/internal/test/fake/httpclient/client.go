@@ -9,12 +9,12 @@ import (
 
 // Response is one canned response of the fake, or an error instead of it.
 type Response struct {
-	// status is the status code of the response.
-	status int
-	// body is the body of the response.
-	body string
 	// err is returned instead of a response when it is not nil.
 	err error
+	// body is the body of the response.
+	body string
+	// status is the status code of the response.
+	status int
 }
 
 // ResponseOption configures a canned Response.

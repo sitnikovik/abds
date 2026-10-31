@@ -16,10 +16,12 @@ import (
 
 // Step sends one request and checks that the response has the expected status and a JSON error message.
 type Step struct {
-	// desc is the name and the description of the step.
-	desc step.Desc
 	// cli sends the request.
 	cli httpx.Doer
+	// body is the JSON body of the request, nil for no body.
+	body any
+	// desc is the name and the description of the step.
+	desc step.Desc
 	// baseURL is the base URL of the application, without a trailing slash.
 	baseURL string
 	// method is the HTTP method of the request.
@@ -28,8 +30,6 @@ type Step struct {
 	path string
 	// keys are the variables substituted into path, in order.
 	keys []string
-	// body is the JSON body of the request, nil for no body.
-	body any
 	// status is the expected status code of the response.
 	status int
 }

@@ -73,12 +73,12 @@ func (s Get) Run(ctx context.Context, _ step.Variables) error {
 		return errs.Wrap(err, "unexpected response")
 	}
 	var got struct {
-		ID             uint64 `json:"id"`
 		Name           string `json:"name"`
-		PriceDayKWPH   uint32 `json:"price_day_kwph"`
-		PriceNightKWPH uint32 `json:"price_night_kwph"`
 		ValidFrom      string `json:"valid_from"`
 		ValidTo        string `json:"valid_to"`
+		ID             uint64 `json:"id"`
+		PriceDayKWPH   uint32 `json:"price_day_kwph"`
+		PriceNightKWPH uint32 `json:"price_night_kwph"`
 	}
 	err = httpx.Decode(body, &got)
 	if err != nil {

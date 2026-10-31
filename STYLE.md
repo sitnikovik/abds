@@ -1110,6 +1110,55 @@ func main() {
 }
 ```
 
+**⚠️ Chained calls**:
+
+When a chained call contains multiline arguments (e.g., a constructor
+followed by a `Run` method), do not put the last chain link inline
+after the previous closing parenthesis.
+
+**❌ Bad**:
+
+The examples below glue the chain links together:
+the constructor sits inline on the assignment line
+and `Run` hangs right after the closing parenthesis of the previous call.
+That makes the chain harder to scan and easy to miss during review.
+
+```go
+err := invoices.NewPagination(cli, "http://localhost:8080").Run(
+    context.Background(),
+    vars,
+)
+```
+
+```go
+err := invoices.NewPagination(
+    cli,
+    "http://localhost:8080",
+).Run(
+    context.Background(),
+    vars,
+)
+```
+
+**✅ Good**:
+
+The example below breaks the chain after the package or receiver name
+and puts every chained method and every argument on its own line
+with one extra indent level, ending each line with `.`.
+That keeps a stable visual structure across the whole chain.
+
+```go
+err := invoices.
+    NewPagination(
+        cli,
+        "http://localhost:8080",
+    ).
+    Run(
+        context.Background(),
+        vars,
+    )
+```
+
 **📝 Exceptions / Notes**:
 
 Calls without arguments may stay on one line.

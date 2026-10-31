@@ -21,6 +21,9 @@ Guidance for AI agents working in this repository.
 - Declarative style: constructors with functional options, immutable structs, no setters, no getters.
 - Do not check values for `nil`. Return `error` values.
 - Fields are unexported. Types are exported and created through constructors.
+- Vertical formatting for calls and chained calls: multiline arguments always go one per line,
+  and chained calls break after the package name with each method on its own line
+  (see STYLE.md, "Chained calls").
 
 ## Documentation
 
@@ -59,6 +62,8 @@ Guidance for AI agents working in this repository.
 - Get the checked result directly: call the constructor and the method
   in one expression instead of storing one-time intermediate objects
   in variables (see STYLE.md, "Direct result in tests").
+  In that expression, break chained calls after the package name
+  and put each `Run` argument on its own line (see STYLE.md, "Chained calls").
 - Do not pass a literal `nil` for a non-error parameter. Declare a variable
   with the default zero value named after the parameter and pass it.
   A literal `nil` stays fine for `error` parameters (see STYLE.md,

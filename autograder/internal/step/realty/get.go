@@ -66,7 +66,8 @@ func (s Get) Run(ctx context.Context, vars step.Variables) error {
 	if err != nil {
 		return err
 	}
-	if err := expect.All(httpx.Status(rsp, http.StatusOK), httpx.JSONContent(rsp)); err != nil {
+	err = expect.All(httpx.Status(rsp, http.StatusOK), httpx.JSONContent(rsp))
+	if err != nil {
 		return errs.Wrap(err, "unexpected response")
 	}
 	var got struct {
@@ -77,7 +78,8 @@ func (s Get) Run(ctx context.Context, vars step.Variables) error {
 		Floor   uint8  `json:"floor"`
 		Porch   uint8  `json:"porch"`
 	}
-	if err := httpx.Decode(body, &got); err != nil {
+	err = httpx.Decode(body, &got)
+	if err != nil {
 		return err
 	}
 	return expect.All(

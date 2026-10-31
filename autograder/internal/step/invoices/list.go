@@ -73,7 +73,8 @@ func (s List) Run(ctx context.Context, vars step.Variables) error {
 	if err != nil {
 		return err
 	}
-	if err := expect.All(httpx.Status(rsp, http.StatusOK), httpx.JSONContent(rsp)); err != nil {
+	err = expect.All(httpx.Status(rsp, http.StatusOK), httpx.JSONContent(rsp))
+	if err != nil {
 		return errs.Wrap(err, "unexpected response")
 	}
 	var got struct {
@@ -82,7 +83,8 @@ func (s List) Run(ctx context.Context, vars step.Variables) error {
 		} `json:"invoices"`
 		Count int `json:"count"`
 	}
-	if err := httpx.Decode(body, &got); err != nil {
+	err = httpx.Decode(body, &got)
+	if err != nil {
 		return err
 	}
 	sorted := true

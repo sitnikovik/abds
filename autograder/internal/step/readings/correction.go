@@ -70,7 +70,8 @@ func (s Correction) Run(ctx context.Context, vars step.Variables) error {
 	if err != nil {
 		return err
 	}
-	if err := expect.All(httpx.Status(rsp, http.StatusOK), httpx.JSONContent(rsp)); err != nil {
+	err = expect.All(httpx.Status(rsp, http.StatusOK), httpx.JSONContent(rsp))
+	if err != nil {
 		return errs.Wrap(err, "unexpected response")
 	}
 	var got struct {
@@ -79,10 +80,12 @@ func (s Correction) Run(ctx context.Context, vars step.Variables) error {
 			NightKW uint32 `json:"night_kw"`
 		} `json:"readings"`
 	}
-	if err := httpx.Decode(body, &got); err != nil {
+	err = httpx.Decode(body, &got)
+	if err != nil {
 		return err
 	}
-	if err := expect.All(errs.Wrap(number.Equal(len(got.Readings), 1), "date must have one actual reading")); err != nil {
+	err = expect.All(errs.Wrap(number.Equal(len(got.Readings), 1), "date must have one actual reading"))
+	if err != nil {
 		return err
 	}
 	return expect.All(

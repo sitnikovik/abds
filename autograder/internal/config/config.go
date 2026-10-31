@@ -57,7 +57,8 @@ func Load(lookup func(key string) (string, bool)) (Config, error) {
 		env[key] = val
 	}
 	for _, key := range []string{keyAppPort, keyClickHousePort} {
-		if err := ValidatePort(env[key]); err != nil {
+		err := ValidatePort(env[key])
+		if err != nil {
 			return Config{}, fmt.Errorf("environment variable %s: %w", key, err)
 		}
 	}

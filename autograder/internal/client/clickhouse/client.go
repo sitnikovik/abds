@@ -41,13 +41,15 @@ func (c Client) Count(ctx context.Context, query string, args ...any) (uint64, e
 		_ = rows.Close()
 	}()
 	if !rows.Next() {
-		if err := rows.Err(); err != nil {
+		err := rows.Err()
+		if err != nil {
 			return 0, fmt.Errorf("iterate rows: %w", err)
 		}
 		return 0, errors.New("query returned no rows")
 	}
 	var n uint64
-	if err := rows.Scan(&n); err != nil {
+	err = rows.Scan(&n)
+	if err != nil {
 		return 0, fmt.Errorf("scan count: %w", err)
 	}
 	return n, nil
@@ -77,12 +79,14 @@ func (c Client) Strings(
 		for i := range vals {
 			dest[i] = &vals[i]
 		}
-		if err := rows.Scan(dest...); err != nil {
+		err := rows.Scan(dest...)
+		if err != nil {
 			return nil, fmt.Errorf("scan row: %w", err)
 		}
 		out = append(out, vals)
 	}
-	if err := rows.Err(); err != nil {
+	err = rows.Err()
+	if err != nil {
 		return nil, fmt.Errorf("iterate rows: %w", err)
 	}
 	return out, nil

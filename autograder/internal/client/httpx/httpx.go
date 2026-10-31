@@ -70,7 +70,8 @@ func JSONContent(rsp *http.Response) error {
 
 // Decode unmarshals the JSON body into dst.
 func Decode(body []byte, dst any) error {
-	if err := json.Unmarshal(body, dst); err != nil {
+	err := json.Unmarshal(body, dst)
+	if err != nil {
 		return fmt.Errorf("decode body: %w", err)
 	}
 	return nil

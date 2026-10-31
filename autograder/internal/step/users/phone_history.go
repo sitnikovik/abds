@@ -64,7 +64,8 @@ func (s PhoneHistory) Run(ctx context.Context, vars step.Variables) error {
 	if err != nil {
 		return fmt.Errorf("read owner: %w", err)
 	}
-	if err := expect.All(errs.Wrap(number.Positive(len(rows)), "owner must be stored")); err != nil {
+	err = expect.All(errs.Wrap(number.Positive(len(rows)), "owner must be stored"))
+	if err != nil {
 		return err
 	}
 	old := rows[0][0]
@@ -90,7 +91,8 @@ func (s PhoneHistory) Run(ctx context.Context, vars step.Variables) error {
 	if err != nil {
 		return err
 	}
-	if err := expect.All(httpx.Status(rsp, http.StatusNoContent), errs.Wrap(strings.Empty(string(patchBody)), "body must be empty")); err != nil {
+	err = expect.All(httpx.Status(rsp, http.StatusNoContent), errs.Wrap(strings.Empty(string(patchBody)), "body must be empty"))
+	if err != nil {
 		return err
 	}
 	got, err := s.Fetch(ctx, id)
@@ -132,11 +134,13 @@ func (s PhoneHistory) Fetch(ctx context.Context, id uint64) (Owner, error) {
 	if err != nil {
 		return Owner{}, err
 	}
-	if err := expect.All(httpx.Status(rsp, http.StatusOK), httpx.JSONContent(rsp)); err != nil {
+	err = expect.All(httpx.Status(rsp, http.StatusOK), httpx.JSONContent(rsp))
+	if err != nil {
 		return Owner{}, errs.Wrap(err, "unexpected response")
 	}
 	var got Owner
-	if err := httpx.Decode(body, &got); err != nil {
+	err = httpx.Decode(body, &got)
+	if err != nil {
 		return Owner{}, err
 	}
 	return got, nil

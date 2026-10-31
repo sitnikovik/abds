@@ -135,7 +135,8 @@ func (s Step) Run(ctx context.Context, vars step.Variables) error {
 	var got struct {
 		Message string `json:"message"`
 	}
-	if err := httpx.Decode(body, &got); err != nil {
+	err = httpx.Decode(body, &got)
+	if err != nil {
 		return errs.Wrap(err, "unexpected response")
 	}
 	return expect.All(

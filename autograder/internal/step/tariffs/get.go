@@ -68,7 +68,8 @@ func (s Get) Run(ctx context.Context, _ step.Variables) error {
 	if err != nil {
 		return err
 	}
-	if err := expect.All(httpx.Status(rsp, http.StatusOK), httpx.JSONContent(rsp)); err != nil {
+	err = expect.All(httpx.Status(rsp, http.StatusOK), httpx.JSONContent(rsp))
+	if err != nil {
 		return errs.Wrap(err, "unexpected response")
 	}
 	var got struct {
@@ -79,7 +80,8 @@ func (s Get) Run(ctx context.Context, _ step.Variables) error {
 		ValidFrom      string `json:"valid_from"`
 		ValidTo        string `json:"valid_to"`
 	}
-	if err := httpx.Decode(body, &got); err != nil {
+	err = httpx.Decode(body, &got)
+	if err != nil {
 		return err
 	}
 	return expect.All(

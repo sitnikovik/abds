@@ -86,7 +86,8 @@ func (s Boundary) Run(ctx context.Context, vars step.Variables) error {
 	if err != nil {
 		return fmt.Errorf("read versions: %w", err)
 	}
-	if err := expect.All(errs.Wrap(number.GreaterOrEqual(len(rows), 2), "tariff must have two versions")); err != nil {
+	err = expect.All(errs.Wrap(number.GreaterOrEqual(len(rows), 2), "tariff must have two versions"))
+	if err != nil {
 		return err
 	}
 	start, err := time.Parse(dateTimeLayout, rows[1][0])
@@ -136,11 +137,13 @@ func (s Boundary) Version(ctx context.Context, day string) (Version, error) {
 	if err != nil {
 		return Version{}, err
 	}
-	if err := expect.All(httpx.Status(rsp, http.StatusOK), httpx.JSONContent(rsp)); err != nil {
+	err = expect.All(httpx.Status(rsp, http.StatusOK), httpx.JSONContent(rsp))
+	if err != nil {
 		return Version{}, errs.Wrap(err, "unexpected response")
 	}
 	var got Version
-	if err := httpx.Decode(body, &got); err != nil {
+	err = httpx.Decode(body, &got)
+	if err != nil {
 		return Version{}, err
 	}
 	return got, nil

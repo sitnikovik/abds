@@ -74,7 +74,8 @@ func (s Fio) Run(ctx context.Context, vars step.Variables) error {
 	if err != nil {
 		return fmt.Errorf("read owner: %w", err)
 	}
-	if err := expect.All(errs.Wrap(number.Positive(len(rows)), "owner must be stored")); err != nil {
+	err = expect.All(errs.Wrap(number.Positive(len(rows)), "owner must be stored"))
+	if err != nil {
 		return err
 	}
 	old := rows[0][0]
@@ -82,7 +83,8 @@ func (s Fio) Run(ctx context.Context, vars step.Variables) error {
 	if old == next {
 		next = "Автограйдер Тест 2"
 	}
-	if err := s.Patch(ctx, id, next); err != nil {
+	err = s.Patch(ctx, id, next)
+	if err != nil {
 		return err
 	}
 	fio, err := s.Fetch(ctx, id)
@@ -158,13 +160,15 @@ func (s Fio) Fetch(ctx context.Context, id uint64) (string, error) {
 	if err != nil {
 		return "", err
 	}
-	if err := expect.All(httpx.Status(rsp, http.StatusOK), httpx.JSONContent(rsp)); err != nil {
+	err = expect.All(httpx.Status(rsp, http.StatusOK), httpx.JSONContent(rsp))
+	if err != nil {
 		return "", errs.Wrap(err, "unexpected response")
 	}
 	var got struct {
 		FIO string `json:"fio"`
 	}
-	if err := json.Unmarshal(body, &got); err != nil {
+	err = json.Unmarshal(body, &got)
+	if err != nil {
 		return "", fmt.Errorf("decode body: %w", err)
 	}
 	return got.FIO, nil

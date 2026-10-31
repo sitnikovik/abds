@@ -103,7 +103,8 @@ func (s Pagination) Page(ctx context.Context, id, query string) ([]string, error
 	if err != nil {
 		return nil, err
 	}
-	if err := expect.All(httpx.Status(rsp, http.StatusOK), httpx.JSONContent(rsp)); err != nil {
+	err = expect.All(httpx.Status(rsp, http.StatusOK), httpx.JSONContent(rsp))
+	if err != nil {
 		return nil, errs.Wrap(err, "unexpected response")
 	}
 	var got struct {
@@ -111,7 +112,8 @@ func (s Pagination) Page(ctx context.Context, id, query string) ([]string, error
 			Created string `json:"created_at"`
 		} `json:"invoices"`
 	}
-	if err := httpx.Decode(body, &got); err != nil {
+	err = httpx.Decode(body, &got)
+	if err != nil {
 		return nil, err
 	}
 	created := make([]string, 0, len(got.Invoices))

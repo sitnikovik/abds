@@ -40,6 +40,10 @@
   - [No arguments / return values](#no-arguments--return-values)
   - [Full example](#full-example)
   - [No comments](#no-comments)
+- [Naming](#naming)
+  - [Directories](#directories)
+  - [File names](#file-names)
+  - [Import aliases](#import-aliases)
 - [Exporting](#exporting)
   - [Functions must be exported](#functions-must-be-exported)
   - [Any type must have a constructor](#any-type-must-have-a-constructor)
@@ -1953,6 +1957,104 @@ func (o *Order) ApplyDiscount(discount int64) int64 {
 - [Document all](#document-all)
 - [What the function does](#what-the-function-does)
 - [Sentence structure](#sentence-structure)
+
+## Naming
+
+**📌 Rule**:
+
+Follow one casing convention for each part of the codebase:
+directories with multiple words use kebab-case, file names use snake_case,
+and import aliases use camelCase.
+
+**🤔 Why**:
+
+One casing rule per scope makes paths predictable and easy to guess
+and keeps search-by-guessing possible for both humans and tools.
+
+### Directories
+
+**📌 Rule**:
+
+Name directories in lowercase kebab-case.
+You may also write a directory name as one concatenated lowercase word
+when the words are short or tightly related and splitting them into
+kebab-case does not noticeably improve readability.
+Do not use underscores or camelCase in directory names.
+
+**❌ Bad:**
+
+```text
+internal/step/not_found/
+internal/step/bad_request/
+internal/step/phoneHistory/
+```
+
+**✅ Good:**
+
+```text
+internal/step/not-found/
+internal/step/bad-request/
+internal/step/phone-history/
+```
+
+```text
+internal/step/listnotfound/ // still fine: the words are short and tightly related
+```
+
+### File names
+
+**📌 Rule**:
+
+Name Go files in lowercase snake_case.
+
+**❌ Bad:**
+
+```text
+internal/step/not-found/step.go
+internal/step/not-found/badRequest.go
+internal/step/not-found/badrequest.go
+```
+
+**✅ Good:**
+
+```text
+internal/step/not-found/step.go
+internal/step/not-found/bad-request.go
+internal/step/not-found/not-found_test.go
+```
+
+### Import aliases
+
+> [!IMPORTANT]
+> No snake_case aliases!
+
+**📌 Rule**:
+
+Write every import alias in camelCase.
+Omit the alias entirely when the default package name is already unambiguous.
+
+**❌ Bad:**
+
+```go
+import (
+    check_err "github.com/you/repo/expect/errors"
+    gauges_post "github.com/you/repo/internal/step/gauges/post"
+)
+```
+
+**✅ Good:**
+
+```go
+import (
+    checkErr "github.com/you/repo/expect/errors"
+    gaugesPost "github.com/you/repo/internal/step/gauges/post"
+)
+```
+
+**🔗 Related rules**:
+
+- [Exporting](#exporting)
+- [Document all](#document-all)
 
 ## Exporting
 

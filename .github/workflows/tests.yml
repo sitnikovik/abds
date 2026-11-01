@@ -7,7 +7,8 @@ jobs:
   go-guard:
     uses: ./.github/workflows/go_guard.yml
 
-  tests:
+  unit-tests:
+    name: Unit tests
     needs: go-guard
     if: needs.go-guard.outputs.go_mod_exists == 'true'
     runs-on: ubuntu-latest
@@ -17,14 +18,63 @@ jobs:
       - name: Set up Go
         uses: actions/setup-go@v5
         with:
-          go-version-file: go.mod
+          go-version-file: autograder/go.mod
+          cache-dependency-path: autograder/go.sum
       - name: Run unit tests
         run: |
-          make unit-test
+          make -C autograder unit-test
+      - name: Upload unit coverage profile
+        uses: actions/upload-artifact@v4
+        with:
+          name: coverage-unit
+          path: autograder/tmp/coverage_unit.out
+
+  integration-tests:
+    name: Integration tests
+    needs: go-guard
+    if: needs.go-guard.outputs.go_mod_exists == 'true'
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+      - name: Set up Go
+        uses: actions/setup-go@v5
+        with:
+          go-version-file: autograder/go.mod
+          cache-dependency-path: autograder/go.sum
       - name: Run integration tests
         run: |
-          make integration-test
+          make -C autograder integration-test
+      - name: Upload integration coverage profile
+        uses: actions/upload-artifact@v4
+        with:
+          name: coverage-integration
+          path: autograder/tmp/coverage_integration.out
+
+  coverage:
+    name: Check coverage
+    needs: [unit-tests, integration-tests]
+    if: needs.go-guard.outputs.go_mod_exists == 'true'
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+      - name: Set up Go
+        uses: actions/setup-go@v5
+        with:
+          go-version-file: autograder/go.mod
+          cache-dependency-path: autograder/go.sum
+      - name: Download unit coverage profile
+        uses: actions/download-artifact@v4
+        with:
+          name: coverage-unit
+          path: autograder/tmp
+      - name: Download integration coverage profile
+        uses: actions/download-artifact@v4
+        with:
+          name: coverage-integration
+          path: autograder/tmp
       - name: Check coverage
         run: |
           source .github/ci.env
-          make coverage
+          make -C autograder coverage

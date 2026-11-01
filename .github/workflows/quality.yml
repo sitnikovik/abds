@@ -24,9 +24,9 @@ jobs:
           curl -sSfL https://raw.githubusercontent.com/golangci/golangci-lint/master/install.sh \
             | sh -s -- -b $(go env GOPATH)/bin v2.8.0
           echo "PATH=$(go env GOPATH)/bin:$PATH" >> $GITHUB_ENV
-      - name: Run autograder checks
+      - name: Run lint
         run: |
-          make -C autograder check
+          make -C autograder lint
 
   linter:
     needs: go-guard

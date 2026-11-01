@@ -4,7 +4,7 @@ on:
   workflow_call:
     outputs:
       go_mod_exists:
-        description: Whether go.mod exists in repository root
+        description: Whether go.mod exists in repository root or autograder/
         value: ${{ jobs.guard.outputs.go_mod_exists }}
 
 jobs:
@@ -18,7 +18,7 @@ jobs:
       - name: Check go.mod
         id: gomod
         run: |
-          if [ -f go.mod ]; then
+          if [ -f go.mod ] || [ -f autograder/go.mod ]; then
             echo "exists=true" >> "$GITHUB_OUTPUT"
           else
             echo "::warning::go.mod not found. Go-specific jobs will be skipped."

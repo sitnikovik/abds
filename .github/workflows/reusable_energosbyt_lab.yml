@@ -1,11 +1,15 @@
-name: Energosbyt Lab 1 Check (Reusable)
+name: Energosbyt Lab Check (Reusable)
 
 on:
   workflow_call:
+    inputs:
+      lab:
+        required: true
+        type: string
 
 jobs:
   lab:
-    name: Lab 1
+    name: Lab ${{ inputs.lab }}
     runs-on: ubuntu-latest
     timeout-minutes: 30
 
@@ -53,7 +57,7 @@ jobs:
             sleep 2
           done
           cd course/autograder
-          go run ./cmd/lab1
+          go run ./cmd/lab${{ inputs.lab }}
 
       - name: Show service logs
         if: always()

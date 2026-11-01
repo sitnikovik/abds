@@ -9,37 +9,37 @@ import (
 	"github.com/sitnikovik/abds/autograder/internal/step"
 	"github.com/sitnikovik/abds/autograder/internal/step/data"
 	"github.com/sitnikovik/abds/autograder/internal/step/fixture"
-	gauges_post "github.com/sitnikovik/abds/autograder/internal/step/gauges/post"
-	gauges_post_bad_request "github.com/sitnikovik/abds/autograder/internal/step/gauges/postbadrequest"
-	gauges_post_not_found "github.com/sitnikovik/abds/autograder/internal/step/gauges/postnotfound"
-	gauges_replacement "github.com/sitnikovik/abds/autograder/internal/step/gauges/replacement"
-	invoices_bad_request "github.com/sitnikovik/abds/autograder/internal/step/invoices/badrequest"
-	invoices_list "github.com/sitnikovik/abds/autograder/internal/step/invoices/list"
-	invoices_not_found "github.com/sitnikovik/abds/autograder/internal/step/invoices/notfound"
-	invoices_pagination "github.com/sitnikovik/abds/autograder/internal/step/invoices/pagination"
+	gaugesPost "github.com/sitnikovik/abds/autograder/internal/step/gauges/post"
+	gaugesPostBadRequest "github.com/sitnikovik/abds/autograder/internal/step/gauges/postbadrequest"
+	gaugesPostNotFound "github.com/sitnikovik/abds/autograder/internal/step/gauges/postnotfound"
+	gaugesReplacement "github.com/sitnikovik/abds/autograder/internal/step/gauges/replacement"
+	invoicesBadRequest "github.com/sitnikovik/abds/autograder/internal/step/invoices/badrequest"
+	invoicesList "github.com/sitnikovik/abds/autograder/internal/step/invoices/list"
+	invoicesNotFound "github.com/sitnikovik/abds/autograder/internal/step/invoices/notfound"
+	invoicesPagination "github.com/sitnikovik/abds/autograder/internal/step/invoices/pagination"
 	"github.com/sitnikovik/abds/autograder/internal/step/ping"
-	readings_bad_request "github.com/sitnikovik/abds/autograder/internal/step/readings/badrequest"
-	readings_correction "github.com/sitnikovik/abds/autograder/internal/step/readings/correction"
-	readings_list "github.com/sitnikovik/abds/autograder/internal/step/readings/list"
-	readings_list_not_found "github.com/sitnikovik/abds/autograder/internal/step/readings/listnotfound"
-	readings_post "github.com/sitnikovik/abds/autograder/internal/step/readings/post"
-	readings_post_bad_request "github.com/sitnikovik/abds/autograder/internal/step/readings/postbadrequest"
-	readings_post_not_found "github.com/sitnikovik/abds/autograder/internal/step/readings/postnotfound"
-	realty_get "github.com/sitnikovik/abds/autograder/internal/step/realty/get"
-	realty_not_found "github.com/sitnikovik/abds/autograder/internal/step/realty/notfound"
+	readingsBadRequest "github.com/sitnikovik/abds/autograder/internal/step/readings/badrequest"
+	readingsCorrection "github.com/sitnikovik/abds/autograder/internal/step/readings/correction"
+	readingsList "github.com/sitnikovik/abds/autograder/internal/step/readings/list"
+	readingsListNotFound "github.com/sitnikovik/abds/autograder/internal/step/readings/listnotfound"
+	readingsPost "github.com/sitnikovik/abds/autograder/internal/step/readings/post"
+	readingsPostBadRequest "github.com/sitnikovik/abds/autograder/internal/step/readings/postbadrequest"
+	readingsPostNotFound "github.com/sitnikovik/abds/autograder/internal/step/readings/postnotfound"
+	realtyGet "github.com/sitnikovik/abds/autograder/internal/step/realty/get"
+	realtyNotFound "github.com/sitnikovik/abds/autograder/internal/step/realty/notfound"
 	"github.com/sitnikovik/abds/autograder/internal/step/schema"
-	tariffs_bad_request "github.com/sitnikovik/abds/autograder/internal/step/tariffs/badrequest"
-	tariffs_boundary "github.com/sitnikovik/abds/autograder/internal/step/tariffs/boundary"
-	tariffs_get "github.com/sitnikovik/abds/autograder/internal/step/tariffs/get"
-	tariffs_invalid_date "github.com/sitnikovik/abds/autograder/internal/step/tariffs/invaliddate"
-	tariffs_not_found "github.com/sitnikovik/abds/autograder/internal/step/tariffs/notfound"
-	users_fio "github.com/sitnikovik/abds/autograder/internal/step/users/fio"
-	users_get "github.com/sitnikovik/abds/autograder/internal/step/users/get"
-	users_not_found "github.com/sitnikovik/abds/autograder/internal/step/users/notfound"
-	users_patch "github.com/sitnikovik/abds/autograder/internal/step/users/patch"
-	users_patch_bad_request "github.com/sitnikovik/abds/autograder/internal/step/users/patchbadrequest"
-	users_patch_not_found "github.com/sitnikovik/abds/autograder/internal/step/users/patchnotfound"
-	users_phone_history "github.com/sitnikovik/abds/autograder/internal/step/users/phonehistory"
+	tariffsBadRequest "github.com/sitnikovik/abds/autograder/internal/step/tariffs/badrequest"
+	tariffsBoundary "github.com/sitnikovik/abds/autograder/internal/step/tariffs/boundary"
+	tariffsGet "github.com/sitnikovik/abds/autograder/internal/step/tariffs/get"
+	tariffsInvalidDate "github.com/sitnikovik/abds/autograder/internal/step/tariffs/invaliddate"
+	tariffsNotFound "github.com/sitnikovik/abds/autograder/internal/step/tariffs/notfound"
+	usersFio "github.com/sitnikovik/abds/autograder/internal/step/users/fio"
+	usersGet "github.com/sitnikovik/abds/autograder/internal/step/users/get"
+	usersNotFound "github.com/sitnikovik/abds/autograder/internal/step/users/notfound"
+	usersPatch "github.com/sitnikovik/abds/autograder/internal/step/users/patch"
+	usersPatchBadRequest "github.com/sitnikovik/abds/autograder/internal/step/users/patchbadrequest"
+	usersPatchNotFound "github.com/sitnikovik/abds/autograder/internal/step/users/patchnotfound"
+	usersPhoneHistory "github.com/sitnikovik/abds/autograder/internal/step/users/phonehistory"
 )
 
 // Steps returns the checks of lab 1 in the order they run.
@@ -72,34 +72,34 @@ func Steps(
 			db,
 			database,
 		),
-		users_get.NewStep(httpCli, base),
-		users_not_found.NewStep(httpCli, base),
-		users_fio.NewStep(db, database, httpCli, base),
-		users_phone_history.NewStep(db, database, httpCli, base),
-		users_patch.NewStep(httpCli, base),
-		users_patch_bad_request.NewStep(httpCli, base),
-		users_patch_not_found.NewStep(httpCli, base),
-		realty_get.NewStep(httpCli, base),
-		realty_not_found.NewStep(httpCli, base),
-		readings_list.NewStep(httpCli, base),
-		readings_bad_request.NewStep(httpCli, base),
-		readings_list_not_found.NewStep(httpCli, base),
-		readings_post.NewStep(httpCli, base),
-		readings_post_bad_request.NewStep(httpCli, base),
-		readings_post_not_found.NewStep(httpCli, base),
-		readings_correction.NewStep(httpCli, base),
-		invoices_list.NewStep(httpCli, base),
-		invoices_pagination.NewStep(httpCli, base),
-		invoices_bad_request.NewStep(httpCli, base),
-		invoices_not_found.NewStep(httpCli, base),
-		tariffs_get.NewStep(httpCli, base),
-		tariffs_bad_request.NewStep(httpCli, base),
-		tariffs_invalid_date.NewStep(httpCli, base),
-		tariffs_not_found.NewStep(httpCli, base),
-		tariffs_boundary.NewStep(db, database, httpCli, base),
-		gauges_post.NewStep(httpCli, base),
-		gauges_post_bad_request.NewStep(httpCli, base),
-		gauges_post_not_found.NewStep(httpCli, base),
-		gauges_replacement.NewStep(db, database),
+		usersGet.NewStep(httpCli, base),
+		usersNotFound.NewStep(httpCli, base),
+		usersFio.NewStep(db, database, httpCli, base),
+		usersPhoneHistory.NewStep(db, database, httpCli, base),
+		usersPatch.NewStep(httpCli, base),
+		usersPatchBadRequest.NewStep(httpCli, base),
+		usersPatchNotFound.NewStep(httpCli, base),
+		realtyGet.NewStep(httpCli, base),
+		realtyNotFound.NewStep(httpCli, base),
+		readingsList.NewStep(httpCli, base),
+		readingsBadRequest.NewStep(httpCli, base),
+		readingsListNotFound.NewStep(httpCli, base),
+		readingsPost.NewStep(httpCli, base),
+		readingsPostBadRequest.NewStep(httpCli, base),
+		readingsPostNotFound.NewStep(httpCli, base),
+		readingsCorrection.NewStep(httpCli, base),
+		invoicesList.NewStep(httpCli, base),
+		invoicesPagination.NewStep(httpCli, base),
+		invoicesBadRequest.NewStep(httpCli, base),
+		invoicesNotFound.NewStep(httpCli, base),
+		tariffsGet.NewStep(httpCli, base),
+		tariffsBadRequest.NewStep(httpCli, base),
+		tariffsInvalidDate.NewStep(httpCli, base),
+		tariffsNotFound.NewStep(httpCli, base),
+		tariffsBoundary.NewStep(db, database, httpCli, base),
+		gaugesPost.NewStep(httpCli, base),
+		gaugesPostBadRequest.NewStep(httpCli, base),
+		gaugesPostNotFound.NewStep(httpCli, base),
+		gaugesReplacement.NewStep(db, database),
 	}
 }

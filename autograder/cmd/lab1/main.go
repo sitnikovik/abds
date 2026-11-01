@@ -41,6 +41,7 @@ func main() {
 		err = st.Run(ctx, vars)
 		if err != nil {
 			fmt.Printf("❌ %s: %v\n", st.Name(), err)
+			failed++
 			continue
 		}
 		fmt.Printf("✅ %s\n", st.Name())

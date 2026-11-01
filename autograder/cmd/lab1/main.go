@@ -40,10 +40,10 @@ func main() {
 	for _, st := range steps {
 		err = st.Run(ctx, vars)
 		if err != nil {
-			fmt.Printf("FAIL %s: %v\n", st.Name(), err)
+			fmt.Printf("❌ %s: %v\n", st.Name(), err)
 			continue
 		}
-		fmt.Printf("PASS %s\n", st.Name())
+		fmt.Printf("✅ %s\n", st.Name())
 	}
 	if failed > 0 {
 		fmt.Printf("%d of %d checks failed\n", failed, len(steps))

@@ -7,7 +7,7 @@ jobs:
   go-guard:
     uses: ./.github/workflows/go_guard.yml
 
-  autograder:
+  linter:
     needs: go-guard
     if: needs.go-guard.outputs.go_mod_exists == 'true'
     runs-on: ubuntu-latest
@@ -24,27 +24,6 @@ jobs:
           curl -sSfL https://raw.githubusercontent.com/golangci/golangci-lint/master/install.sh \
             | sh -s -- -b $(go env GOPATH)/bin v2.8.0
           echo "PATH=$(go env GOPATH)/bin:$PATH" >> $GITHUB_ENV
-      - name: Run lint
+      - name: Run lint in autograder
         run: |
           make -C autograder lint
-
-  linter:
-    needs: go-guard
-    if: needs.go-guard.outputs.go_mod_exists == 'true'
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v4
-      - name: Set up Go
-        uses: actions/setup-go@v5
-        with:
-          go-version: '1.25.7'
-          cache: true
-      - name: Install golangci-lint
-        run: |
-          curl -sSfL https://raw.githubusercontent.com/golangci/golangci-lint/master/install.sh \
-            | sh -s -- -b $(go env GOPATH)/bin v2.8.0
-          echo "PATH=$(go env GOPATH)/bin:$PATH" >> $GITHUB_ENV
-      - name: Run linter
-        run: |
-          make lint

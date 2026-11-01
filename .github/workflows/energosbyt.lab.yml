@@ -1,29 +1,69 @@
-name: Energosbyt Autograder
+name: Energosbyt Lab Check (Reusable)
 
 on:
-  pull_request:
-    paths:
-      - 'autograder/**'
-      - '.github/ci.env'
-      - 'make/**'
-      - '.github/workflows/energosbyt.lab.yml'
+  workflow_call:
+    inputs:
+      lab:
+        description: 'Lab number'
+        required: true
+        type: string
 
 jobs:
-  check:
+  lab:
+    name: Lab ${{ inputs.lab }}
     runs-on: ubuntu-latest
+    timeout-minutes: 30
+
     steps:
-      - name: Checkout code
+      - name: Checkout student repository
         uses: actions/checkout@v4
+
+      - name: Checkout course repository
+        uses: actions/checkout@v4
+        with:
+          repository: sitnikovik/abds
+          path: course
+
       - name: Set up Go
         uses: actions/setup-go@v5
         with:
-          go-version-file: autograder/go.mod
-          cache-dependency-path: autograder/go.sum
-      - name: Install golangci-lint
+          go-version-file: course/autograder/go.mod
+          cache-dependency-path: course/autograder/go.sum
+
+      - name: Check required files
         run: |
-          curl -sSfL https://raw.githubusercontent.com/golangci/golangci-lint/master/install.sh \
-            | sh -s -- -b $(go env GOPATH)/bin v2.8.0
-          echo "PATH=$(go env GOPATH)/bin:$PATH" >> $GITHUB_ENV
-      - name: Run autograder checks
+          for f in docker-compose.yml Makefile .env.local; do
+            if [ ! -f "$f" ]; then
+              echo "::error::file $f is missing in the repository"
+              exit 1
+            fi
+          done
+
+      - name: Start services
+        run: make run
+
+      - name: Prepare data
+        timeout-minutes: 5
+        run: make setup
+
+      - name: Run autograder
         run: |
-          make -C autograder check
+          set -a
+          . ./.env.local
+          set +a
+          for i in $(seq 1 30); do
+            if curl -fs "http://localhost:${APP_PORT}/ping" > /dev/null; then
+              break
+            fi
+            sleep 2
+          done
+          cd course/autograder
+          go run ./cmd/lab${{ inputs.lab }}
+
+      - name: Show service logs
+        if: always()
+        run: docker compose logs
+
+      - name: Stop services
+        if: always()
+        run: docker compose down -v

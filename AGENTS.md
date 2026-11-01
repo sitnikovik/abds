@@ -25,6 +25,15 @@ Guidance for AI agents working in this repository.
   and chained calls break after the package name with each method on its own line
   (see STYLE.md, "Chained calls").
 
+## Naming
+
+- Directories with multiple words use kebab-case (`internal/step/not-found/`),
+  though one concatenated lowercase word is fine when
+  splitting it does not noticeably improve readability (`listnotfound`).
+- File names use snake_case (`bad-request.go`).
+- Import aliases use camelCase (`checkErr`, `gaugesPost`), and no alias is better
+  when the default package name is already unambiguous.
+
 ## Documentation
 
 - Every package, type, function, method and field has a GoDoc comment.
@@ -47,8 +56,11 @@ Guidance for AI agents working in this repository.
   - `run.go` — the `Run(ctx, vars) error` method;
   - `run_test.go` — the tests of the step in a `<operation>_test` package.
 - In step tests import the checked package with the alias `impl`.
-- Name step packages as one concatenated word without underscores
-  (`notfound`, `badrequest`, `invaliddate`), matching the directory name.
+- Prefer kebab-case for step directory names with multiple words
+  (`not-found`, `bad-request`, `invalid-date`),
+  but a concatenated word is fine when it stays readable
+  (`listnotfound`); step packages keep one concatenated word
+  without separators (`notfound`, `badrequest`, `invaliddate`).
 - Pin the `buggles` version in `autograder/go.mod`. The framework is not stable yet.
 - ClickHouse access uses `github.com/ClickHouse/clickhouse-go/v2` over the native protocol.
   - Declarative repo layer: `internal/repo/<entity>/<operation>/`.

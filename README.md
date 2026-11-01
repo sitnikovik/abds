@@ -1,8 +1,8 @@
-# Archtecture of Big Data Systems
+# Architecture of Big Data Systems
 
 [![Quality](https://github.com/sitnikovik/abds/actions/workflows/quality.yml/badge.svg)](https://github.com/sitnikovik/abds/actions/workflows/quality.yml)
 [![Tests](https://github.com/sitnikovik/abds/actions/workflows/tests.yml/badge.svg)](https://github.com/sitnikovik/abds/actions/workflows/tests.yml)
-![Lab Progress](https://img.shields.io/badge/Lab-3%20of%207-blue)
+![Lab Progress](https://img.shields.io/badge/Lab-1%20of%203-blue)
 
 Проект содержит все необходимые материалы для курса по NoSQL базам данных
 и пайплайн в GitHub Actions для проверки лабораторных работ.

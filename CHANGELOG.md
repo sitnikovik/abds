@@ -5,6 +5,17 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/2.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [2.1.0] - 2026-11-01
+
+### Added
+
+- Autograder for checking student labs in GitHub Actions: step-based packages under `internal/step/...`,
+ClickHouse repo layer and checks with `buggles`
+- Check for Lab 1
+- Coverage checking scripts and autograder CI workflow
+- Code style guide `STYLE.md`
+- `AGENTS.md` guidance for AI agents working in the repository
+
 ## [2.0.0] - 2026-10-29
 
 ### Added

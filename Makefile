@@ -1,5 +1,7 @@
 .DEFAULT_GOAL = run
 
+include make/lab.mk
+
 .PHONY: run
 run: .cfg
 	@echo "🐳 🔕 Запускаю проект в фоновом режиме..."

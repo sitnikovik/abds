@@ -1,0 +1,148 @@
+version: '3.7'
+x-environment: &environment
+  CLICKHOUSE_USER: default
+  CLICKHOUSE_PASSWORD: ""
+  CLICKHOUSE_DEFAULT_ACCESS_MANAGEMENT: 1
+
+x-clickhouse: &clickhouse
+  image: clickhouse/clickhouse-server:26.7
+  environment:
+    <<: *environment
+  depends_on:
+    - energosbyt_keeper1
+    - energosbyt_keeper2
+    - energosbyt_keeper3
+
+services:
+  energosbyt_keeper1:
+    image: clickhouse/clickhouse-keeper:26.7
+    container_name: energosbyt_keeper1
+    volumes:
+      - ./configs/keeper/1.xml:/etc/clickhouse-keeper/keeper_config.xml:ro
+      - ./volume/energosbyt_keeper1:/var/lib/clickhouse-keeper
+    ports:
+      - "9181:9181"
+
+  energosbyt_keeper2:
+    image: clickhouse/clickhouse-keeper:26.7
+    container_name: energosbyt_keeper2
+    volumes:
+      - ./configs/keeper/2.xml:/etc/clickhouse-keeper/keeper_config.xml:ro
+      - ./volume/energosbyt_keeper2:/var/lib/clickhouse-keeper
+    ports:
+      - "9182:9181"
+
+  energosbyt_keeper3:
+    image: clickhouse/clickhouse-keeper:26.7
+    container_name: energosbyt_keeper3
+    volumes:
+      - ./configs/keeper/3.xml:/etc/clickhouse-keeper/keeper_config.xml:ro
+      - ./volume/energosbyt_keeper3:/var/lib/clickhouse-keeper
+    ports:
+      - "9183:9181"
+
+  energosbyt_ch1:
+    <<: *clickhouse
+    container_name: energosbyt_ch1
+    hostname: energosbyt_ch1
+    ports:
+      - "8123:8123" # Веб-интерфейс
+      - "9000:9000"
+      - "9363:9363" # Метрики
+    volumes:
+      - ./configs/clickhouse/remote-servers.xml:/etc/clickhouse-server/config.d/remote-servers.xml:ro
+      - ./configs/clickhouse/prometheus.xml:/etc/clickhouse-server/config.d/prometheus.xml:ro
+      - ./configs/clickhouse/macros/1.xml:/etc/clickhouse-server/config.d/macros.xml:ro
+      - ./volume/energosbyt_ch1:/var/lib/clickhouse
+
+  energosbyt_ch2:
+    <<: *clickhouse
+    container_name: energosbyt_ch2
+    hostname: energosbyt_ch2
+    ports:
+      - "8124:8123" # Веб-интерфейс
+    volumes:
+      - ./configs/clickhouse/remote-servers.xml:/etc/clickhouse-server/config.d/remote-servers.xml:ro
+      - ./configs/clickhouse/prometheus.xml:/etc/clickhouse-server/config.d/prometheus.xml:ro
+      - ./configs/clickhouse/macros/2.xml:/etc/clickhouse-server/config.d/macros.xml:ro
+      - ./volume/energosbyt_ch2:/var/lib/clickhouse
+
+  energosbyt_ch3:
+    <<: *clickhouse
+    container_name: energosbyt_ch3
+    hostname: energosbyt_ch3
+    ports:
+      - "8125:8123"
+    volumes:
+      - ./configs/clickhouse/remote-servers.xml:/etc/clickhouse-server/config.d/remote-servers.xml:ro
+      - ./configs/clickhouse/prometheus.xml:/etc/clickhouse-server/config.d/prometheus.xml:ro
+      - ./configs/clickhouse/macros/3.xml:/etc/clickhouse-server/config.d/macros.xml:ro
+      - ./volume/energosbyt_ch3:/var/lib/clickhouse
+
+  energosbyt_ch4:
+    <<: *clickhouse
+    container_name: energosbyt_ch4
+    hostname: energosbyt_ch4
+    ports:
+      - "8126:8123"
+    volumes:
+      - ./configs/clickhouse/remote-servers.xml:/etc/clickhouse-server/config.d/remote-servers.xml:ro
+      - ./configs/clickhouse/prometheus.xml:/etc/clickhouse-server/config.d/prometheus.xml:ro
+      - ./configs/clickhouse/macros/4.xml:/etc/clickhouse-server/config.d/macros.xml:ro
+      - ./volume/energosbyt_ch4:/var/lib/clickhouse
+
+  energosbyt_ch5:
+    <<: *clickhouse
+    container_name: energosbyt_ch5
+    hostname: energosbyt_ch5
+    ports:
+      - "8127:8123"
+    volumes:
+      - ./configs/clickhouse/remote-servers.xml:/etc/clickhouse-server/config.d/remote-servers.xml:ro
+      - ./configs/clickhouse/prometheus.xml:/etc/clickhouse-server/config.d/prometheus.xml:ro
+      - ./configs/clickhouse/macros/5.xml:/etc/clickhouse-server/config.d/macros.xml:ro
+      - ./volume/energosbyt_ch5:/var/lib/clickhouse
+
+  energosbyt_ch6:
+    <<: *clickhouse
+    container_name: energosbyt_ch6
+    hostname: energosbyt_ch6
+    ports:
+      - "8128:8123"
+    volumes:
+      - ./configs/clickhouse/remote-servers.xml:/etc/clickhouse-server/config.d/remote-servers.xml:ro
+      - ./configs/clickhouse/prometheus.xml:/etc/clickhouse-server/config.d/prometheus.xml:ro
+      - ./configs/clickhouse/macros/6.xml:/etc/clickhouse-server/config.d/macros.xml:ro
+      - ./volume/energosbyt_ch6:/var/lib/clickhouse
+
+  # Сбор метрик
+  prometheus:
+    image: prom/prometheus:latest
+    container_name: energosbyt_prometheus
+    volumes:
+      - ./configs/prometheus/prometheus.yml:/etc/prometheus/prometheus.yml:ro
+      - ./volume/prometheus:/prometheus
+    ports:
+      - "9090:9090"
+
+  # Дашборды с метриками ClickHouse
+  grafana:
+    image: grafana/grafana:latest
+    container_name: energosbyt_grafana
+    environment:
+      GF_SECURITY_ADMIN_PASSWORD: admin # admin/admin
+      GF_USERS_ALLOW_SIGN_UP: "false"
+      # Логи также пишутся на диск
+      GF_PATHS_DATA: /var/lib/grafana
+      GF_PATHS_LOGS: /var/log/grafana
+      # Включаем дублирование логов из консоли в файл
+      GF_LOG_MODE: console file
+    volumes:
+      - ./configs/grafana/provisioning:/etc/grafana/provisioning:ro
+      - ./configs/grafana/dashboards/energosbyt.json:/var/lib/grafana/dashboards/energosbyt.json:ro
+      - ./volume/grafana:/var/lib/grafana
+      - ./volume/grafana/logs:/var/log/grafana
+    ports:
+      - "3000:3000"
+    depends_on:
+      - prometheus

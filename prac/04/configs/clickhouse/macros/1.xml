@@ -1,0 +1,13 @@
+<clickhouse>
+    <!-- Макросы — строки-подстановки, доступные в SQL как {name} на ЭТОМ узле -->
+    <macros>
+        <!-- Имя кластера для ON CLUSTER и Distributed: совпадает с секцией в remote-servers.xml -->
+        <cluster>energosbyt</cluster>
+        <!-- Номер шарда -->
+        <!-- Подставляется в путь ReplicatedMergeTree /clickhouse/tables/{shard}/... -->
+        <shard>1</shard>
+        <!-- Номер реплики внутри шарда -->
+        <!-- различает ch1 (1) и ch2 (2) — иначе обе реплики претендуют на один путь в Keeper -->
+        <replica>1</replica>
+    </macros>
+</clickhouse>

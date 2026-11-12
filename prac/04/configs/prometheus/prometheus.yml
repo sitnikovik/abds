@@ -1,0 +1,27 @@
+global:
+  # Частота сбора метрик всех таргетов: каждые 5 секунд
+  scrape_interval: 5s
+
+scrape_configs:
+  # Джоба сбора метрик ClickHouse
+  - job_name: clickhouse
+    static_configs:
+      # Метрики отдаёт сам ClickHouse на 9363 (см. configs/clickhouse/prometheus.xml).
+      # Перечисляем имена сервисов из docker-compose
+      - targets:
+          - energosbyt_ch1:9363
+          - energosbyt_ch2:9363
+          - energosbyt_ch3:9363
+          - energosbyt_ch4:9363
+          - energosbyt_ch5:9363
+          - energosbyt_ch6:9363
+
+  # Джоба сбора метрик ClickHouse Keeper.
+  # Тот же встроенный экспортер, но у образа clickhouse-keeper свой порт.
+  # Настраивается через configs/keeper/*.xml (секция prometheus)
+  - job_name: keeper
+    static_configs:
+      - targets:
+          - energosbyt_keeper1:9363
+          - energosbyt_keeper2:9363
+          - energosbyt_keeper3:9363

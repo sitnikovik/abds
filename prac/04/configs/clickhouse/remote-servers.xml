@@ -1,0 +1,77 @@
+<clickhouse>
+    <!-- Корневой элемент конфигурации ClickHouse -->
+    <zookeeper>
+        <!-- Подключение к ClickHouse Keeper --> 
+        <!-- здесь реплики находят друг друга, хранят метаданные и DDL-очередь -->
+        <!-- По алгоритму Raft должно быть миниум три узла для кворума -->
+        <node>
+            <!-- Имя хоста первого кипера как в docker-compose (имя сервиса = DNS-имя в сети) -->
+            <host>energosbyt_keeper1</host>
+            <!-- Порт для клиентов Keeper (это НЕ Raft-порт между самими киперами) -->
+            <port>9181</port>
+        </node>
+        <node>
+            <host>energosbyt_keeper2</host>
+            <port>9181</port>
+        </node>
+        <node>
+            <host>energosbyt_keeper3</host>
+            <port>9181</port>
+        </node>
+    </zookeeper>
+    <remote_servers>
+        <!-- Топология кластера: объявляем ВСЕ узлы, чтобы Distributed-таблицы и ON CLUSTER работали -->
+        <energosbyt>
+            <!-- Шард 1 -->
+            <shard>
+                <!-- Репликация внутри шарда через кипер -->
+                <!-- internal_replication определяет стратегию записи данных распределенной таблицей (Distributed) -->
+                <!-- на реплики внутри конкретного шарда -->
+                <!-- true - стандарт для продакшена -->
+                <!-- false - Distributed сам дублировал бы парты таблиц во все реплики -->
+                <internal_replication>true</internal_replication>
+                <!-- Вес шарда при rand()-распределении -->
+                <!-- у всех шардов равный вес, значит ~1/3 данных -->
+                <weight>1</weight>
+                <!-- Первая реплика шарда 1 -->
+                <replica>
+                    <!-- Имя хоста = сервис из docker-compose -->
+                    <host>energosbyt_ch1</host>
+                    <!-- Native-порт ClickHouse для межузлового трафика -->
+                    <port>9000</port>
+                </replica>
+                <!-- Вторая реплика того же шарда: полный дубль данных -->
+                <replica>
+                    <host>energosbyt_ch2</host>
+                    <port>9000</port>
+                </replica>
+            </shard>
+            <!-- Шард 2 -->
+            <shard>
+                <internal_replication>true</internal_replication>
+                <weight>1</weight>
+                <replica>
+                    <host>energosbyt_ch3</host>
+                    <port>9000</port>
+                </replica>
+                <replica>
+                    <host>energosbyt_ch4</host>
+                    <port>9000</port>
+                </replica>
+            </shard>
+            <!-- Шард 3 -->
+            <shard>
+                <internal_replication>true</internal_replication>
+                <weight>1</weight>
+                <replica>
+                    <host>energosbyt_ch5</host>
+                    <port>9000</port>
+                </replica>
+                <replica>
+                    <host>energosbyt_ch6</host>
+                    <port>9000</port>
+                </replica>
+            </shard>
+        </energosbyt>
+    </remote_servers>
+</clickhouse>

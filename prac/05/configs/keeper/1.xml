@@ -1,0 +1,46 @@
+<clickhouse>
+    <!-- Конфиг ClickHouse Keeper #1 -->
+    <!-- слушать ВСЕ сетевые интерфейсы, иначе киперр работал бы только на 127.0.0.1 внутри контейнера и ClickHouse его бы не увидел -->
+    <listen_host>0.0.0.0</listen_host>
+    <keeper_server>
+        <!-- Порт для клиентов кипера --> 
+        <!-- Cюда приходят ClickHouse-реплики и keeper-client (ZooKeeper-протокол) -->
+        <tcp_port>9181</tcp_port>
+        <!-- Уникальный номер этого узла в кворуме Raft — то же число, что id в raft_configuration ниже -->
+        <server_id>1</server_id>
+        <!-- Raft-журнал: append-only история операций -->
+        <!-- Это как журнал операций -->
+        <log_storage_path>/var/lib/clickhouse-keeper/keeper.log</log_storage_path>
+        <!-- Каталог со снапшотами (сериализованные копии состояния на момент времени) -->
+        <snapshot_storage_path>/var/lib/clickhouse-keeper/snapshots</snapshot_storage_path>
+        <!-- Состав кворумa: все три узла обязаны знать друг о друге -->
+        <raft_configuration>
+            <!-- Узел ClickHouse Keeper #1: совпадает с server_id выше -->
+            <server>
+                <id>1</id>
+                <!-- хост первого кипера из docker-compose -->
+                <hostname>energosbyt_keeper1</hostname>
+                <!-- ВНУТРЕННИЙ порт межкиперного общения Raft (НЕ tcp_port 9181) -->
+                <port>9234</port>
+            </server>
+            <!-- Узел ClickHouse Keeper #2 -->
+            <server>
+                <id>2</id>
+                <hostname>energosbyt_keeper2</hostname>
+                <port>9234</port>
+            </server>
+            <!-- Узел ClickHouse Keeper #3 -->
+            <server>
+                <id>3</id>
+                <hostname>energosbyt_keeper3</hostname>
+                <port>9234</port>
+            </server>
+        </raft_configuration>
+    </keeper_server>
+    <!-- Встроенный экспортер метрик киперпа -->
+    <!-- Благодаря ему Prometheus видит узлы кворума -->
+    <prometheus>
+        <port>9363</port>
+        <endpoint>/metrics</endpoint>
+    </prometheus>
+</clickhouse>

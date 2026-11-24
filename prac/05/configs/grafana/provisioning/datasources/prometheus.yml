@@ -1,0 +1,15 @@
+apiVersion: 1
+
+datasources:
+  # Единственный источник данных для всех панелей наших дашбордов
+  - name: Prometheus
+    # UID нужен дашбордам: в графиковых панелях datasource находится по uid, а не по имени
+    uid: prometheus
+    type: prometheus
+    # proxy: запросы идут из бэкенда Grafana (нужно из-за docker-сети, браузер хоста про имя "prometheus" не знает)
+    access: proxy
+    url: http://prometheus:9090
+    # Отмечаем источником данных по умолчанию
+    isDefault: true
+    # Разрешаем редактирование из UI
+    editable: true

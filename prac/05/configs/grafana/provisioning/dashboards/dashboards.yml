@@ -1,0 +1,12 @@
+apiVersion: 1
+
+providers:
+  # Провайдер для папки с нашими JSON-дашбордами
+  - name: ClickHouse
+    # Имя папки в интерфейсе Grafana, в которую лягут дашборды из этого провайдера
+    folder: ClickHouse
+    # Тип источника: файлы на диске
+    type: file
+    options:
+      # Внутри контейнера это то, что Docker монтирует в /var/lib/grafana/dashboards/*.json
+      path: /var/lib/grafana/dashboards

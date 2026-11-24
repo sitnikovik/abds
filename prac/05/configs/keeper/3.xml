@@ -1,0 +1,32 @@
+<clickhouse>
+    <!-- Keeper #3 -->
+    <listen_host>0.0.0.0</listen_host>
+    <keeper_server>
+        <tcp_port>9181</tcp_port>
+        <server_id>3</server_id>
+        <log_storage_path>/var/lib/clickhouse-keeper/keeper.log</log_storage_path>
+        <snapshot_storage_path>/var/lib/clickhouse-keeper/snapshots</snapshot_storage_path>
+        <raft_configuration>
+            <!-- Полный список узлов кворума: тот же, что в кипере 1 и 2 -->
+            <server>
+                <id>1</id>
+                <hostname>energosbyt_keeper1</hostname>
+                <port>9234</port>
+            </server>
+            <server>
+                <id>2</id>
+                <hostname>energosbyt_keeper2</hostname>
+                <port>9234</port>
+            </server>
+            <server>
+                <id>3</id>
+                <hostname>energosbyt_keeper3</hostname>
+                <port>9234</port>
+            </server>
+        </raft_configuration>
+    </keeper_server>
+    <prometheus>
+        <port>9363</port>
+        <endpoint>/metrics</endpoint>
+    </prometheus>
+</clickhouse>

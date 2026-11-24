@@ -1,0 +1,10 @@
+<clickhouse>
+    <!-- Макросы — строки-подстановки, доступные в SQL как {name} на ЭТОМ узле -->
+    <macros>
+        <cluster>energosbyt</cluster>
+        <!-- ch3 — первая реплика второго шарда -->
+        <shard>2</shard>
+        <!-- свой путь в Keeper: /clickhouse/tables/2/...replicas/1 -->
+        <replica>1</replica>
+    </macros>
+</clickhouse>

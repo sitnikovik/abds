@@ -1,0 +1,20 @@
+clickhouse:
+  connection:
+    host: "energosbyt_ch1"
+    port: 9000
+    database: "default"
+  auth:
+    username: "default"
+    password: ""
+kafka:
+  producer:
+    brokers:
+      - name: "energosbyt_kafka"
+        port: 9092
+        topics:
+          - name: "gauges"
+    connection:
+      timeout: 10
+    retry:
+      max: 5
+    ack: -1

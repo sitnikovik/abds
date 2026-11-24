@@ -5,6 +5,16 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/2.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [2.3.0] - 2026-11-24
+
+### Added
+
+- Fifth practice lesson:
+  - Kafka + ClickHouse integration for streaming meter readings;
+  - Go streamer application with TimeMachine (5 years in 60s);
+  - Kafka Engine table and Materialized View for automatic ingestion;
+  - Kafka UI and Kafka Exporter for monitoring;
+
 ## [2.2.0] - 2026-11-12
 
 ### Added

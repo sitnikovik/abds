@@ -1,0 +1,20 @@
+<clickhouse>
+    <!-- Встроенный экспортер метрик --> 
+    <!-- ClickHouse сам отдаёт по формату Prometheus на отдельном порту, отдельный экспортер не нужен -->
+    <prometheus>
+        <!-- Порт, на котором ClickHouse слушает HTTP GET /metrics (совпадает с scrape-таргетом в prometheus.yml) -->
+        <port>9363</port>
+        <!-- Отдавать table system.metrics: мгновенные счётчики (активные запросы, мушьmerge, TCP-сессии) -->
+        <!-- Мгновенные счётчики (активные запросы, tcp-сессии и др.) -->
+        <metrics>true</metrics>
+        <!-- Отдавать system.events -->
+        <!-- накопленные счётчики событий (рисуют графики qps/insert/select и др.) -->
+        <events>true</events>
+        <!-- Отдавать system.asynchronous_metrics -->
+        <!-- Фоновые показатели (память ОС, диски, Uptime, число табличек) -->
+        <asynchronous_metrics>true</asynchronous_metrics>
+        <!-- Отдавать служебные строки вроде ClickHouseStatusInfo/версии -->
+        <!-- используется для инстанс-переменных дашбордов -->
+        <status_info>true</status_info>
+    </prometheus>
+</clickhouse>

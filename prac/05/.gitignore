@@ -1,0 +1,19 @@
+# Бинарные файлы
+bin/
+
+# Data files (generated)
+data/*.csv
+
+# Volumes
+volume/
+
+# IDE
+.idea/
+.vscode/
+*.swp
+*.swo
+*~
+
+# OS
+.DS_Store
+Thumbs.db
